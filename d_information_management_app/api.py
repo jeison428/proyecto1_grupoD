@@ -2,12 +2,13 @@
 #se comunica con el serializador
 
 from rest_framework.response import Response
-from .serializers import PaisSerializer, GrupoInvestigacionSerializer#, LoginSerializer, UserSerializer
+from .serializers import *
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework import generics, permissions
-from knox.models import AuthToken
-from .models import GrupoInvestigacion
+from .models import GrupoInvestigacion, AreaConocimiento, LineaInvestigacion
+
+# Create your api's here.
+# --------------------------------------------------Arias
 
 class PaisAPI(APIView):
     def post(self, request):
@@ -19,6 +20,9 @@ class PaisAPI(APIView):
         else:
             return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+# Create your api's here.
+# --------------------------------------------------Jeison
+
 class crearGrupoInvestigacionAPI(APIView):
     def post(self, request):
         serializer = GrupoInvestigacionSerializer(data = request.data)
@@ -29,23 +33,22 @@ class crearGrupoInvestigacionAPI(APIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-# class LoginAPI(generics.GenericAPIView):
-#     serializer_class = LoginSerializer
+class crearAreaConocimientoAPI(APIView):
+    def post(self, request):
+        serializer = AreaConocimientoSerializer(data = request.data)
+        if serializer.is_valid():
+            hayElemento = AreaConocimiento.objects.filter(nombre=request.data['nombre'])
+            if not(hayElemento):
+                areaConocimiento = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.validated_data
-#         return Response({
-#             "user":
-#             UserSerializer(user, context=self.get_serializer_context()).data,
-#             "token":
-#             AuthToken.objects.create(user)[1]
-#         })
-
-# class UserAPI(generics.RetrieveAPIView):
-#     permission_classes = [permissions.IsAuthenticated]
-#     serializer_class = UserSerializer
-
-#     def get_object(self):
-#         return self.request.user
+class crearLineaInvestigacionAPI(APIView):
+    def post(self, request):
+        serializer = LineaInvestigacionSerializer(data = request.data)
+        if serializer.is_valid():
+            hayElemento = LineaInvestigacion.objects.filter(nombre=request.data['nombre'])
+            if not(hayElemento):
+                lineaInvestigacion = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)

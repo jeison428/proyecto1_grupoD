@@ -1,9 +1,8 @@
 from rest_framework import serializers
-from .models import Pais, GrupoInvestigacion
-from knox.models import AuthToken
-from django.contrib.auth import authenticate
+from .models import *
 
-
+# Create your serializers here.
+# --------------------------------------------------Arias
 
 class PaisSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
@@ -14,13 +13,10 @@ class PaisSerializer(serializers.Serializer):
         instance.nombre = validate_data.get('nombre')
         instance.save()
         return instance
-    
-    """def validate_username(self, data):
-        paises = Pais.objects.filter(nombre = data)
-        if len(paises) != 0:
-            raise serializers.ValidationError("Este nombre de pais ya existe, Ingrese uno nuevo")
-        else:
-            return data"""
+
+
+# Create your serializers here.
+# --------------------------------------------------Jeison
 
 class GrupoInvestigacionSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
@@ -40,19 +36,30 @@ class GrupoInvestigacionSerializer(serializers.Serializer):
         instance.save()
         return instance
 
-# class LoginSerializer(serializers.Serializer):
-#     username = serializers.CharField()
-#     password = serializers.CharField()
+class AreaConocimientoSerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
+    nombre = serializers.CharField()
+    descripcion = serializers.CharField()
 
-#     def validate(self, data):
-#         user = authenticate(**data)
-#         if user and user.is_active:
-#             return user
-#         raise serializers.ValidationError("Credenciales incorrectas")
+    def create(self, validate_data):
+        instance = AreaConocimiento()
+        instance.nombre = validate_data.get('nombre')
+        instance.descripcion = validate_data.get('descripcion')
+        instance.save()
+        return instance
 
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ('personal_id', 'cellphone')
+class LineaInvestigacionSerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
+    id_area_con = serializers.IntegerField()
+    nombre = serializers.CharField()
+    descripcion = serializers.CharField()
+
+    def create(self, validate_data):
+        instance = LineaInvestigacion()
+        instance.id_area_con = validate_data.get('id_area_con')
+        instance.nombre = validate_data.get('nombre')
+        instance.descripcion = validate_data.get('descripcion')
+        instance.save()
+        return instance
 
 

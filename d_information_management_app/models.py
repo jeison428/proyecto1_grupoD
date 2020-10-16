@@ -1,5 +1,4 @@
-from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.db import models    
 import datetime
 
 # Create your models here.
@@ -41,7 +40,7 @@ class Ciudad(models.Model):
         return self.nombre
 
 # -------------------------------------------Jeison
-# Clase que contiene la informacion basica de los Grupos de Investigacion
+
 class GrupoInvestigacion(models.Model):
     id= models.AutoField(primary_key=True)
     id_institucion = models.IntegerField()
@@ -115,14 +114,3 @@ class Dirige(models.Model):
         verbose_name = 'Dirige'
         verbose_name_plural = 'Dirige'
 
-#Create your models here.
-# class User(AbstractUser):
-#     personal_id = models.CharField(max_length=14, unique=True)
-#     cellphone = models.CharField(max_length=16)
-
-#     def __str__(self):
-#         return "{}".format(self.personal_id)
-
-#     class Meta:
-#         verbose_name = "Usuario"
-#         verbose_name_plural = "Usuarios"
