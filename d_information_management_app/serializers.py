@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from .models import Pais, GrupoInvestigacion
+from knox.models import AuthToken
+from django.contrib.auth import authenticate
+
 
 
 class PaisSerializer(serializers.Serializer):
@@ -20,12 +23,12 @@ class PaisSerializer(serializers.Serializer):
             return data"""
 
 class GrupoInvestigacionSerializer(serializers.Serializer):
-    id_grupo_investigacion = serializers.ReadOnlyField()
+    id = serializers.ReadOnlyField()
     id_institucion = serializers.IntegerField()
-    nombre_grupo_inv = serializers.CharField()
+    nombre = serializers.CharField()
     categoria = serializers.CharField()
     email = serializers.EmailField()
-    fundacion_grupo = serializers.DateField()
+    fecha_fundacion = serializers.DateField()
 
     def create(self, validate_data):
         instance = GrupoInvestigacion()
@@ -36,3 +39,20 @@ class GrupoInvestigacionSerializer(serializers.Serializer):
         instance.fecha_fundacion = validate_data.get('fecha_fundacion')
         instance.save()
         return instance
+
+# class LoginSerializer(serializers.Serializer):
+#     username = serializers.CharField()
+#     password = serializers.CharField()
+
+#     def validate(self, data):
+#         user = authenticate(**data)
+#         if user and user.is_active:
+#             return user
+#         raise serializers.ValidationError("Credenciales incorrectas")
+
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ('personal_id', 'cellphone')
+
+

@@ -102,7 +102,7 @@ WSGI_APPLICATION = 'posgrados_unicauca_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'posgrados_unicauca_backend',
+        'NAME': 'posgrados_unicauca_backend_v2',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': '127.0.0.1',
