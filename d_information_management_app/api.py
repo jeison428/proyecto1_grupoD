@@ -19,7 +19,7 @@ class PaisAPI(APIView):
         else:
             return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class GrupoInvestigacionAPI(APIView):
+class crearGrupoInvestigacionAPI(APIView):
     def post(self, request):
         serializer = GrupoInvestigacionSerializer(data = request.data)
         if serializer.is_valid():

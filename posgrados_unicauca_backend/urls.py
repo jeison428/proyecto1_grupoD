@@ -25,5 +25,5 @@ urlpatterns = [
     path('', include('b_activities_app.urls')),
     path('', include('c_tracking_app.urls')),
     path('', include('d_accounts_app.urls')),
-    path('', include(('d_information_management_app.urls')),
+    path('', include('d_information_management_app.urls')),
 ]
