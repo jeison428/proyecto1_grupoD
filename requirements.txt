@@ -1,0 +1,5 @@
+# python==3.6
+pip install Django==2.2.3
+pip install python-decouple
+pip install django-rest-knox
+pip install djangorestframework

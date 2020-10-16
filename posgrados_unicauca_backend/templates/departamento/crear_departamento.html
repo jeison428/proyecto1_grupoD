@@ -1,0 +1,19 @@
+{% extends 'index.html' %}
+
+{% block titulo%}
+    Creacion de Departamentos
+{% endblock titulo%}
+
+{% block body%}
+    <H1>CREAR DEPARTAMENTO</H1>
+    <form method="POST" >
+        {% csrf_token %}
+
+        {% if error%}
+            <h2>{{error}}</h2>
+        {% else %}
+            {{ departamento_form.as_p}}<!--as_p pintarlo como parrafo,as_table como tabla -->
+            <button type="submit">Crear</button>
+        {% endif%}        
+    </form>    
+{% endblock body %}

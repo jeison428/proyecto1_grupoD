@@ -1,0 +1,40 @@
+{% extends 'index.html' %}
+
+{% block titulo%}
+    Consultar Pais
+{% endblock titulo%}
+
+{% block body%}
+    <H1>CONSULTAR PAIS</H1>
+    
+    <form method="POST" >
+        {% csrf_token %}
+        {{ pais_form.as_p}}<!--as_p pintarlo como parrafo,as_table como tabla -->
+        <button type="submit">Consultar</button>
+    </form> 
+    </br>
+    </br>
+    </form> 
+    
+    
+    {% if paises %}
+        <table>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Nombres</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for pais in paises%}
+                <tr>
+                    <td>{{pais.id}}</td>
+                    <td>{{pais.nombre}}</td>
+                {% endfor%}
+            </tbody>
+        </table>
+    {%else%}
+        <h1>No existe pais</h1>
+    {%endif%}
+
+{% endblock body %}

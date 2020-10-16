@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear grupos de investigacion</title>
+</head>
+<body>
+    <form action="/information/crear_grupo_inv/" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Crear" style="margin-left: 200px;"></p>
+    </form>
+    
+    <p>En la bandera viene: {{bandera}}</p>
+    {% if bandera == "correcto" %}
+        <h3>El grupo de investigacion fue registrado CORRECTAMENTE</h3>
+    {% endif %}
+    {% if bandera == "incorrecto" %}
+        <h3>ERROR: El grupo de Investigacion ya esta registrado</h3>
+    {% endif %}
+</body>
+</html>
