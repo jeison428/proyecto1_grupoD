@@ -4,6 +4,9 @@ from .models import *
 # Create your serializers here.
 # --------------------------------------------------Arias
 
+
+
+
 class PaisSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     nombre = serializers.CharField()
@@ -14,17 +17,28 @@ class PaisSerializer(serializers.Serializer):
         instance.save()
         return instance
 
-class InstitucionSerializer(serializers.Serializer):
-    id = serializers.ReadOnlyField()
-    nombre_ins = serializers.CharField()
-    ciudad = Ciudad.objects.filter(id = 1)
 
-    def create(self, validate_data):
-        instance = Institucion()
-        instance.nombre_ins = validate_data.get('nombre_ins')
-        instance.ciudad = validate_data.get('ciudad')
-        instance.save()
-        return instance
+class CiudadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ciudad
+        fields = ['id', 'nombre','departamento']
+
+class Serializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ['id', 'nombre_ins','ciudad']
+ 
+class InstitucionSerializer(serializers.Serializer):
+     id = serializers.ReadOnlyField()
+     nombre_ins = serializers.CharField()
+     #ciudad = serializers.instance()
+
+     def create(self, validate_data):
+         print("Lo valores de valdiate_data", validate_data)
+         instance = Institucion()
+         instance.nombre_ins = validate_data.get('nombre_ins')
+         instance.ciudad = validate_data.get('ciudad')
+         instance.save()
+         return instance
 
 
 # Create your serializers here.

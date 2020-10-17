@@ -28,6 +28,8 @@ class ListarPaisesAPI(APIView):
 
 class CrearInstitucionAPI(APIView):
     def post(self, request):
+        request.data['ciudad']=[1,'Popayan',1]
+        print("lo que llega: ",request.data)
         serializer = InstitucionSerializer(data = request.data) 
         if serializer.is_valid():#Valida que los tipos de datos sean correctos
             prueba = Institucion.objects.filter(nombre_ins=request.data["nombre_ins"])
