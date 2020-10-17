@@ -69,19 +69,29 @@ class Profesor(models.Model):
 # Create your models here.
 # -------------------------------------------Jeison
 
+
+class GrupoInvestigacionManager(BaseUserManager):
+    def create_grupo_investigacion(self, validated_data):
+        grupoInvestigacion = GrupoInvestigacion(**validated_data)
+        grupoInvestigacion.save()
+        return grupoInvestigacion
+
 class LineaInvestigacionManager(BaseUserManager):
     def create_linea_investigacion(self, validated_data):
         lineaInvestigacion = LineaInvestigacion(**validated_data)
         lineaInvestigacion.save()
         return lineaInvestigacion
 
+# modelos
 class GrupoInvestigacion(models.Model):
     id= models.AutoField(primary_key=True)
-    id_institucion = models.IntegerField()
+    institucion = models.ForeignKey(Institucion, on_delete=models.CASCADE, blank=False, null=False)
     nombre = models.CharField(max_length=50)
     categoria = models.CharField(max_length=50)
     email = models.EmailField()
     fecha_fundacion = models.DateField()
+
+    objects = GrupoInvestigacionManager()
 
     class Meta:
         verbose_name = 'Grupo de investigación'

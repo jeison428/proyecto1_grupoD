@@ -7,7 +7,7 @@ from .serializers import (PaisSerializer, InstitucionSerializer, GrupoInvestigac
                             AreaConocimientoSerializer, LineaInvestigacionSerializer)
 from rest_framework.views import APIView
 from rest_framework import status
-from .models import GrupoInvestigacion, AreaConocimiento, LineaInvestigacion
+from .models import GrupoInvestigacion, AreaConocimiento, LineaInvestigacion, Pais, Institucion
 
 # Create your api's here.
 # --------------------------------------------------Arias
@@ -45,9 +45,11 @@ class CrearInstitucionAPI(APIView):
 # Create your api's here.
 # --------------------------------------------------Jeison
 
-class crearGrupoInvestigacionAPI(APIView):
+class crearGrupoInvestigacionAPI(generics.GenericAPIView):
+    serializer_class = GrupoInvestigacionSerializer
+
     def post(self, request):
-        serializer = GrupoInvestigacionSerializer(data = request.data)
+        serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
             hayElemento = GrupoInvestigacion.objects.filter(nombre=request.data['nombre'])
             if not(hayElemento):

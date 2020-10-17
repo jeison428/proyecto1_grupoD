@@ -2,13 +2,13 @@
 from django.urls import path, include
 
 #Javier
-from .views import consultarPais,crearDepartamento, crearCiudad,CrearPais
+from .views import consultarPais,crearDepartamento, crearCiudad, CrearPais
 from d_information_management_app.views import Home
 #-------------------------------------------------
 
 #Jeison
-from .views import crearGrupoInvestigacion
-from d_information_management_app.api import *
+from .api import (CrearInstitucionAPI, ListarPaisesAPI, CrearPaisAPI, crearAreaConocimientoAPI, 
+                    crearGrupoInvestigacionAPI, crearLineaInvestigacionAPI)
 
 urlpatterns = [
     #Javier

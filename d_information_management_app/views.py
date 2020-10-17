@@ -3,11 +3,7 @@ from django.shortcuts import render, redirect
 
 #Jeison
 from django.http import HttpResponse
-from django.template import Template, Context, loader
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from .models import GrupoInvestigacion
-from .forms import GrupoInvestigacionForm
 
 #Javier
 from .forms import PaisForm, DepartamentoForm, CiudadForm
@@ -85,38 +81,3 @@ def crearCiudad(request):
 
 #--------------------------------------------JEISON
 # Metodo para la creacion de un objeto de la clase Grupo de Investigacion
-
-class crearGrupoInvestigacion(CreateView):
-    model = GrupoInvestigacion
-    form_class = GrupoInvestigacionForm
-    template_name = 'grupo_investigacion/crear_gi.html'
-    success_url = reverse_lazy('information:crear_grupo_inv')
-
-def crear_grupo_investigacion2(request):
-
-    if request.method=="POST" and request.POST["id_ins"]:
-        bandera = "correcto"
-        id_instit = request.POST["id_ins"]
-        nombre_gi = request.POST["name_gi"]
-        categoria = request.POST["categoria"]
-        email = request.POST["email"]
-        fundacion_grupo = request.POST["fund_grupo"]
-        
-        hayElemento = grupo_investigacion.objects.filter(nombre_grupo_inv=nombre_gi)
-        if  hayElemento:
-            bandera = "incorrecto"
-        else:
-            gi1=grupo_investigacion(id_institucion=id_instit , nombre_grupo_inv=nombre_gi, fundacion_grupo=fundacion_grupo, email=email, categoria=categoria)
-            gi1.save()
-        contexto = {"bandera":bandera, "variable":hayElemento}
-        return render(request, "grupo_investigacion/crear_gi.html",contexto)
-    else:
-        return render(request, "grupo_investigacion/crear_gi.html")
-
-def buscar_grupo_investigacion(parNombre):
-    hayElemento = grupo_investigacion.objects.filter(nombre_grupo_inv=parNombre)
-    if hayElemento:
-        return hayElemento
-    else:
-        return "No se encontro el grupo de investigacion"
-

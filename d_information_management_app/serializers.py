@@ -44,7 +44,7 @@ class InstitucionSerializer(serializers.Serializer):
 # Create your serializers here.
 # --------------------------------------------------Jeison
 
-class GrupoInvestigacionSerializer(serializers.Serializer):
+class GrupoInvestigacionSerializer2(serializers.Serializer):
     id = serializers.ReadOnlyField()
     id_institucion = serializers.IntegerField()
     nombre = serializers.CharField()
@@ -59,6 +59,16 @@ class GrupoInvestigacionSerializer(serializers.Serializer):
         instance.categoria = validate_data.get('categoria')
         instance.email = validate_data.get('email')
         instance.fecha_fundacion = validate_data.get('fecha_fundacion')
+        instance.save()
+        return instance
+
+class GrupoInvestigacionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GrupoInvestigacion
+        fields = "__all__"
+    
+    def create(self, validate_data):
+        instance = GrupoInvestigacion.objects.create_grupo_investigacion(validate_data)
         instance.save()
         return instance
 

@@ -24,9 +24,3 @@ class CiudadForm(forms.ModelForm):
         fields = ['departamento','nombre']
 
 #Jeison
-
-class GrupoInvestigacionForm(forms.ModelForm):
-    class Meta:
-        model = GrupoInvestigacion 
-        fields = ['id_institucion','nombre','categoria','email','fecha_fundacion']
-        # fecha de fundacion hay que revisar si va
