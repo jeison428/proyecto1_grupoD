@@ -1,4 +1,6 @@
-from django.db import models    
+from django.db import models
+from django.contrib.auth.models import BaseUserManager
+
 import datetime
 
 # Create your models here.
@@ -64,7 +66,14 @@ class Profesor(models.Model):
     def __str__(self):
         return self.nombre
 
+# Create your models here.
 # -------------------------------------------Jeison
+
+class LineaInvestigacionManager(BaseUserManager):
+    def create_linea_investigacion(self, validated_data):
+        lineaInvestigacion = LineaInvestigacion(**validated_data)
+        lineaInvestigacion.save()
+        return lineaInvestigacion
 
 class GrupoInvestigacion(models.Model):
     id= models.AutoField(primary_key=True)
@@ -95,9 +104,11 @@ class AreaConocimiento(models.Model):
 
 class LineaInvestigacion(models.Model):
     id = models.AutoField(primary_key=True)
-    id_area_con = models.IntegerField()
+    area_con = models.ForeignKey(AreaConocimiento, on_delete=models.CASCADE, blank=False, null=False)
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=500)
+
+    objects = LineaInvestigacionManager()
 
     class Meta:
         verbose_name = 'Linea de investigación'
