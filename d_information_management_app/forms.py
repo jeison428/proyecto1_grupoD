@@ -21,7 +21,7 @@ class DepartamentoForm(forms.ModelForm):
 class CiudadForm(forms.ModelForm):
     class Meta:
         model = Ciudad
-        fields = ['pais','departamento','nombre']
+        fields = ['departamento','nombre']
 
 #Jeison
 

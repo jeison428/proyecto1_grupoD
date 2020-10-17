@@ -14,6 +14,18 @@ class PaisSerializer(serializers.Serializer):
         instance.save()
         return instance
 
+class InstitucionSerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
+    nombre_ins = serializers.CharField()
+    ciudad = Ciudad.objects.filter(id = 1)
+
+    def create(self, validate_data):
+        instance = Institucion()
+        instance.nombre_ins = validate_data.get('nombre_ins')
+        instance.ciudad = validate_data.get('ciudad')
+        instance.save()
+        return instance
+
 
 # Create your serializers here.
 # --------------------------------------------------Jeison

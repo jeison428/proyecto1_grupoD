@@ -29,12 +29,37 @@ class Departamento(models.Model):
 class Ciudad(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30, blank=False, null=False)
-    pais = models.ForeignKey(Pais, on_delete=models.CASCADE, blank=False, null=False)
     departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE, blank=False, null=False)
 
     class Meta:
         verbose_name = 'Ciudad'
         verbose_name_plural = 'Ciudades'
+    
+    def __str__(self):
+        return self.nombre
+
+class Institucion(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre_ins = models.CharField(max_length=30, blank=False, null=False)
+    ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE, blank=False, null=False)
+
+    class Meta:
+        verbose_name = 'Institucion'
+        verbose_name_plural = 'Instituciones'
+    
+    def __str__(self):
+        return self.nombre_ins
+
+class Profesor(models.Model):
+    id = models.AutoField(primary_key=True)
+    cedula = models.IntegerField()
+    nombre = models.CharField(max_length=30, blank=False, null=False)
+    apellido = models.CharField(max_length=30, blank=False, null=False)
+    es_interno = models.IntegerField()#FALTA VERIFICAR TIPO DE DATO
+
+    class Meta:
+        verbose_name = 'Profesor'
+        verbose_name_plural = 'Profesores'
     
     def __str__(self):
         return self.nombre

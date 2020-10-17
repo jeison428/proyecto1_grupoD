@@ -10,15 +10,33 @@ from .models import GrupoInvestigacion, AreaConocimiento, LineaInvestigacion
 # Create your api's here.
 # --------------------------------------------------Arias
 
-class PaisAPI(APIView):
+class CrearPaisAPI(APIView):
     def post(self, request):
-        print(request)
-        serializer = PaisSerializer(data = request.data)
-        if serializer.is_valid():
-            pais = serializer.save()
-            return Response(serializer.data, status = status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+        serializer = PaisSerializer(data = request.data) 
+        if serializer.is_valid():#Valida que los tipos de datos sean correctos
+            prueba = Pais.objects.filter(nombre=request.data["nombre"])
+            if not(prueba):
+                pais = serializer.save()              
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+class ListarPaisesAPI(APIView):
+    #serializer_class = UpdateSerializer
+    def get(self, request, *args, **kwargs):
+        queryset = Pais.objects.all()
+        return Response({"Paises": PaisSerializer(queryset, many=True).data })
+
+class CrearInstitucionAPI(APIView):
+    def post(self, request):
+        serializer = InstitucionSerializer(data = request.data) 
+        if serializer.is_valid():#Valida que los tipos de datos sean correctos
+            prueba = Institucion.objects.filter(nombre_ins=request.data["nombre_ins"])
+            if not(prueba):
+                institucion = serializer.save()              
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+
 
 # Create your api's here.
 # --------------------------------------------------Jeison
