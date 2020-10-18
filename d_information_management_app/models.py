@@ -151,34 +151,28 @@ class LineaInvestigacion(models.Model):
         return self.nombre
 
 class Trabaja(models.Model):
-    id_grupo_inv = models.IntegerField()
-    id_area_con = models.IntegerField()
+    grupo_inv = models.ForeignKey(GrupoInvestigacion, on_delete=models.CASCADE, blank=False, null=False, default=1)
+    area_con = models.ForeignKey(AreaConocimiento, on_delete=models.CASCADE, blank=False, null=False, default=1)
     estado_estudio = models.BooleanField()
-    fecha_inicio = models.DateField(auto_now_add=True)
-    fecha_fin = models.DateField(default=datetime.date.today)
 
     class Meta:
         verbose_name = 'Trabaja'
         verbose_name_plural = 'Trabaja'
 
 class Maneja(models.Model):
-    id_linea_inv = models.IntegerField()
-    id_profesor = models.IntegerField()
+    linea_inv = models.ForeignKey(LineaInvestigacion, on_delete=models.CASCADE, blank=False, null=False, default=1)
+    profesor = models.ForeignKey(Profesor, on_delete=models.CASCADE, blank=False, null=False, default=1)
     estado_analisis = models.BooleanField()
-    fecha_inicio = models.DateField(auto_now_add=True)
-    fecha_fin = models.DateField(default=datetime.date.today)
 
     class Meta:
         verbose_name = 'Maneja'
         verbose_name_plural = 'Maneja'
 
 class Dirige(models.Model):
-    id_grupo_inv = models.IntegerField()
-    id_profesor = models.IntegerField()
+    grupo_inv = models.ForeignKey(GrupoInvestigacion, on_delete=models.CASCADE, blank=False, null=False, default=1)
+    profesor = models.ForeignKey(Profesor, on_delete=models.CASCADE, blank=False, null=False, default=1)
     estado_direccion = models.BooleanField()
-    fecha_inicio = models.DateField(auto_now_add=True)
-    fecha_fin = models.DateField(default=datetime.date.today)
-
+    
     class Meta:
         verbose_name = 'Dirige'
         verbose_name_plural = 'Dirige'
