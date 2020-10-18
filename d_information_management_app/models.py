@@ -5,6 +5,23 @@ import datetime
 
 # Create your models here.
 # --------------------------------------------------Arias
+class DepartamentoManager(BaseUserManager):
+    def crearDepartamento(self, validated_data):
+        departamento = Departamento(**validated_data)
+        departamento.save()
+        return departamento
+
+class CiudadManager(BaseUserManager):
+    def crearCiudad(self, validated_data):
+        ciudad = Ciudad(**validated_data)
+        ciudad.save()
+        return ciudad
+
+class InstitucionManager(BaseUserManager):
+    def crearInstitucion(self, validated_data):
+        institucion = Institucion(**validated_data)
+        institucion.save()
+        return institucion
 
 class Pais(models.Model):
     id = models.AutoField(primary_key=True)
@@ -21,6 +38,8 @@ class Departamento(models.Model):
     nombre = models.CharField(max_length=30, blank=False, null=False)
     pais = models.ForeignKey(Pais, on_delete=models.CASCADE, blank=False, null=False)
 
+    objects = DepartamentoManager()
+    
     class Meta:
         verbose_name = 'Departamento'
         verbose_name_plural = 'Departamentos'
@@ -33,6 +52,8 @@ class Ciudad(models.Model):
     nombre = models.CharField(max_length=30, blank=False, null=False)
     departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE, blank=False, null=False)
 
+    objects = CiudadManager()
+
     class Meta:
         verbose_name = 'Ciudad'
         verbose_name_plural = 'Ciudades'
@@ -44,6 +65,8 @@ class Institucion(models.Model):
     id = models.AutoField(primary_key=True)
     nombre_ins = models.CharField(max_length=30, blank=False, null=False)
     ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE, blank=False, null=False)
+
+    objects = InstitucionManager()
 
     class Meta:
         verbose_name = 'Institucion'

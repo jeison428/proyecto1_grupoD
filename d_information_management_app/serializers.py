@@ -1,11 +1,9 @@
 from rest_framework import serializers
-from .models import (Pais, Ciudad, Institucion, GrupoInvestigacion, AreaConocimiento, LineaInvestigacion)
+from .models import (Pais, Departamento, Ciudad, Institucion, Profesor,
+                     GrupoInvestigacion, AreaConocimiento, LineaInvestigacion)
 
 # Create your serializers here.
 # --------------------------------------------------Arias
-
-
-
 
 class PaisSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
@@ -17,29 +15,51 @@ class PaisSerializer(serializers.Serializer):
         instance.save()
         return instance
 
+class DepartamentoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Departamento
+        fields = "__all__"
+
+    def create(self, validate_data):
+        instance = Departamento.objects.crearDepartamento(validate_data)
+        instance.save()
+        return instance
 
 class CiudadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ciudad
-        fields = ['id', 'nombre','departamento']
+        fields = "__all__"
 
-class Serializer(serializers.ModelSerializer):
+    def create(self, validate_data):
+        instance = Ciudad.objects.crearCiudad(validate_data)
+        instance.save()
+        return instance
+
+class InstitucionSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['id', 'nombre_ins','ciudad']
- 
-class InstitucionSerializer(serializers.Serializer):
-     id = serializers.ReadOnlyField()
-     nombre_ins = serializers.CharField()
-     #ciudad = serializers.instance()
+        model = Institucion
+        fields = "__all__"
 
-     def create(self, validate_data):
-         print("Lo valores de valdiate_data", validate_data)
-         instance = Institucion()
-         instance.nombre_ins = validate_data.get('nombre_ins')
-         instance.ciudad = validate_data.get('ciudad')
-         instance.save()
-         return instance
+    def create(self, validate_data):
+        instance = Institucion.objects.crearInstitucion(validate_data)
+        instance.save()
+        return instance
 
+class ProfesorSerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
+    cedula = serializers.IntegerField()
+    nombre = serializers.CharField()
+    apellido = serializers.CharField()
+    es_interno = serializers.IntegerField()
+
+    def create(self, validate_data):
+        instance = Profesor()
+        instance.cedula = validate_data.get('cedula')
+        instance.nombre = validate_data.get('nombre')
+        instance.apellido = validate_data.get('apellido')
+        instance.es_interno = validate_data.get('es_interno')
+        instance.save()
+        return instance
 
 # Create your serializers here.
 # --------------------------------------------------Jeison
@@ -107,3 +127,5 @@ class LineaInvestigacionSerializer(serializers.ModelSerializer):
         instance = LineaInvestigacion.objects.create_linea_investigacion(validate_data)
         instance.save()
         return instance
+
+

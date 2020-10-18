@@ -2,12 +2,15 @@
 #se comunica con el serializador
 
 from rest_framework import generics, permissions
-from rest_framework.response import Response
-from .serializers import (PaisSerializer, InstitucionSerializer, GrupoInvestigacionSerializer,
-                            AreaConocimientoSerializer, LineaInvestigacionSerializer)
-from rest_framework.views import APIView
 from rest_framework import status
-from .models import GrupoInvestigacion, AreaConocimiento, LineaInvestigacion, Pais, Institucion
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .serializers import (PaisSerializer, DepartamentoSerializer, CiudadSerializer, InstitucionSerializer, ProfesorSerializer,
+                         GrupoInvestigacionSerializer,AreaConocimientoSerializer, LineaInvestigacionSerializer)
+
+from .models import (Pais, Departamento, Ciudad, Institucion, Profesor, 
+                    GrupoInvestigacion, AreaConocimiento, LineaInvestigacion)
 
 # Create your api's here.
 # --------------------------------------------------Arias
@@ -22,25 +25,67 @@ class CrearPaisAPI(APIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+class CrearDepartamentoAPI(generics.GenericAPIView):
+    serializer_class = DepartamentoSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():
+            hayElemento = Departamento.objects.filter(nombre=request.data['nombre'])
+            if not(hayElemento):
+                departamento = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+class CrearCiudadAPI(generics.GenericAPIView):
+    serializer_class = CiudadSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():
+            hayElemento = Ciudad.objects.filter(nombre=request.data['nombre'])
+            if not(hayElemento):
+                ciudad = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+class CrearInstitucionAPI(generics.GenericAPIView):
+    serializer_class = InstitucionSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():
+            hayElemento = Institucion.objects.filter(nombre_ins=request.data['nombre_ins'])
+            if not(hayElemento):
+                institucion = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+class CrearProfesorAPI(APIView):
+    def post(self, request):
+        serializer = ProfesorSerializer(data = request.data) 
+        if serializer.is_valid():#Valida que los tipos de datos sean correctos
+            prueba = Profesor.objects.filter(nombre=request.data["nombre"])
+            if not(prueba):
+                profesor = serializer.save()              
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
 class ListarPaisesAPI(APIView):
     #serializer_class = UpdateSerializer
     def get(self, request, *args, **kwargs):
         queryset = Pais.objects.all()
         return Response({"Paises": PaisSerializer(queryset, many=True).data })
 
-class CrearInstitucionAPI(APIView):
-    def post(self, request):
-        request.data['ciudad']=[1,'Popayan',1]
-        print("lo que llega: ",request.data)
-        serializer = InstitucionSerializer(data = request.data) 
-        if serializer.is_valid():#Valida que los tipos de datos sean correctos
-            prueba = Institucion.objects.filter(nombre_ins=request.data["nombre_ins"])
-            if not(prueba):
-                institucion = serializer.save()              
-                return Response(serializer.data, status = status.HTTP_201_CREATED)
-        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+class ListarDepartamentosAPI(APIView):#NO VALIDAN NADA, ESTAN HECHOS A LO MALDITA SEA
+    def post(self, request, *args, **kwargs):
+        queryset = Departamento.objects.filter(pais=request.data["pais"])
+        return Response({"Departamentos": DepartamentoSerializer(queryset, many=True).data })
 
-
+class ListarCiudadesAPI(APIView):#INCOMPLETO
+    def post(self, request, *args, **kwargs):
+        #queryset = Ciudad.objects.filter(SELECT * FROM Ciudad )        
+        return Response({"Ciudades": CiudadSerializer(queryset, many=True).data })
 
 # Create your api's here.
 # --------------------------------------------------Jeison
@@ -70,7 +115,7 @@ class crearAreaConocimientoAPI(APIView):
 class crearLineaInvestigacionAPI(generics.GenericAPIView):
     serializer_class = LineaInvestigacionSerializer
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
             hayElemento = LineaInvestigacion.objects.filter(nombre=request.data['nombre'])
