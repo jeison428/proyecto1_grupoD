@@ -20,8 +20,8 @@ urlpatterns = [
     path('api/1.0/crear_institucion/', CrearInstitucionAPI.as_view()),
     path('api/1.0/crear_profesor/', CrearProfesorAPI.as_view()),
     path('api/1.0/listar_paises/', ListarPaisesAPI.as_view()),
-    path('api/1.0/listar_departamentos/', ListarDepartamentosAPI.as_view()),
-    path('api/1.0/listar_ciudades/', ListarCiudadesAPI.as_view()),
+    path('api/1.0/listar_departamentos/<int:id_pais>', ListarDepartamentosAPI.as_view()),
+    path('api/1.0/listar_ciudades/<int:id_depto>', ListarCiudadesAPI.as_view()),
     #Jeison
     path('api/1.0/crear_grupo_investigacion/', crearGrupoInvestigacionAPI.as_view()),
     path('api/1.0/crear_area_conocimiento/', crearAreaConocimientoAPI.as_view()),

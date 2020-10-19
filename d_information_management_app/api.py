@@ -77,14 +77,14 @@ class ListarPaisesAPI(APIView):
         queryset = Pais.objects.all()
         return Response({"Paises": PaisSerializer(queryset, many=True).data })
 
-class ListarDepartamentosAPI(APIView):#NO VALIDAN NADA, ESTAN HECHOS A LO MALDITA SEA
-    def post(self, request, *args, **kwargs):
-        queryset = Departamento.objects.filter(pais=request.data["pais"])
+class ListarDepartamentosAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = Departamento.objects.filter(pais=kwargs["id_pais"])
         return Response({"Departamentos": DepartamentoSerializer(queryset, many=True).data })
 
-class ListarCiudadesAPI(APIView):#INCOMPLETO
-    def post(self, request, *args, **kwargs):
-        #queryset = Ciudad.objects.filter(SELECT * FROM Ciudad )        
+class ListarCiudadesAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = Ciudad.objects.filter(departamento=kwargs["id_depto"])      
         return Response({"Ciudades": CiudadSerializer(queryset, many=True).data })
 
 # Create your api's here.
