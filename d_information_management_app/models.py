@@ -80,7 +80,7 @@ class Profesor(models.Model):
     cedula = models.IntegerField()
     nombre = models.CharField(max_length=30, blank=False, null=False)
     apellido = models.CharField(max_length=30, blank=False, null=False)
-    es_interno = models.IntegerField()#FALTA VERIFICAR TIPO DE DATO
+    es_interno = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Profesor'
