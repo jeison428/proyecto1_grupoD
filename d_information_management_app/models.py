@@ -93,11 +93,11 @@ class Profesor(models.Model):
 # -------------------------------------------Jeison
 
 
-class GrupoInvestigacionManager(BaseUserManager):
-    def create_grupo_investigacion(self, validated_data):
-        grupoInvestigacion = GrupoInvestigacion(**validated_data)
-        grupoInvestigacion.save()
-        return grupoInvestigacion
+# class GrupoInvestigacionManager(BaseUserManager):
+#     def create_grupo_investigacion(self, validated_data):
+#         grupoInvestigacion = GrupoInvestigacion(**validated_data)
+#         grupoInvestigacion.save()
+#         return grupoInvestigacion
 
 class LineaInvestigacionManager(BaseUserManager):
     def create_linea_investigacion(self, validated_data):
@@ -114,7 +114,7 @@ class GrupoInvestigacion(models.Model):
     email = models.EmailField()
     fecha_fundacion = models.DateField()
 
-    objects = GrupoInvestigacionManager()
+    #objects = GrupoInvestigacionManager()
 
     class Meta:
         verbose_name = 'Grupo de investigación'

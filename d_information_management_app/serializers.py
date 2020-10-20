@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import (Pais, Departamento, Ciudad, Institucion, Profesor,
+from .models import (Pais, Departamento, Ciudad, Institucion, Profesor, Trabaja, Maneja, Dirige,
                      GrupoInvestigacion, AreaConocimiento, LineaInvestigacion)
 
 # Create your serializers here.
@@ -71,7 +71,8 @@ class GrupoInvestigacionSerializer(serializers.ModelSerializer):
         fields = "__all__"
     
     def create(self, validate_data):
-        instance = GrupoInvestigacion.objects.create_grupo_investigacion(validate_data)
+        #instance = GrupoInvestigacion.objects.create_grupo_investigacion(validate_data) mandar siempre el ID
+        instance = GrupoInvestigacion.objects.create(**validate_data)
         instance.save()
         return instance
 
@@ -97,4 +98,11 @@ class LineaInvestigacionSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class TrabajaSerializer(serializers.Serializer):
+    class Meta:
+        model = Trabaja
+        fields = ['grupo_inv', 'area_con', 'estado_estudio']
+
+    def create(self, validate_data):
+        pass
 

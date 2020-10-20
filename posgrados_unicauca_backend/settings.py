@@ -25,7 +25,7 @@ SECRET_KEY = '%9&d=-3h-=*k7+=l!1k*%n7qu($9l9ll_#7@p3w-sd$qy@un#*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','https://localhost:3000']
 
 
 # Application definition
@@ -70,10 +70,6 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
-
-CORS_ORIGIN_WHITELIST = (
-       'https://localhost:3000',
-)
 
 ROOT_URLCONF = 'posgrados_unicauca_backend.urls'
 
