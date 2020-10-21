@@ -125,27 +125,12 @@ class crearLineaInvestigacionAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class ConsultarGrupoInvestigacion_institucionAPI2(APIView):#no funciona
-    def get(self, request, *args, **kwargs):
-        queryset = GrupoInvestigacion.objects.filter(institucion=request.data['institucion'])
-        return Response({"Grupos": GrupoInvestigacionSerializer(queryset, many=True).data })
-
 class ConsultarGrupoInvestigacion_institucionAPI(APIView):#si funciona
     def get(self, request, *args, **kwargs):
         queryset = GrupoInvestigacion.objects.filter(institucion=kwargs['id_ins'])
         return Response({"Grupos": GrupoInvestigacionSerializer(queryset, many=True).data })
-    #serializer_class = GrupoInvestigacionSerializer
-    # def get_queryset(self, request, *args, **kwargs):
-    #     print(">>>>>>>>>>>>>>>>1        ",self.request.data)
-    #     queryset = GrupoInvestigacion.objects.all()
-    #     id_inst = self.request.query_params.get('id_inst')
-    #     print(">>>>>>>>>>>>>>>>2         ",id_inst)
-    #     if id_inst is not None:
-    #         queryset = queryset.filter(institucion=id_inst)
-    #     return queryset
 
 class ConsultarGrupoInvestigacion_idAPI(APIView):
     def get(self, request, *args, **kwargs):
-        print(">>>>>>>>>>>aca",(kwargs))
         queryset = GrupoInvestigacion.objects.filter(id=kwargs['id'])
         return Response({"Grupo": GrupoInvestigacionSerializer(queryset, many=True).data })

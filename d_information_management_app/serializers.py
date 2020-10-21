@@ -21,7 +21,7 @@ class DepartamentoSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def create(self, validate_data):
-        instance = Departamento.objects.crearDepartamento(validate_data)
+        instance = Departamento.objects.create(**validate_data)
         instance.save()
         return instance
 
@@ -68,10 +68,9 @@ class ProfesorSerializer(serializers.Serializer):
 class GrupoInvestigacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = GrupoInvestigacion
-        fields = "__all__"
+        fields = "__all__"# ['campo1','campo2']
     
     def create(self, validate_data):
-        #instance = GrupoInvestigacion.objects.create_grupo_investigacion(validate_data) mandar siempre el ID
         instance = GrupoInvestigacion.objects.create(**validate_data)
         instance.save()
         return instance
@@ -94,7 +93,7 @@ class LineaInvestigacionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def create(self, validate_data):
-        instance = LineaInvestigacion.objects.create_linea_investigacion(validate_data)
+        instance = LineaInvestigacion.objects.create(**validate_data)
         instance.save()
         return instance
 

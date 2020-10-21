@@ -5,11 +5,6 @@ import datetime
 
 # Create your models here.
 # --------------------------------------------------Arias
-class DepartamentoManager(BaseUserManager):
-    def crearDepartamento(self, validated_data):
-        departamento = Departamento(**validated_data)
-        departamento.save()
-        return departamento
 
 class CiudadManager(BaseUserManager):
     def crearCiudad(self, validated_data):
@@ -37,8 +32,6 @@ class Departamento(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30, blank=False, null=False)
     pais = models.ForeignKey(Pais, on_delete=models.CASCADE, blank=False, null=False)
-
-    objects = DepartamentoManager()
     
     class Meta:
         verbose_name = 'Departamento'
@@ -96,14 +89,9 @@ class Profesor(models.Model):
 # class GrupoInvestigacionManager(BaseUserManager):
 #     def create_grupo_investigacion(self, validated_data):
 #         grupoInvestigacion = GrupoInvestigacion(**validated_data)
+#         "operaciones de resta o suma en las tablas necesarias"
 #         grupoInvestigacion.save()
 #         return grupoInvestigacion
-
-class LineaInvestigacionManager(BaseUserManager):
-    def create_linea_investigacion(self, validated_data):
-        lineaInvestigacion = LineaInvestigacion(**validated_data)
-        lineaInvestigacion.save()
-        return lineaInvestigacion
 
 # modelos
 class GrupoInvestigacion(models.Model):
@@ -113,8 +101,6 @@ class GrupoInvestigacion(models.Model):
     categoria = models.CharField(max_length=50)
     email = models.EmailField()
     fecha_fundacion = models.DateField()
-
-    #objects = GrupoInvestigacionManager()
 
     class Meta:
         verbose_name = 'Grupo de investigación'
@@ -140,8 +126,6 @@ class LineaInvestigacion(models.Model):
     area_con = models.ForeignKey(AreaConocimiento, on_delete=models.CASCADE, blank=False, null=False)
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=500)
-
-    objects = LineaInvestigacionManager()
 
     class Meta:
         verbose_name = 'Linea de investigación'
