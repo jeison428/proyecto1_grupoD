@@ -125,7 +125,7 @@ class crearLineaInvestigacionAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class ConsultarGrupoInvestigacion_institucionAPI(APIView):#si funciona
+class ConsultarGrupoInvestigacion_departamentoAPI(APIView):#si funciona
     def get(self, request, *args, **kwargs):
         queryset = GrupoInvestigacion.objects.filter(institucion=kwargs['id_ins'])
         return Response({"Grupos": GrupoInvestigacionSerializer(queryset, many=True).data })
@@ -134,3 +134,27 @@ class ConsultarGrupoInvestigacion_idAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = GrupoInvestigacion.objects.filter(id=kwargs['id'])
         return Response({"Grupo": GrupoInvestigacionSerializer(queryset, many=True).data })
+
+class ConsultarAreaConocimientoAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = AreaConocimiento.objects.all()
+        return Response({"Grupo": AreaConocimientoSerializer(queryset, many=True).data })
+
+class ConsultarAreaConocimiento_idAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = AreaConocimiento.objects.filter(id=kwargs['id'])
+        return Response({"Grupo": AreaConocimientoSerializer(queryset, many=True).data })
+
+class ConsultarLineaInvestigacion_areaAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = LineaInvestigacion.objects.filter(area_con=kwargs['id_area'])
+        return Response({"Grupos": LineaInvestigacionSerializer(queryset, many=True).data })
+
+class ConsultarLineaInvestigacion_idAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = LineaInvestigacion.objects.filter(id=kwargs['id'])
+        return Response({"Grupo": LineaInvestigacionSerializer(queryset, many=True).data })
+
+
+
+

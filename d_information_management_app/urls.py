@@ -10,7 +10,9 @@ from d_information_management_app.views import Home
 from .api import (CrearPaisAPI, CrearDepartamentoAPI, CrearCiudadAPI, CrearInstitucionAPI, CrearProfesorAPI,
                  ListarPaisesAPI, ListarDepartamentosAPI, ListarCiudadesAPI,
                  crearAreaConocimientoAPI, crearGrupoInvestigacionAPI, crearLineaInvestigacionAPI, 
-                 ConsultarGrupoInvestigacion_idAPI, ConsultarGrupoInvestigacion_institucionAPI)
+                 ConsultarGrupoInvestigacion_idAPI, ConsultarGrupoInvestigacion_departamentoAPI, 
+                 ConsultarAreaConocimientoAPI, ConsultarAreaConocimiento_idAPI, ConsultarLineaInvestigacion_areaAPI,
+                 ConsultarLineaInvestigacion_idAPI)
 
 urlpatterns = [
     #Javier
@@ -26,7 +28,11 @@ urlpatterns = [
     path('api/1.0/crear_grupo_investigacion/', crearGrupoInvestigacionAPI.as_view()),
     path('api/1.0/crear_area_conocimiento/', crearAreaConocimientoAPI.as_view()),
     path('api/1.0/crear_linea_investigacion/', crearLineaInvestigacionAPI.as_view()),
-    path('api/1.0/consultar_gi_institucion/<int:id_ins>', ConsultarGrupoInvestigacion_institucionAPI.as_view()),
+    path('api/1.0/consultar_gi_institucion/<int:id_ins>', ConsultarGrupoInvestigacion_departamentoAPI.as_view()),
     path('api/1.0/consultar_gi_id/<int:id>', ConsultarGrupoInvestigacion_idAPI.as_view()),
+    path('api/1.0/consultar_area_conocimiento/', ConsultarAreaConocimientoAPI.as_view()),
+    path('api/1.0/consultar_area_conocimiento/<int:id>', ConsultarAreaConocimiento_idAPI.as_view()),
+    path('api/1.0/consultar_li_area/<int:id_area>', ConsultarLineaInvestigacion_areaAPI.as_view()),
+    path('api/1.0/consultar_li_id/<int:id>', ConsultarLineaInvestigacion_idAPI.as_view()),
     
 ]

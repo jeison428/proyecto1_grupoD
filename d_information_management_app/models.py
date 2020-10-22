@@ -85,14 +85,6 @@ class Profesor(models.Model):
 # Create your models here.
 # -------------------------------------------Jeison
 
-
-# class GrupoInvestigacionManager(BaseUserManager):
-#     def create_grupo_investigacion(self, validated_data):
-#         grupoInvestigacion = GrupoInvestigacion(**validated_data)
-#         "operaciones de resta o suma en las tablas necesarias"
-#         grupoInvestigacion.save()
-#         return grupoInvestigacion
-
 # modelos
 class GrupoInvestigacion(models.Model):
     id= models.AutoField(primary_key=True)
