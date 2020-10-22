@@ -7,9 +7,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .serializers import (PaisSerializer, DepartamentoSerializer, CiudadSerializer, InstitucionSerializer, ProfesorSerializer,
+                          FacultadSerializer, DepartamentoUSerializer,
                          GrupoInvestigacionSerializer,AreaConocimientoSerializer, LineaInvestigacionSerializer)
 
-from .models import (Pais, Departamento, Ciudad, Institucion, Profesor, 
+from .models import (Pais, Departamento, Ciudad, Institucion, Profesor, Facultad, DepartamentoU,
                     GrupoInvestigacion, AreaConocimiento, LineaInvestigacion)
 
 # Create your api's here.
@@ -71,21 +72,74 @@ class CrearProfesorAPI(APIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class ListarPaisesAPI(APIView):
-    #serializer_class = UpdateSerializer
+class CrearFacultadAPI(generics.GenericAPIView):
+    serializer_class = FacultadSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():
+            hayElemento = Facultad.objects.filter(nombre=request.data['nombre'])
+            if not(hayElemento):
+                facultad = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+class CrearDepartamentoUAPI(generics.GenericAPIView):
+    serializer_class = DepartamentoUSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():
+            hayElemento = DepartamentoU.objects.filter(nombre=request.data['nombre'])
+            if not(hayElemento):
+                departamentoU = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+class ConsultarPaisesAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = Pais.objects.all()
         return Response({"Paises": PaisSerializer(queryset, many=True).data })
 
-class ListarDepartamentosAPI(APIView):
+class ConsultarDepartamentos_paisAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = Departamento.objects.filter(pais=kwargs["id_pais"])
         return Response({"Departamentos": DepartamentoSerializer(queryset, many=True).data })
 
-class ListarCiudadesAPI(APIView):
+class ConsultarCiudades_departamentoAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = Ciudad.objects.filter(departamento=kwargs["id_depto"])      
         return Response({"Ciudades": CiudadSerializer(queryset, many=True).data })
+
+class ConsultarInstitucionesAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = Institucion.objects.all()
+        return Response({"Instituciones": InstitucionSerializer(queryset, many=True).data })
+
+class ConsultarInstitucion_idAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = Institucion.objects.filter(id=kwargs["id"])  
+        return Response({"Institucion": InstitucionSerializer(queryset, many=True).data })
+
+class ConsultarFacultadesAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = Facultad.objects.all()
+        return Response({"Facultades": FacultadSerializer(queryset, many=True).data })
+
+class ConsultarFacultad_idAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = Facultad.objects.filter(id=kwargs["id"])  
+        return Response({"Facultad": FacultadSerializer(queryset, many=True).data })
+
+class ConsultarDepartamentosUAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = DepartamentoU.objects.all()
+        return Response({"DepartamentosU": DepartamentoUSerializer(queryset, many=True).data })
+
+class ConsultarDepartamentoU_idAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = DepartamentoU.objects.filter(id=kwargs["id"])  
+        return Response({"DepartamentoU": DepartamentoUSerializer(queryset, many=True).data })
 
 # Create your api's here.
 # --------------------------------------------------Jeison

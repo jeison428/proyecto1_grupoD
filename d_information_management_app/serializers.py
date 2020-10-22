@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from .models import (Pais, Departamento, Ciudad, Institucion, Profesor, Trabaja, Maneja, Dirige,
-                     GrupoInvestigacion, AreaConocimiento, LineaInvestigacion)
+from .models import (Pais, Departamento, Ciudad, Institucion, Profesor, Facultad, DepartamentoU,
+                    Trabaja, Maneja, Dirige,
+                    GrupoInvestigacion, AreaConocimiento, LineaInvestigacion)
 
 # Create your serializers here.
 # --------------------------------------------------Arias
@@ -31,7 +32,7 @@ class CiudadSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def create(self, validate_data):
-        instance = Ciudad.objects.crearCiudad(validate_data)
+        instance = Ciudad.objects.create(**validate_data)
         instance.save()
         return instance
 
@@ -41,7 +42,7 @@ class InstitucionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def create(self, validate_data):
-        instance = Institucion.objects.crearInstitucion(validate_data)
+        instance = Institucion.objects.create(**validate_data)
         instance.save()
         return instance
 
@@ -58,6 +59,26 @@ class ProfesorSerializer(serializers.Serializer):
         instance.nombre = validate_data.get('nombre')
         instance.apellido = validate_data.get('apellido')
         instance.es_interno = validate_data.get('es_interno')
+        instance.save()
+        return instance
+
+class FacultadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Facultad
+        fields = "__all__"
+
+    def create(self, validate_data):
+        instance = Facultad.objects.create(**validate_data)
+        instance.save()
+        return instance
+
+class DepartamentoUSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DepartamentoU
+        fields = "__all__"
+
+    def create(self, validate_data):
+        instance = DepartamentoU.objects.create(**validate_data)
         instance.save()
         return instance
 

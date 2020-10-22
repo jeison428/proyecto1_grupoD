@@ -5,19 +5,6 @@ import datetime
 
 # Create your models here.
 # --------------------------------------------------Arias
-
-class CiudadManager(BaseUserManager):
-    def crearCiudad(self, validated_data):
-        ciudad = Ciudad(**validated_data)
-        ciudad.save()
-        return ciudad
-
-class InstitucionManager(BaseUserManager):
-    def crearInstitucion(self, validated_data):
-        institucion = Institucion(**validated_data)
-        institucion.save()
-        return institucion
-
 class Pais(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30, blank=False, null=False)
@@ -45,8 +32,6 @@ class Ciudad(models.Model):
     nombre = models.CharField(max_length=30, blank=False, null=False)
     departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE, blank=False, null=False)
 
-    objects = CiudadManager()
-
     class Meta:
         verbose_name = 'Ciudad'
         verbose_name_plural = 'Ciudades'
@@ -58,8 +43,6 @@ class Institucion(models.Model):
     id = models.AutoField(primary_key=True)
     nombre_ins = models.CharField(max_length=30, blank=False, null=False)
     ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE, blank=False, null=False)
-
-    objects = InstitucionManager()
 
     class Meta:
         verbose_name = 'Institucion'
@@ -81,6 +64,43 @@ class Profesor(models.Model):
     
     def __str__(self):
         return self.nombre
+
+class Facultad(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=30, blank=False, null=False)
+    institucion = models.ForeignKey(Institucion, on_delete=models.CASCADE, blank=False, null=False)
+
+    class Meta:
+        verbose_name = 'Facultad'
+        verbose_name_plural = 'Facultades'
+    
+    def __str__(self):
+        return self.nombre
+
+class DepartamentoU(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=30, blank=False, null=False)
+    facultad = models.ForeignKey(Facultad, on_delete=models.CASCADE, blank=False, null=False)
+
+    class Meta:
+        verbose_name = 'DepartamentoU'
+        verbose_name_plural = 'DepartamentosU'
+    
+    def __str__(self):
+        return self.nombre
+
+# class FormacionAcademica(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     titulo = models.CharField(max_length=30, blank=False, null=False)
+#     institucion = models.CharField(max_length=30, blank=False, null=False)
+#     fecha = models.DateField()
+
+#     class Meta:
+#         verbose_name = 'FormacionAcademica'
+#         verbose_name_plural = 'FormacionesAcademicas'
+    
+#     def __str__(self):
+#         return self.nombre
 
 # Create your models here.
 # -------------------------------------------Jeison
