@@ -173,3 +173,22 @@ class Dirige(models.Model):
         verbose_name = 'Dirige'
         verbose_name_plural = 'Dirige'
 
+class es_miembro(models.Model):
+    identificacion = models.ForeignKey(Profesor, on_delete=models.CASCADE, blank=False, null=False)
+    grupo_inv = models.ForeignKey(GrupoInvestigacion, on_delete=models.CASCADE, blank=False, null=False)
+    estado_membresia = models.BooleanField()
+
+    class Meta:
+        verbose_name = 'Es Miembro'
+        verbose_name_plural = 'Son Miembros'
+
+class Labora(models.Model):
+    identificacion = models.ForeignKey(Profesor, on_delete=models.CASCADE, blank=False, null=False)
+    departamentoU = models.ForeignKey(DepartamentoU, on_delete=models.CASCADE, blank=False, null=False)
+    categoria_laboral = models.CharField(max_length=50, blank=False, null=False)
+    estado_laboral = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'Labora'
+        verbose_name_plural = 'Labora'
+

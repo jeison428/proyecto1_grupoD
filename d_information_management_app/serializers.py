@@ -118,11 +118,32 @@ class LineaInvestigacionSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-class TrabajaSerializer(serializers.Serializer):
+class TrabajaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trabaja
-        fields = ['grupo_inv', 'area_con', 'estado_estudio']
+        fields = '__all__'
 
     def create(self, validate_data):
-        pass
+        instance = Trabaja.objects.create(**validate_data)
+        instance.save()
+        return instance
 
+class ManejaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Maneja
+        fields = ['linea_inv', 'profesor', 'estado_analisis']
+
+    def create(self, validate_data):
+        instance = Maneja.objects.create(**validate_data)
+        instance.save()
+        return instance
+
+class DirigeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dirige
+        fields = ['grupo_inv', 'profesor', 'estado_direccion']
+
+    def create(self, validate_data):
+        instance = Dirige.objects.create(**validate_data)
+        instance.save()
+        return instance

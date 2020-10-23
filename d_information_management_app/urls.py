@@ -8,11 +8,11 @@ from d_information_management_app.views import Home
 
 #Jeison
 from .api import (CrearPaisAPI, CrearDepartamentoAPI, CrearCiudadAPI, CrearInstitucionAPI, CrearProfesorAPI,
-                 CrearFacultadAPI, CrearDepartamentoUAPI, 
+                 CrearFacultadAPI, CrearDepartamentoUAPI, CrearTrabaja,
                  ConsultarPaisAPI, ConsultarDepartamento_paisAPI, ConsultarCiudad_departamentoAPI, 
                  ConsultarInstitucionAPI, ConsultarInstitucion_idAPI, ConsultarFacultadAPI, ConsultarFacultad_idAPI,
                  ConsultarDepartamentoUAPI,ConsultarDepartamentoU_idAPI,
-                 crearAreaConocimientoAPI, crearGrupoInvestigacionAPI, crearLineaInvestigacionAPI, 
+                 CrearAreaConocimientoAPI, CrearGrupoInvestigacionAPI, CrearLineaInvestigacionAPI, 
                  ConsultarGrupoInvestigacion_idAPI, ConsultarGrupoInvestigacion_departamentoAPI, 
                  ConsultarAreaConocimientoAPI, ConsultarAreaConocimiento_idAPI, ConsultarLineaInvestigacion_areaAPI,
                  ConsultarLineaInvestigacion_idAPI)
@@ -37,9 +37,12 @@ urlpatterns = [
     path('api/1.0/consultar_departamentoU/', ConsultarDepartamentoUAPI.as_view()),
     path('api/1.0/consultar_departamentoU_id/<int:id>', ConsultarDepartamentoU_idAPI.as_view()),
     #Jeison
-    path('api/1.0/crear_grupo_investigacion/', crearGrupoInvestigacionAPI.as_view()),
-    path('api/1.0/crear_area_conocimiento/', crearAreaConocimientoAPI.as_view()),
-    path('api/1.0/crear_linea_investigacion/', crearLineaInvestigacionAPI.as_view()),
+    #Crear
+    path('api/1.0/crear_grupo_investigacion/', CrearGrupoInvestigacionAPI.as_view()),
+    path('api/1.0/crear_area_conocimiento/', CrearAreaConocimientoAPI.as_view()),
+    path('api/1.0/crear_linea_investigacion/', CrearLineaInvestigacionAPI.as_view()),
+    path('api/1.0/crear_trabaja/', CrearTrabaja.as_view()),
+    #Consultar
     path('api/1.0/consultar_gi_institucion/<int:id_ins>', ConsultarGrupoInvestigacion_departamentoAPI.as_view()),
     path('api/1.0/consultar_gi_id/<int:id>', ConsultarGrupoInvestigacion_idAPI.as_view()),
     path('api/1.0/consultar_area_conocimiento/', ConsultarAreaConocimientoAPI.as_view()),

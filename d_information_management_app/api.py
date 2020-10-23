@@ -6,9 +6,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import (PaisSerializer, DepartamentoSerializer, CiudadSerializer, InstitucionSerializer, ProfesorSerializer,
-                          FacultadSerializer, DepartamentoUSerializer,
-                         GrupoInvestigacionSerializer,AreaConocimientoSerializer, LineaInvestigacionSerializer)
+from .serializers import (PaisSerializer, DepartamentoSerializer, CiudadSerializer, InstitucionSerializer, 
+                        ProfesorSerializer, FacultadSerializer, DepartamentoUSerializer, GrupoInvestigacionSerializer,
+                        AreaConocimientoSerializer, LineaInvestigacionSerializer, TrabajaSerializer)
 
 from .models import (Pais, Departamento, Ciudad, Institucion, Profesor, Facultad, DepartamentoU,
                     GrupoInvestigacion, AreaConocimiento, LineaInvestigacion)
@@ -144,7 +144,7 @@ class ConsultarDepartamentoU_idAPI(APIView):
 # Create your api's here.
 # --------------------------------------------------Jeison
 
-class crearGrupoInvestigacionAPI(generics.GenericAPIView):
+class CrearGrupoInvestigacionAPI(generics.GenericAPIView):
     serializer_class = GrupoInvestigacionSerializer
 
     def post(self, request):
@@ -157,7 +157,7 @@ class crearGrupoInvestigacionAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class crearAreaConocimientoAPI(APIView):
+class CrearAreaConocimientoAPI(APIView):
     def post(self, request):
         serializer = AreaConocimientoSerializer(data = request.data)
         if serializer.is_valid():
@@ -167,7 +167,7 @@ class crearAreaConocimientoAPI(APIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class crearLineaInvestigacionAPI(generics.GenericAPIView):
+class CrearLineaInvestigacionAPI(generics.GenericAPIView):
     serializer_class = LineaInvestigacionSerializer
 
     def post(self, request):
@@ -178,6 +178,20 @@ class crearLineaInvestigacionAPI(generics.GenericAPIView):
                 lineaInvestigacion = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+class CrearTrabaja(generics.GenericAPIView):
+    serializer_class = TrabajaSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():
+            # hayElemento = LineaInvestigacion.objects.filter(nombre=request.data['nombre'])
+            # if not(hayElemento):
+            lineaInvestigacion = serializer.save()
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+#consultar
 
 class ConsultarGrupoInvestigacion_departamentoAPI(APIView):#si funciona
     def get(self, request, *args, **kwargs):
