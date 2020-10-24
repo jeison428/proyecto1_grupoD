@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 from .serializers import (PaisSerializer, DepartamentoSerializer, CiudadSerializer, InstitucionSerializer, 
                         ProfesorSerializer, FacultadSerializer, DepartamentoUSerializer, GrupoInvestigacionSerializer,
-                        AreaConocimientoSerializer, LineaInvestigacionSerializer, TrabajaSerializer)
+                        AreaConocimientoSerializer, LineaInvestigacionSerializer, TrabajaSerializer, ManejaSerializer)
 
 from .models import (Pais, Departamento, Ciudad, Institucion, Profesor, Facultad, DepartamentoU,
                     GrupoInvestigacion, AreaConocimiento, LineaInvestigacion)
@@ -185,9 +185,17 @@ class CrearTrabaja(generics.GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            # hayElemento = LineaInvestigacion.objects.filter(nombre=request.data['nombre'])
-            # if not(hayElemento):
-            lineaInvestigacion = serializer.save()
+            trabaja = serializer.save()
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+class CrearManeja(generics.GenericAPIView):
+    serializer_class = ManejaSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():
+            maneja = serializer.save()
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
