@@ -8,7 +8,8 @@ from rest_framework.views import APIView
 
 from .serializers import (PaisSerializer, DepartamentoSerializer, CiudadSerializer, InstitucionSerializer, 
                         ProfesorSerializer, FacultadSerializer, DepartamentoUSerializer, GrupoInvestigacionSerializer,
-                        AreaConocimientoSerializer, LineaInvestigacionSerializer, TrabajaSerializer, ManejaSerializer)
+                        AreaConocimientoSerializer, LineaInvestigacionSerializer, TrabajaSerializer, ManejaSerializer,
+                        DirigeSerializer)
 
 from .models import (Pais, Departamento, Ciudad, Institucion, Profesor, Facultad, DepartamentoU,
                     GrupoInvestigacion, AreaConocimiento, LineaInvestigacion)
@@ -179,7 +180,7 @@ class CrearLineaInvestigacionAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CrearTrabaja(generics.GenericAPIView):
+class CrearTrabajaAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
     serializer_class = TrabajaSerializer
 
     def post(self, request):
@@ -189,7 +190,17 @@ class CrearTrabaja(generics.GenericAPIView):
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CrearManeja(generics.GenericAPIView):
+class CrearDirigeAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
+    serializer_class = DirigeSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():
+            dirige = serializer.save()
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+class CrearManejaAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
     serializer_class = ManejaSerializer
 
     def post(self, request):

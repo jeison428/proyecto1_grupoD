@@ -8,7 +8,7 @@ from d_information_management_app.views import Home
 
 #Jeison
 from .api import (CrearPaisAPI, CrearDepartamentoAPI, CrearCiudadAPI, CrearInstitucionAPI, CrearProfesorAPI,
-                 CrearFacultadAPI, CrearDepartamentoUAPI, CrearTrabaja,
+                 CrearFacultadAPI, CrearDepartamentoUAPI, CrearTrabajaAPI, CrearManejaAPI, CrearDirigeAPI,
                  ConsultarPaisAPI, ConsultarDepartamento_paisAPI, ConsultarCiudad_departamentoAPI, 
                  ConsultarInstitucionAPI, ConsultarInstitucion_idAPI, ConsultarFacultadAPI, ConsultarFacultad_idAPI,
                  ConsultarDepartamentoUAPI,ConsultarDepartamentoU_idAPI,
@@ -41,7 +41,9 @@ urlpatterns = [
     path('api/1.0/crear_grupo_investigacion/', CrearGrupoInvestigacionAPI.as_view()),
     path('api/1.0/crear_area_conocimiento/', CrearAreaConocimientoAPI.as_view()),
     path('api/1.0/crear_linea_investigacion/', CrearLineaInvestigacionAPI.as_view()),
-    path('api/1.0/crear_trabaja/', CrearTrabaja.as_view()),
+    path('api/1.0/crear_trabaja/', CrearTrabajaAPI.as_view()),
+    path('api/1.0/crear_dirige/', CrearDirigeAPI.as_view()),
+    path('api/1.0/crear_maneja/', CrearManejaAPI.as_view()),
     #Consultar
     path('api/1.0/consultar_gi_institucion/<int:id_ins>', ConsultarGrupoInvestigacion_departamentoAPI.as_view()),
     path('api/1.0/consultar_gi_id/<int:id>', ConsultarGrupoInvestigacion_idAPI.as_view()),
