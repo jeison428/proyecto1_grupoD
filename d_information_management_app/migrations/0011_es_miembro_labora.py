@@ -46,8 +46,6 @@ class Migration(migrations.Migration):
                 ('grupo_inv', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='d_information_management_app.GrupoInvestigacion')),
                 ('profesor', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='d_information_management_app.Profesor')),
                 ('estado_direccion', models.BooleanField()),
-                ('fecha_inicio', models.DateField(auto_now_add=True)),
-                ('fecha_fin', models.DateField(default=datetime.date.today)),
             ],
             options={
                 'verbose_name': 'Dirige',
@@ -61,8 +59,6 @@ class Migration(migrations.Migration):
                 ('id_linea_inv', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='d_information_management_app.LineaInvestigacion')),
                 ('id_profesor', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='d_information_management_app.Profesor')),
                 ('estado_analisis', models.BooleanField()),
-                ('fecha_inicio', models.DateField(auto_now_add=True)),
-                ('fecha_fin', models.DateField(default=datetime.date.today)),
             ],
             options={
                 'verbose_name': 'Maneja',
