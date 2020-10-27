@@ -1,84 +1,77 @@
 from rest_framework import serializers
-from .models import (Pais, Departamento, Ciudad, Institucion, Profesor, Facultad, DepartamentoU,
-                    Trabaja, Maneja, Dirige,
-                    GrupoInvestigacion, AreaConocimiento, LineaInvestigacion)
+from .models import (Country, Department, City, Institution, Professor, Faculty, DepartmentU, InvestigationGroup, 
+                    KnowledgeArea, InvestigationLine, WorksDepartm, Drive, Directs, WorksInvestGroup)
 
 # Create your serializers here.
 # --------------------------------------------------Arias
 
-class PaisSerializer(serializers.Serializer):
+class CountrySerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
-    nombre = serializers.CharField()
+    name = serializers.CharField()
 
     def create(self, validate_data):
-        instance = Pais()
-        instance.nombre = validate_data.get('nombre')
+        instance = Country()
+        instance.name = validate_data.get('name')
         instance.save()
         return instance
 
-class DepartamentoSerializer(serializers.ModelSerializer):
+class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Departamento
+        model = Department
         fields = "__all__"
 
     def create(self, validate_data):
-        instance = Departamento.objects.create(**validate_data)
+        instance = Department.objects.create(**validate_data)
         instance.save()
         return instance
 
-class CiudadSerializer(serializers.ModelSerializer):
+class CitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Ciudad
+        model = City
         fields = "__all__"
 
     def create(self, validate_data):
-        instance = Ciudad.objects.create(**validate_data)
+        instance = City.objects.create(**validate_data)
         instance.save()
         return instance
 
-class InstitucionSerializer(serializers.ModelSerializer):
+class InstitutionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Institucion
+        model = Institution
         fields = "__all__"
 
     def create(self, validate_data):
-        instance = Institucion.objects.create(**validate_data)
+        instance = Institution.objects.create(**validate_data)
         instance.save()
         return instance
 
-class ProfesorSerializer(serializers.Serializer):
-    id = serializers.ReadOnlyField()
-    cedula = serializers.IntegerField()
-    nombre = serializers.CharField()
-    apellido = serializers.CharField()
-    es_interno = serializers.IntegerField()
-
-    def create(self, validate_data):
-        instance = Profesor()
-        instance.cedula = validate_data.get('cedula')
-        instance.nombre = validate_data.get('nombre')
-        instance.apellido = validate_data.get('apellido')
-        instance.es_interno = validate_data.get('es_interno')
-        instance.save()
-        return instance
-
-class FacultadSerializer(serializers.ModelSerializer):
+class ProfessorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Facultad
+        model = Professor
         fields = "__all__"
 
     def create(self, validate_data):
-        instance = Facultad.objects.create(**validate_data)
+        instance = Professor.objects.create(**validate_data)
         instance.save()
         return instance
 
-class DepartamentoUSerializer(serializers.ModelSerializer):
+class FacultySerializer(serializers.ModelSerializer):
     class Meta:
-        model = DepartamentoU
+        model = Faculty
         fields = "__all__"
 
     def create(self, validate_data):
-        instance = DepartamentoU.objects.create(**validate_data)
+        instance = Faculty.objects.create(**validate_data)
+        instance.save()
+        return instance
+
+class DepartmentUSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DepartmentU
+        fields = "__all__"
+
+    def create(self, validate_data):
+        instance = DepartmentU.objects.create(**validate_data)
         instance.save()
         return instance
 
@@ -86,64 +79,64 @@ class DepartamentoUSerializer(serializers.ModelSerializer):
 # --------------------------------------------------Jeison
 
 
-class GrupoInvestigacionSerializer(serializers.ModelSerializer):
+class InvestigationGroupSerializer(serializers.ModelSerializer):
     class Meta:
-        model = GrupoInvestigacion
+        model = InvestigationGroup
         fields = "__all__"# ['campo1','campo2']
     
     def create(self, validate_data):
-        instance = GrupoInvestigacion.objects.create(**validate_data)
+        instance = InvestigationGroup.objects.create(**validate_data)
         instance.save()
         return instance
 
-class AreaConocimientoSerializer(serializers.Serializer):
+class KnowledgeAreaSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
-    nombre = serializers.CharField()
-    descripcion = serializers.CharField()
+    name = serializers.CharField()
+    description = serializers.CharField()
 
     def create(self, validate_data):
-        instance = AreaConocimiento()
-        instance.nombre = validate_data.get('nombre')
-        instance.descripcion = validate_data.get('descripcion')
+        instance = KnowledgeArea()
+        instance.name = validate_data.get('name')
+        instance.description = validate_data.get('description')
         instance.save()
         return instance
 
-class LineaInvestigacionSerializer(serializers.ModelSerializer):
+class InvestigationLineSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LineaInvestigacion
+        model = InvestigationLine
         fields = "__all__"
 
     def create(self, validate_data):
-        instance = LineaInvestigacion.objects.create(**validate_data)
+        instance = InvestigationLine.objects.create(**validate_data)
         instance.save()
         return instance
 
-class TrabajaSerializer(serializers.ModelSerializer):
+class WorksInvestGroupSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Trabaja
+        model = WorksInvestGroup
         fields = '__all__'
 
     def create(self, validate_data):
-        instance = Trabaja.objects.create(**validate_data)
+        instance = WorksInvestGroup.objects.create(**validate_data)
         instance.save()
         return instance
 
-class ManejaSerializer(serializers.ModelSerializer):
+class DriveSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Maneja
-        fields = ['linea_inv', 'profesor', 'estado_analisis']
+        model = Drive
+        fields = '__all__'
 
     def create(self, validate_data):
-        instance = Maneja.objects.create(**validate_data)
+        instance = Drive.objects.create(**validate_data)
         instance.save()
         return instance
 
-class DirigeSerializer(serializers.ModelSerializer):
+class DirectsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Dirige
-        fields = ['grupo_inv', 'profesor', 'estado_direccion']
+        model = Directs
+        fields = '__all__'
 
     def create(self, validate_data):
-        instance = Dirige.objects.create(**validate_data)
+        instance = Directs.objects.create(**validate_data)
         instance.save()
         return instance

@@ -6,241 +6,241 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import (PaisSerializer, DepartamentoSerializer, CiudadSerializer, InstitucionSerializer, 
-                        ProfesorSerializer, FacultadSerializer, DepartamentoUSerializer, GrupoInvestigacionSerializer,
-                        AreaConocimientoSerializer, LineaInvestigacionSerializer, TrabajaSerializer, ManejaSerializer,
-                        DirigeSerializer)
+from .serializers import (CountrySerializer, DepartmentSerializer, CitySerializer, InstitutionSerializer, 
+                        ProfessorSerializer, FacultySerializer, DepartmentUSerializer, InvestigationGroupSerializer,
+                        KnowledgeAreaSerializer, InvestigationLineSerializer, WorksInvestGroupSerializer, 
+                        DriveSerializer, DirectsSerializer)
 
-from .models import (Pais, Departamento, Ciudad, Institucion, Profesor, Facultad, DepartamentoU,
-                    GrupoInvestigacion, AreaConocimiento, LineaInvestigacion)
+from .models import (Country, Department, City, Institution, Professor, Faculty, DepartmentU,
+                    InvestigationGroup, KnowledgeArea, InvestigationLine#, WorksDepartm, Drive, Directs,
+                    )
 
 # Create your api's here.
 # --------------------------------------------------Arias
 
-class CrearPaisAPI(APIView):
+class CreateCountryAPI(APIView):
     def post(self, request):
-        serializer = PaisSerializer(data = request.data) 
+        serializer = CountrySerializer(data = request.data) 
         if serializer.is_valid():#Valida que los tipos de datos sean correctos
-            prueba = Pais.objects.filter(nombre=request.data["nombre"])
-            if not(prueba):
-                pais = serializer.save()              
+            test = Country.objects.filter(name=request.data["name"])
+            if not(test):
+                country = serializer.save()              
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CrearDepartamentoAPI(generics.GenericAPIView):
-    serializer_class = DepartamentoSerializer
+class CreateDepartmentAPI(generics.GenericAPIView):
+    serializer_class = DepartmentSerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            hayElemento = Departamento.objects.filter(nombre=request.data['nombre'])
-            if not(hayElemento):
-                departamento = serializer.save()
+            isElement = Department.objects.filter(name=request.data['name'])
+            if not(isElement):
+                department = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CrearCiudadAPI(generics.GenericAPIView):
-    serializer_class = CiudadSerializer
+class CreateCityAPI(generics.GenericAPIView):
+    serializer_class = CitySerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            hayElemento = Ciudad.objects.filter(nombre=request.data['nombre'])
-            if not(hayElemento):
-                ciudad = serializer.save()
+            isElement = City.objects.filter(name=request.data['name'])
+            if not(isElement):
+                city = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CrearInstitucionAPI(generics.GenericAPIView):
-    serializer_class = InstitucionSerializer
+class CreateInstitutionAPI(generics.GenericAPIView):
+    serializer_class = InstitutionSerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            hayElemento = Institucion.objects.filter(nombre_ins=request.data['nombre_ins'])
-            if not(hayElemento):
-                institucion = serializer.save()
+            isElement = Institution.objects.filter(name_inst=request.data['name_inst'])
+            if not(isElement):
+                institution = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CrearProfesorAPI(APIView):
+class CreateProfessorAPI(APIView):# toca modificarlo a los cambios nuevos
     def post(self, request):
-        serializer = ProfesorSerializer(data = request.data) 
+        serializer = ProfessorSerializer(data = request.data) 
         if serializer.is_valid():#Valida que los tipos de datos sean correctos
-            prueba = Profesor.objects.filter(nombre=request.data["nombre"])
-            if not(prueba):
-                profesor = serializer.save()              
+            test = Professor.objects.filter(name=request.data["name"])
+            if not(test):
+                professor = serializer.save()              
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CrearFacultadAPI(generics.GenericAPIView):
-    serializer_class = FacultadSerializer
+class CreateFacultyAPI(generics.GenericAPIView):
+    serializer_class = FacultySerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            hayElemento = Facultad.objects.filter(nombre=request.data['nombre'])
-            if not(hayElemento):
-                facultad = serializer.save()
+            isElement = Faculty.objects.filter(name=request.data['name'])
+            if not(isElement):
+                faculty = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CrearDepartamentoUAPI(generics.GenericAPIView):
-    serializer_class = DepartamentoUSerializer
+class CreateDepartmentUAPI(generics.GenericAPIView):
+    serializer_class = DepartmentUSerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            hayElemento = DepartamentoU.objects.filter(nombre=request.data['nombre'])
-            if not(hayElemento):
-                departamentoU = serializer.save()
+            isElement = DepartmentU.objects.filter(name=request.data['name'])
+            if not(isElement):
+                departmentU = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class ConsultarPaisAPI(APIView):
+class ConsultCountryAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = Pais.objects.all()
-        return Response({"Paises": PaisSerializer(queryset, many=True).data })
+        queryset = Country.objects.all()
+        return Response({"Countrys": CountrySerializer(queryset, many=True).data })
 
-class ConsultarDepartamento_paisAPI(APIView):
+class ConsultDepartment_CountryAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = Departamento.objects.filter(pais=kwargs["id_pais"])
-        return Response({"Departamentos": DepartamentoSerializer(queryset, many=True).data })
+        queryset = Department.objects.filter(country=kwargs["id_country"])
+        return Response({"Departments": DepartmentSerializer(queryset, many=True).data })
 
-class ConsultarCiudad_departamentoAPI(APIView):
+class ConsultCity_DepartmentAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = Ciudad.objects.filter(departamento=kwargs["id_depto"])      
-        return Response({"Ciudades": CiudadSerializer(queryset, many=True).data })
+        queryset = City.objects.filter(department=kwargs["id_dep"])      
+        return Response({"Citys": CitySerializer(queryset, many=True).data })
 
-class ConsultarInstitucionAPI(APIView):
+class ConsultInstitutionAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = Institucion.objects.all()
-        return Response({"Instituciones": InstitucionSerializer(queryset, many=True).data })
+        queryset = Institution.objects.all()
+        return Response({"Institutions": InstitutionSerializer(queryset, many=True).data })
 
-class ConsultarInstitucion_idAPI(APIView):
+class ConsultInstitution_idAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = Institucion.objects.filter(id=kwargs["id"])  
-        return Response({"Institucion": InstitucionSerializer(queryset, many=True).data })
+        queryset = Institution.objects.filter(id=kwargs["id"])  
+        return Response({"Institution": InstitutionSerializer(queryset, many=True).data })
 
-class ConsultarFacultadAPI(APIView):
+class ConsultFacultyAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = Facultad.objects.all()
-        return Response({"Facultades": FacultadSerializer(queryset, many=True).data })
+        queryset = Faculty.objects.all()
+        return Response({"Facultys": FacultySerializer(queryset, many=True).data })
 
-class ConsultarFacultad_idAPI(APIView):
+class ConsultFaculty_idAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = Facultad.objects.filter(id=kwargs["id"])  
-        return Response({"Facultad": FacultadSerializer(queryset, many=True).data })
+        queryset = Faculty.objects.filter(id=kwargs["id"])  
+        return Response({"Faculty": FacultySerializer(queryset, many=True).data })
 
-class ConsultarDepartamentoUAPI(APIView):
+class ConsultDepartmentUAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = DepartamentoU.objects.all()
         return Response({"DepartamentosU": DepartamentoUSerializer(queryset, many=True).data })
 
-class ConsultarDepartamentoU_idAPI(APIView):
+class ConsultDepartmentU_idAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = DepartamentoU.objects.filter(id=kwargs["id"])  
-        return Response({"DepartamentoU": DepartamentoUSerializer(queryset, many=True).data })
+        queryset = DepartmentU.objects.filter(id=kwargs["id"])  
+        return Response({"DepartmentU": DepartmentUSerializer(queryset, many=True).data })
 
 # Create your api's here.
 # --------------------------------------------------Jeison
 
-class CrearGrupoInvestigacionAPI(generics.GenericAPIView):
-    serializer_class = GrupoInvestigacionSerializer
+class CreateInvestigationGroupAPI(generics.GenericAPIView):
+    serializer_class = InvestigationGroupSerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            hayElemento = GrupoInvestigacion.objects.filter(nombre=request.data['nombre'])
-            if not(hayElemento):
-                grupoInvestigacion = serializer.save()
-                print(">>>>>>>>>>>>>222    ",(grupoInvestigacion))
+            isElement = InvestigationGroup.objects.filter(name=request.data['name'])
+            if not(isElement):
+                investigationGroup = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CrearAreaConocimientoAPI(APIView):
+class CreateKnowledgeAreaAPI(APIView):
     def post(self, request):
-        serializer = AreaConocimientoSerializer(data = request.data)
+        serializer = KnowledgeAreaSerializer(data = request.data)
         if serializer.is_valid():
-            hayElemento = AreaConocimiento.objects.filter(nombre=request.data['nombre'])
-            if not(hayElemento):
-                areaConocimiento = serializer.save()
+            isElement = KnowledgeArea.objects.filter(name=request.data['name'])
+            if not(isElement):
+                knowledgeArea = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CrearLineaInvestigacionAPI(generics.GenericAPIView):
-    serializer_class = LineaInvestigacionSerializer
-
-    def post(self, request):
-        serializer = self.get_serializer(data = request.data)
-        if serializer.is_valid():
-            hayElemento = LineaInvestigacion.objects.filter(nombre=request.data['nombre'])
-            if not(hayElemento):
-                lineaInvestigacion = serializer.save()
-                return Response(serializer.data, status = status.HTTP_201_CREATED)
-        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-
-class CrearTrabajaAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
-    serializer_class = TrabajaSerializer
+class CreateInvestigationLineAPI(generics.GenericAPIView):
+    serializer_class = InvestigationLineSerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            trabaja = serializer.save()
+            isElement = InvestigationLine.objects.filter(name=request.data['name'])
+            if not(isElement):
+                investigationLine = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+class CreateWorksInvestGroupAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
+    serializer_class = WorksInvestGroupSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():
+            korksInvestGroup = WorksInvestGroup.save()
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CrearDirigeAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
-    serializer_class = DirigeSerializer
+class CreateDirectsAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
+    serializer_class = DirectsSerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            dirige = serializer.save()
+            directs = serializer.save()
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CrearManejaAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
-    serializer_class = ManejaSerializer
+class CreateDriveAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
+    serializer_class = DriveSerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            maneja = serializer.save()
+            drive = serializer.save()
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 #consultar
 
-class ConsultarGrupoInvestigacion_departamentoAPI(APIView):#si funciona
+class ConsultInvestigationGroup_DepartmentAPI(APIView):#si funciona
     def get(self, request, *args, **kwargs):
-        queryset = GrupoInvestigacion.objects.filter(institucion=kwargs['id_ins'])
-        return Response({"Grupos": GrupoInvestigacionSerializer(queryset, many=True).data })
+        queryset = InvestigationGroup.objects.filter(departmentU=kwargs['dep'])
+        return Response({"Groups": InvestigationGroupSerializer(queryset, many=True).data })
 
-class ConsultarGrupoInvestigacion_idAPI(APIView):
+class ConsultInvestigationGroup_idAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = GrupoInvestigacion.objects.filter(id=kwargs['id'])
-        return Response({"Grupo": GrupoInvestigacionSerializer(queryset, many=True).data })
+        queryset = InvestigationGroup.objects.filter(id=kwargs['id'])
+        return Response({"Group": InvestigationGroupSerializer(queryset, many=True).data })
 
-class ConsultarAreaConocimientoAPI(APIView):
+class ConsultKnowledgeAreaAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = AreaConocimiento.objects.all()
-        return Response({"Grupo": AreaConocimientoSerializer(queryset, many=True).data })
+        queryset = KnowledgeArea.objects.all()
+        return Response({"Knowledges": KnowledgeAreaSerializer(queryset, many=True).data })
 
-class ConsultarAreaConocimiento_idAPI(APIView):
+class ConsultKnowledgeArea_idAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = AreaConocimiento.objects.filter(id=kwargs['id'])
-        return Response({"Grupo": AreaConocimientoSerializer(queryset, many=True).data })
+        queryset = KnowledgeArea.objects.filter(id=kwargs['id'])
+        return Response({"Knowledge": KnowledgeAreaSerializer(queryset, many=True).data })
 
-class ConsultarLineaInvestigacion_areaAPI(APIView):
+class ConsultInvestigationLine_knowledgeAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = LineaInvestigacion.objects.filter(area_con=kwargs['id_area'])
-        return Response({"Grupos": LineaInvestigacionSerializer(queryset, many=True).data })
+        queryset = InvestigationLine.objects.filter(know_area=kwargs['id_area'])
+        return Response({"Lines": InvestigationLineSerializer(queryset, many=True).data })
 
-class ConsultarLineaInvestigacion_idAPI(APIView):
+class ConsultInvestigationLine_idAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = LineaInvestigacion.objects.filter(id=kwargs['id'])
-        return Response({"Grupo": LineaInvestigacionSerializer(queryset, many=True).data })
+        queryset = InvestigationLine.objects.filter(id=kwargs['id'])
+        return Response({"Line": InvestigationLineSerializer(queryset, many=True).data })
 
 
 
