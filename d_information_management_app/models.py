@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager
+from d_accounts_app.models import User
 
 import datetime
 
@@ -49,7 +50,7 @@ class Institution(models.Model):
         return self.name_inst
 
 class Professor(models.Model):
-    #persona = models.ForeignKey(Persona, )
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=False, null=True)
     institution = models.ForeignKey(Institution, on_delete=models.SET_NULL, blank=False, null=True)
     is_director_student = models.BooleanField(default=False)
     is_director_gi = models.BooleanField(default=False)
@@ -59,8 +60,8 @@ class Professor(models.Model):
         verbose_name = 'Profesor'
         verbose_name_plural = 'Profesores'
     
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.user.name
 
 class Faculty(models.Model):
     name = models.CharField(max_length=30, blank=False, null=False)
@@ -84,18 +85,19 @@ class DepartmentU(models.Model):
     def __str__(self):
         return self.name
 
-# class FormacionAcademica(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     titulo = models.CharField(max_length=30, blank=False, null=False)
-#     institucion = models.CharField(max_length=30, blank=False, null=False)
-#     fecha = models.DateField()
+class AcademicTraining(models.Model):
+    id = models.AutoField(primary_key=True)
+    professor =  models.ForeignKey(Professor, on_delete=models.SET_NULL, blank=False, null=True)
+    titulo = models.CharField(max_length=30, blank=False, null=False)
+    institucion = models.CharField(max_length=30, blank=False, null=False)
+    fecha = models.DateField()
 
-#     class Meta:
-#         verbose_name = 'FormacionAcademica'
-#         verbose_name_plural = 'FormacionesAcademicas'
+    class Meta:
+        verbose_name = 'FormacionAcademica'
+        verbose_name_plural = 'FormacionesAcademicas'
     
-#     def __str__(self):
-#         return self.nombre
+    def __str__(self):
+        return self.titulo   
 
 # Create your models here.
 # -------------------------------------------Jeison

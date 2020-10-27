@@ -8,10 +8,10 @@ from django.urls import path, include
 
 #Jeison
 from .api import (CreateCountryAPI, CreateDepartmentAPI, CreateCityAPI, CreateInstitutionAPI, CreateProfessorAPI,
-                 CreateFacultyAPI, CreateDepartmentUAPI, CreateWorksInvestGroupAPI, CreateDriveAPI, CreateDirectsAPI,
-                 ConsultCountryAPI, ConsultDepartment_CountryAPI, ConsultCity_DepartmentAPI, 
-                 ConsultInstitutionAPI, ConsultInstitution_idAPI, ConsultFacultyAPI, ConsultFaculty_idAPI,
-                 ConsultDepartmentUAPI,ConsultDepartmentU_idAPI,
+                 CreateFacultyAPI, CreateDepartmentUAPI, CreateAcademicTrainingAPI, CreateWorksInvestGroupAPI,
+                 CreateDriveAPI, CreateDirectsAPI,
+                 ConsultCountryAPI, ConsultDepartment_CountryAPI, ConsultCity_DepartmentAPI, ConsultInstitutionAPI, ConsultInstitution_idAPI, ConsultProfessorAPI, ConsultProfessor_idAPI,
+                 ConsultFacultyAPI, ConsultFaculty_idAPI,ConsultDepartmentUAPI,ConsultDepartmentU_idAPI,                 
                  CreateKnowledgeAreaAPI, CreateInvestigationGroupAPI, CreateInvestigationLineAPI, 
                  ConsultInvestigationGroup_idAPI, ConsultInvestigationGroup_DepartmentAPI, 
                  ConsultKnowledgeAreaAPI, ConsultKnowledgeArea_idAPI, ConsultInvestigationLine_knowledgeAPI,
@@ -19,6 +19,7 @@ from .api import (CreateCountryAPI, CreateDepartmentAPI, CreateCityAPI, CreateIn
 
 urlpatterns = [
     #Javier
+    #Crear
     path('api/1.0/crear_pais/', CreateCountryAPI.as_view()),
     path('api/1.0/crear_departamento/', CreateDepartmentAPI.as_view()),
     path('api/1.0/crear_ciudad/', CreateCityAPI.as_view()),
@@ -26,12 +27,15 @@ urlpatterns = [
     path('api/1.0/crear_profesor/', CreateProfessorAPI.as_view()),
     path('api/1.0/crear_facultad/', CreateFacultyAPI.as_view()),
     path('api/1.0/crear_departamento_u/', CreateDepartmentUAPI.as_view()),
-    #----Consultar
+    path('api/1.0/crear_formacion_academica/', CreateAcademicTrainingAPI.as_view()),
+    #Consultar
     path('api/1.0/consultar_paise/', ConsultCountryAPI.as_view()),
     path('api/1.0/consultar_departamento_pais/<int:id_pais>', ConsultDepartment_CountryAPI.as_view()),
     path('api/1.0/consultar_ciudad_departamento/<int:id_depto>', ConsultCity_DepartmentAPI.as_view()),
     path('api/1.0/consultar_institucion/', ConsultInstitutionAPI.as_view()),
     path('api/1.0/consultar_institucion_id/<int:id>', ConsultInstitution_idAPI.as_view()),
+    path('api/1.0/consultar_profesor/', ConsultProfessorAPI.as_view()),
+    path('api/1.0/consultar_profesor_id/<int:id>', ConsultProfessor_idAPI.as_view()),#TODO ESTA RECIBIENDO UN OBJETO USER
     path('api/1.0/consultar_facultad/', ConsultFacultyAPI.as_view()),
     path('api/1.0/consultar_facultad_id/<int:id>', ConsultFaculty_idAPI.as_view()),
     path('api/1.0/consultar_departamentoU/', ConsultDepartmentUAPI.as_view()),

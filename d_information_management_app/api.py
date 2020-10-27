@@ -7,9 +7,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .serializers import (CountrySerializer, DepartmentSerializer, CitySerializer, InstitutionSerializer, 
-                        ProfessorSerializer, FacultySerializer, DepartmentUSerializer, InvestigationGroupSerializer,
-                        KnowledgeAreaSerializer, InvestigationLineSerializer, WorksInvestGroupSerializer, 
-                        DriveSerializer, DirectsSerializer)
+                        ProfessorSerializer, FacultySerializer, DepartmentUSerializer, AcademicTrainingSerializer,
+                        InvestigationGroupSerializer, KnowledgeAreaSerializer, InvestigationLineSerializer, 
+                        WorksInvestGroupSerializer, DriveSerializer, DirectsSerializer)
 
 from .models import (Country, Department, City, Institution, Professor, Faculty, DepartmentU,
                     InvestigationGroup, KnowledgeArea, InvestigationLine#, WorksDepartm, Drive, Directs,
@@ -64,11 +64,13 @@ class CreateInstitutionAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CreateProfessorAPI(APIView):# toca modificarlo a los cambios nuevos
+class CreateProfessorAPI(generics.GenericAPIView):# toca modificarlo a los cambios nuevos
+    serializer_class = ProfessorSerializer
+    
     def post(self, request):
         serializer = ProfessorSerializer(data = request.data) 
-        if serializer.is_valid():#Valida que los tipos de datos sean correctos
-            test = Professor.objects.filter(name=request.data["name"])
+        if serializer.is_valid():
+            test = Professor.objects.filter(user=request.data["user"])
             if not(test):
                 professor = serializer.save()              
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
@@ -98,6 +100,18 @@ class CreateDepartmentUAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+class CreateAcademicTrainingAPI(generics.GenericAPIView):
+    serializer_class = AcademicTrainingSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():#Toca arreglar el filtro. Att_:JAVIER
+            isElement = AcademicTraining.objects.filter(professor=request.data['proffesor'],titulo=request.data['titulo'])
+            if not(isElement):
+                academicTraining = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
 class ConsultCountryAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = Country.objects.all()
@@ -122,6 +136,16 @@ class ConsultInstitution_idAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = Institution.objects.filter(id=kwargs["id"])  
         return Response({"Institution": InstitutionSerializer(queryset, many=True).data })
+
+class ConsultProfessorAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = Professor.objects.all()
+        return Response({"Professors": ProfessorSerializer(queryset, many=True).data })
+
+class ConsultProfessor_idAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = Faculty.objects.filter(user=kwargs["user"])  
+        return Response({"Professors": ProfessorSerializer(queryset, many=True).data })
 
 class ConsultFacultyAPI(APIView):
     def get(self, request, *args, **kwargs):

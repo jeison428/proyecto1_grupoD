@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import (Country, Department, City, Institution, Professor, Faculty, DepartmentU, InvestigationGroup, 
-                    KnowledgeArea, InvestigationLine, WorksDepartm, Drive, Directs, WorksInvestGroup)
+from .models import (Country, Department, City, Institution, Professor, Faculty, DepartmentU, AcademicTraining,
+                    InvestigationGroup, KnowledgeArea, InvestigationLine, WorksDepartm, Drive, Directs, WorksInvestGroup)
 
 # Create your serializers here.
 # --------------------------------------------------Arias
@@ -74,6 +74,17 @@ class DepartmentUSerializer(serializers.ModelSerializer):
         instance = DepartmentU.objects.create(**validate_data)
         instance.save()
         return instance
+
+class AcademicTrainingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AcademicTraining
+        fields = "__all__"
+
+    def create(self, validate_data):
+        instance = AcademicTraining.objects.create(**validate_data)
+        instance.save()
+        return instance
+
 
 # Create your serializers here.
 # --------------------------------------------------Jeison
