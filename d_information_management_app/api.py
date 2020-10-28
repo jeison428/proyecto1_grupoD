@@ -167,6 +167,11 @@ class ConsultDepartmentU_idAPI(APIView):
         queryset = DepartmentU.objects.filter(id=kwargs["id"])  
         return Response({"DepartmentU": DepartmentUSerializer(queryset, many=True).data })
 
+class ConsultDepartmentU_InstitutionAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = DepartmentU.objects.filter(faculty__institution=kwargs["id"])  
+        return Response({"DepartmentU": DepartmentUSerializer(queryset, many=True).data })
+
 # Create your api's here.
 # --------------------------------------------------Jeison
 

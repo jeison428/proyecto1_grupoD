@@ -9,7 +9,7 @@ from django.urls import path, include
 #Jeison
 from .api import (CreateCountryAPI, CreateDepartmentAPI, CreateCityAPI, CreateInstitutionAPI, CreateProfessorAPI,
                  CreateFacultyAPI, CreateDepartmentUAPI, CreateAcademicTrainingAPI, CreateWorksInvestGroupAPI,
-                 CreateDriveAPI, CreateDirectsAPI,
+                 CreateDriveAPI, CreateDirectsAPI,ConsultDepartmentU_InstitutionAPI,
                  ConsultCountryAPI, ConsultDepartment_CountryAPI, ConsultCity_DepartmentAPI, ConsultInstitutionAPI, ConsultInstitution_idAPI, ConsultProfessorAPI, ConsultProfessor_idAPI,
                  ConsultFacultyAPI, ConsultFaculty_idAPI,ConsultDepartmentUAPI,ConsultDepartmentU_idAPI,                 
                  CreateKnowledgeAreaAPI, CreateInvestigationGroupAPI, CreateInvestigationLineAPI, 
@@ -29,7 +29,7 @@ urlpatterns = [
     path('api/1.0/crear_departamento_u/', CreateDepartmentUAPI.as_view()),
     path('api/1.0/crear_formacion_academica/', CreateAcademicTrainingAPI.as_view()),
     #Consultar
-    path('api/1.0/consultar_paise/', ConsultCountryAPI.as_view()),
+    path('api/1.0/consultar_pais/', ConsultCountryAPI.as_view()),
     path('api/1.0/consultar_departamento_pais/<int:id_pais>', ConsultDepartment_CountryAPI.as_view()),
     path('api/1.0/consultar_ciudad_departamento/<int:id_depto>', ConsultCity_DepartmentAPI.as_view()),
     path('api/1.0/consultar_institucion/', ConsultInstitutionAPI.as_view()),
@@ -40,6 +40,7 @@ urlpatterns = [
     path('api/1.0/consultar_facultad_id/<int:id>', ConsultFaculty_idAPI.as_view()),
     path('api/1.0/consultar_departamentoU/', ConsultDepartmentUAPI.as_view()),
     path('api/1.0/consultar_departamentoU_id/<int:id>', ConsultDepartmentU_idAPI.as_view()),
+    path('api/1.0/consultar_departamentoU_institucion/<int:id>', ConsultDepartmentU_InstitutionAPI.as_view()),
     #Jeison
     #Crear
     path('api/1.0/crear_grupo_investigacion/', CreateInvestigationGroupAPI.as_view()),
