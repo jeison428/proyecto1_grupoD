@@ -6,14 +6,14 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import (CountrySerializer, DepartmentSerializer, CitySerializer, InstitutionSerializer, 
-                        ProfessorSerializer, FacultySerializer, DepartmentUSerializer, AcademicTrainingSerializer,
-                        InvestigationGroupSerializer, KnowledgeAreaSerializer, InvestigationLineSerializer, 
-                        WorksInvestGroupSerializer, DriveSerializer, DirectsSerializer)
+from .serializers import (CountrySerializer, StateSerializer, CitySerializer, InstitutionSerializer, 
+                        ProfessorSerializer, FacultySerializer, DepartmentSerializer, InvestigationGroupSerializer,
+                        KnowledgeAreaSerializer, InvestigationLineSerializer, WorksInvestGroupSerializer, 
+                        ManageInvestLineSerializer, ManageInvestGroupSerializer, AcademicTrainingSerializer)
 
-from .models import (Country, Department, City, Institution, Professor, Faculty, DepartmentU,
-                    InvestigationGroup, KnowledgeArea, InvestigationLine#, WorksDepartm, Drive, Directs,
-                    )
+from .models import (Country, State, City, Institution, Professor, Faculty, Department, AcademicTraining,
+                    InvestigationGroup, KnowledgeArea, InvestigationLine, WorksInvestGroup, ManageInvestGroup,
+                    ManageInvestLine)
 
 # Create your api's here.
 # --------------------------------------------------Arias
@@ -28,13 +28,13 @@ class CreateCountryAPI(APIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CreateDepartmentAPI(generics.GenericAPIView):
-    serializer_class = DepartmentSerializer
+class CreateStateAPI(generics.GenericAPIView):
+    serializer_class = StateSerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            isElement = Department.objects.filter(name=request.data['name'])
+            isElement = State.objects.filter(name=request.data['name'])
             if not(isElement):
                 department = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
@@ -66,11 +66,11 @@ class CreateInstitutionAPI(generics.GenericAPIView):
 
 class CreateProfessorAPI(generics.GenericAPIView):# toca modificarlo a los cambios nuevos
     serializer_class = ProfessorSerializer
-    
+
     def post(self, request):
-        serializer = ProfessorSerializer(data = request.data) 
-        if serializer.is_valid():
-            test = Professor.objects.filter(user=request.data["user"])
+        serializer = self.get_serializer(data = request.data) 
+        if serializer.is_valid():#Valida que los tipos de datos sean correctos
+            test = Professor.objects.filter(name=request.data["name"])
             if not(test):
                 professor = serializer.save()              
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
@@ -88,27 +88,15 @@ class CreateFacultyAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CreateDepartmentUAPI(generics.GenericAPIView):
-    serializer_class = DepartmentUSerializer
+class CreateDepartmentAPI(generics.GenericAPIView):
+    serializer_class = DepartmentSerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            isElement = DepartmentU.objects.filter(name=request.data['name'])
+            isElement = Department.objects.filter(name=request.data['name'])
             if not(isElement):
-                departmentU = serializer.save()
-                return Response(serializer.data, status = status.HTTP_201_CREATED)
-        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-
-class CreateAcademicTrainingAPI(generics.GenericAPIView):
-    serializer_class = AcademicTrainingSerializer
-
-    def post(self, request):
-        serializer = self.get_serializer(data = request.data)
-        if serializer.is_valid():#Toca arreglar el filtro. Att_:JAVIER
-            isElement = AcademicTraining.objects.filter(professor=request.data['proffesor'],titulo=request.data['titulo'])
-            if not(isElement):
-                academicTraining = serializer.save()
+                department = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
@@ -117,14 +105,14 @@ class ConsultCountryAPI(APIView):
         queryset = Country.objects.all()
         return Response({"Countrys": CountrySerializer(queryset, many=True).data })
 
-class ConsultDepartment_CountryAPI(APIView):
+class ConsultState_CountryAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = Department.objects.filter(country=kwargs["id_country"])
-        return Response({"Departments": DepartmentSerializer(queryset, many=True).data })
+        queryset = State.objects.filter(country=kwargs["id_country"])
+        return Response({"States": StateSerializer(queryset, many=True).data })
 
-class ConsultCity_DepartmentAPI(APIView):
+class ConsultCity_StateAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = City.objects.filter(department=kwargs["id_dep"])      
+        queryset = City.objects.filter(state=kwargs["id_state"])
         return Response({"Citys": CitySerializer(queryset, many=True).data })
 
 class ConsultInstitutionAPI(APIView):
@@ -137,16 +125,6 @@ class ConsultInstitution_idAPI(APIView):
         queryset = Institution.objects.filter(id=kwargs["id"])  
         return Response({"Institution": InstitutionSerializer(queryset, many=True).data })
 
-class ConsultProfessorAPI(APIView):
-    def get(self, request, *args, **kwargs):
-        queryset = Professor.objects.all()
-        return Response({"Professors": ProfessorSerializer(queryset, many=True).data })
-
-class ConsultProfessor_idAPI(APIView):
-    def get(self, request, *args, **kwargs):
-        queryset = Faculty.objects.filter(user=kwargs["user"])  
-        return Response({"Professors": ProfessorSerializer(queryset, many=True).data })
-
 class ConsultFacultyAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = Faculty.objects.all()
@@ -157,20 +135,27 @@ class ConsultFaculty_idAPI(APIView):
         queryset = Faculty.objects.filter(id=kwargs["id"])  
         return Response({"Faculty": FacultySerializer(queryset, many=True).data })
 
-class ConsultDepartmentUAPI(APIView):
+class ConsultDepartmentAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = DepartamentoU.objects.all()
-        return Response({"DepartamentosU": DepartamentoUSerializer(queryset, many=True).data })
+        queryset = Department.objects.all()
+        return Response({"Departments": DepartmentSerializer(queryset, many=True).data })
 
-class ConsultDepartmentU_idAPI(APIView):
+class ConsultDepartment_idAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = DepartmentU.objects.filter(id=kwargs["id"])  
-        return Response({"DepartmentU": DepartmentUSerializer(queryset, many=True).data })
+        queryset = Department.objects.filter(id=kwargs["id"])  
+        return Response({"Department": DepartmentSerializer(queryset, many=True).data })
 
-class ConsultDepartmentU_InstitutionAPI(APIView):
-    def get(self, request, *args, **kwargs):
-        queryset = DepartmentU.objects.filter(faculty__institution=kwargs["id"])  
-        return Response({"DepartmentU": DepartmentUSerializer(queryset, many=True).data })
+class CreateAcademicTrainingAPI(generics.GenericAPIView):
+    serializer_class = AcademicTrainingSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():#Toca arreglar el filtro. Att_:JAVIER
+            isElement = AcademicTraining.objects.filter(professor=request.data['proffesor'],titulo=request.data['titulo'])
+            if not(isElement):
+                academicTraining = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 # Create your api's here.
 # --------------------------------------------------Jeison
@@ -215,12 +200,12 @@ class CreateWorksInvestGroupAPI(generics.GenericAPIView): # Falta validar que no
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            korksInvestGroup = WorksInvestGroup.save()
+            korksInvestGroup = serializer.save()
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CreateDirectsAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
-    serializer_class = DirectsSerializer
+class CreateManageInvestGroupAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
+    serializer_class = ManageInvestGroupSerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
@@ -229,8 +214,8 @@ class CreateDirectsAPI(generics.GenericAPIView): # Falta validar que no hayan 2 
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CreateDriveAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
-    serializer_class = DriveSerializer
+class CreateManageInvestLineAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
+    serializer_class = ManageInvestLineSerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
@@ -243,7 +228,7 @@ class CreateDriveAPI(generics.GenericAPIView): # Falta validar que no hayan 2 re
 
 class ConsultInvestigationGroup_DepartmentAPI(APIView):#si funciona
     def get(self, request, *args, **kwargs):
-        queryset = InvestigationGroup.objects.filter(departmentU=kwargs['dep'])
+        queryset = InvestigationGroup.objects.filter(department=kwargs['dep'])
         return Response({"Groups": InvestigationGroupSerializer(queryset, many=True).data })
 
 class ConsultInvestigationGroup_idAPI(APIView):

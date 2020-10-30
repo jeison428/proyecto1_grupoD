@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from .models import (Country, Department, City, Institution, Professor, Faculty, DepartmentU, AcademicTraining,
-                    InvestigationGroup, KnowledgeArea, InvestigationLine, WorksDepartm, Drive, Directs, WorksInvestGroup)
+from .models import (Country, State, City, Institution, Professor, Faculty, Department, InvestigationGroup, 
+                    KnowledgeArea, InvestigationLine, WorksDepartm, ManageInvestLine, ManageInvestGroup, 
+                    WorksInvestGroup, AcademicTraining)
 
 # Create your serializers here.
 # --------------------------------------------------Arias
@@ -15,13 +16,13 @@ class CountrySerializer(serializers.Serializer):
         instance.save()
         return instance
 
-class DepartmentSerializer(serializers.ModelSerializer):
+class StateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Department
+        model = State
         fields = "__all__"
 
     def create(self, validate_data):
-        instance = Department.objects.create(**validate_data)
+        instance = State.objects.create(**validate_data)
         instance.save()
         return instance
 
@@ -65,13 +66,13 @@ class FacultySerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-class DepartmentUSerializer(serializers.ModelSerializer):
+class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DepartmentU
+        model = Department
         fields = "__all__"
 
     def create(self, validate_data):
-        instance = DepartmentU.objects.create(**validate_data)
+        instance = Department.objects.create(**validate_data)
         instance.save()
         return instance
 
@@ -84,7 +85,6 @@ class AcademicTrainingSerializer(serializers.ModelSerializer):
         instance = AcademicTraining.objects.create(**validate_data)
         instance.save()
         return instance
-
 
 # Create your serializers here.
 # --------------------------------------------------Jeison
@@ -132,22 +132,22 @@ class WorksInvestGroupSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-class DriveSerializer(serializers.ModelSerializer):
+class ManageInvestLineSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Drive
+        model = ManageInvestLine
         fields = '__all__'
 
     def create(self, validate_data):
-        instance = Drive.objects.create(**validate_data)
+        instance = ManageInvestLine.objects.create(**validate_data)
         instance.save()
         return instance
 
-class DirectsSerializer(serializers.ModelSerializer):
+class ManageInvestGroupSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Directs
+        model = ManageInvestGroup
         fields = '__all__'
 
     def create(self, validate_data):
-        instance = Directs.objects.create(**validate_data)
+        instance = ManageInvestGroup.objects.create(**validate_data)
         instance.save()
         return instance

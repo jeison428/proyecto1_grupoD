@@ -30,8 +30,8 @@ urlpatterns = [
     path('api/1.0/crear_formacion_academica/', CreateAcademicTrainingAPI.as_view()),
     #Consultar
     path('api/1.0/consultar_pais/', ConsultCountryAPI.as_view()),
-    path('api/1.0/consultar_departamento_pais/<int:id_pais>', ConsultDepartment_CountryAPI.as_view()),
-    path('api/1.0/consultar_ciudad_departamento/<int:id_depto>', ConsultCity_DepartmentAPI.as_view()),
+    path('api/1.0/consultar_departamento_pais/<int:id_pais>', ConsultDepartment_CountryAPI.as_view()),# id_country
+    path('api/1.0/consultar_ciudad_departamento/<int:id_depto>', ConsultCity_DepartmentAPI.as_view()),#id_dep
     path('api/1.0/consultar_institucion/', ConsultInstitutionAPI.as_view()),
     path('api/1.0/consultar_institucion_id/<int:id>', ConsultInstitution_idAPI.as_view()),
     path('api/1.0/consultar_profesor/', ConsultProfessorAPI.as_view()),
