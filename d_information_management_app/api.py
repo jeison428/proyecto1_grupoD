@@ -70,8 +70,8 @@ class CreateProfessorAPI(generics.GenericAPIView):# toca modificarlo a los cambi
     def post(self, request):
         serializer = self.get_serializer(data = request.data) 
         if serializer.is_valid():#Valida que los tipos de datos sean correctos
-            test = Professor.objects.filter(name=request.data["name"])
-            if not(test):
+            # test = Professor.objects.filter(name=request.data["name"])
+            # if not(test):
                 professor = serializer.save()              
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
