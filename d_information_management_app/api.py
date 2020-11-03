@@ -112,7 +112,7 @@ class ConsultState_CountryAPI(APIView):
 
 class ConsultCity_StateAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = City.objects.filter(state=kwargs["id_state"])
+        queryset = City.objects.filter(state=kwargs["id_dep"])
         return Response({"Citys": CitySerializer(queryset, many=True).data })
 
 class ConsultInstitutionAPI(APIView):
@@ -151,7 +151,7 @@ class CreateAcademicTrainingAPI(generics.GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():#Toca arreglar el filtro. Att_:JAVIER
-            isElement = AcademicTraining.objects.filter(professor=request.data['proffesor'],titulo=request.data['titulo'])
+            isElement = AcademicTraining.objects.filter(professor=request.data['professor'],degree=request.data['degree'])
             if not(isElement):
                 academicTraining = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
