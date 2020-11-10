@@ -384,4 +384,4 @@ class WorksDepartm(models.Model):
         verbose_name_plural = 'Labora'
 
 
-
+# para el sprint es: es miembro, trabaja, dirige

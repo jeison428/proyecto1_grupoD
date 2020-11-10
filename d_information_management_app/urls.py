@@ -12,6 +12,7 @@ from .api import (CreateCountryAPI, CreateStateAPI, CreateCityAPI, CreateInstitu
                  CreateWorksInvestGroupAPI, CreateManageInvestLineAPI, CreateManageInvestGroupAPI,
                  ConsultCountryAPI, ConsultState_CountryAPI, ConsultCity_StateAPI, ConsultInstitutionAPI, ConsultInstitution_idAPI, 
                  #ConsultProfessorAPI, ConsultProfessor_idAPI,
+                 CreateIsMemberAPI,
                  ConsultFacultyAPI, ConsultFaculty_idAPI, ConsultDepartmentAPI, ConsultDepartment_idAPI,
                  CreateKnowledgeAreaAPI, CreateInvestigationGroupAPI, CreateInvestigationLineAPI, 
                  ConsultInvestigationGroup_idAPI, ConsultInvestigationGroup_DepartmentAPI, 
@@ -49,6 +50,7 @@ urlpatterns = [
     path('api/1.0/crear_trabaja/', CreateWorksInvestGroupAPI.as_view()),
     path('api/1.0/crear_dirige/', CreateManageInvestGroupAPI.as_view()),
     path('api/1.0/crear_maneja/', CreateManageInvestLineAPI.as_view()),
+    path('api/1.0/create_is_member/', CreateIsMemberAPI.as_view()),
     #Consultar
     path('api/1.0/consultar_gi_dep/<int:dep>', ConsultInvestigationGroup_DepartmentAPI.as_view()),
     path('api/1.0/consultar_gi_id/<int:id>', ConsultInvestigationGroup_idAPI.as_view()),

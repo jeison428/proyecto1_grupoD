@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import (Country, State, City, Institution, Professor, Faculty, Department, InvestigationGroup, 
                     KnowledgeArea, InvestigationLine, WorksDepartm, ManageInvestLine, ManageInvestGroup, 
-                    WorksInvestGroup, AcademicTraining)
+                    WorksInvestGroup, AcademicTraining, IsMember)
 
 # Create your serializers here.
 # --------------------------------------------------Arias
@@ -89,7 +89,7 @@ class AcademicTrainingSerializer(serializers.ModelSerializer):
 # Create your serializers here.
 # --------------------------------------------------Jeison
 
-
+#Grupo de investigacion
 class InvestigationGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvestigationGroup
@@ -100,6 +100,7 @@ class InvestigationGroupSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+#Area del conocimiento
 class KnowledgeAreaSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     name = serializers.CharField()
@@ -112,6 +113,7 @@ class KnowledgeAreaSerializer(serializers.Serializer):
         instance.save()
         return instance
 
+#Linea de investigacion
 class InvestigationLineSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvestigationLine
@@ -122,6 +124,7 @@ class InvestigationLineSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+#Trabaja
 class WorksInvestGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorksInvestGroup
@@ -132,6 +135,7 @@ class WorksInvestGroupSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+#Maneja
 class ManageInvestLineSerializer(serializers.ModelSerializer):
     class Meta:
         model = ManageInvestLine
@@ -142,6 +146,7 @@ class ManageInvestLineSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+#Dirige
 class ManageInvestGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = ManageInvestGroup
@@ -151,3 +156,15 @@ class ManageInvestGroupSerializer(serializers.ModelSerializer):
         instance = ManageInvestGroup.objects.create(**validate_data)
         instance.save()
         return instance
+
+#Es miembro
+class IsMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IsMember
+        fields = '__all__'
+
+    def create(self, validate_data):
+        instance = IsMember.objects.create(**validate_data)
+        instance.save()
+        return instance
+

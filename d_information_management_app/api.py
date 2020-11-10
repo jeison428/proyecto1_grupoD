@@ -9,11 +9,12 @@ from rest_framework.views import APIView
 from .serializers import (CountrySerializer, StateSerializer, CitySerializer, InstitutionSerializer, 
                         ProfessorSerializer, FacultySerializer, DepartmentSerializer, InvestigationGroupSerializer,
                         KnowledgeAreaSerializer, InvestigationLineSerializer, WorksInvestGroupSerializer, 
-                        ManageInvestLineSerializer, ManageInvestGroupSerializer, AcademicTrainingSerializer)
+                        ManageInvestLineSerializer, ManageInvestGroupSerializer, AcademicTrainingSerializer,
+                        IsMemberSerializer)
 
 from .models import (Country, State, City, Institution, Professor, Faculty, Department, AcademicTraining,
                     InvestigationGroup, KnowledgeArea, InvestigationLine, WorksInvestGroup, ManageInvestGroup,
-                    ManageInvestLine)
+                    ManageInvestLine, IsMember)
 
 # Create your api's here.
 # --------------------------------------------------Arias
@@ -194,24 +195,49 @@ class CreateInvestigationLineAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class CreateWorksInvestGroupAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
+# Trabaja entre GI y AC
+class CreateWorksInvestGroupAPI(generics.GenericAPIView): # (Faltan pruebas)
     serializer_class = WorksInvestGroupSerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            korksInvestGroup = serializer.save()
-            return Response(serializer.data, status = status.HTTP_201_CREATED)
+            isElement = WorksInvestGroup.objects.filter(
+                inv_group=request.data['inv_group'], know_area=request.data['know_area']
+            )
+            if not(isElement):
+                korksInvestGroup = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+# Dirige entre profesor y GI
 class CreateManageInvestGroupAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
     serializer_class = ManageInvestGroupSerializer
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            directs = serializer.save()
-            return Response(serializer.data, status = status.HTTP_201_CREATED)
+            isElement = ManageInvestGroup.objects.filter(
+                inv_group=request.data['inv_group'], professor=request.data['professor']
+            )
+            if not(isElement):
+                directs = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+# Es miembro entre profesor y GI (falta)
+class CreateIsMemberAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
+    serializer_class = IsMemberSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():
+            isElement = IsMember.objects.filter(
+                inv_group=request.data['inv_group'], professor=request.data['professor']
+            )
+            if not(isElement):
+                is_member = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class CreateManageInvestLineAPI(generics.GenericAPIView): # Falta validar que no hayan 2 registros iguales
