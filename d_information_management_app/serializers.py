@@ -91,6 +91,10 @@ class AcademicTrainingSerializer(serializers.ModelSerializer):
 
 #Grupo de investigacion
 class InvestigationGroupSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=False)
+    email = serializers.EmailField(required=False)
+    foundation_date = serializers.DateField(required=False)
+    category = serializers.CharField(required=False)
     class Meta:
         model = InvestigationGroup
         fields = "__all__"# ['campo1','campo2']

@@ -44,6 +44,7 @@ urlpatterns = [
     path('api/1.0/consultar_departamentoU_id/<int:id>', ConsultDepartment_idAPI.as_view()),
     #Jeison
     #Crear
+    # trabaja dirije y es miembro update (put)
     path('api/1.0/crear_grupo_investigacion/', CreateInvestigationGroupAPI.as_view()),
     path('api/1.0/crear_area_conocimiento/', CreateKnowledgeAreaAPI.as_view()),
     path('api/1.0/crear_linea_investigacion/', CreateInvestigationLineAPI.as_view()),

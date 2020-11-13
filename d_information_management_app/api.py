@@ -259,8 +259,23 @@ class ConsultInvestigationGroup_DepartmentAPI(APIView):#si funciona
 
 class ConsultInvestigationGroup_idAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = InvestigationGroup.objects.filter(id=kwargs['id'])
-        return Response({"Group": InvestigationGroupSerializer(queryset, many=True).data })
+        try:
+            queryset = InvestigationGroup.objects.filter(id=kwargs['id'])
+        except InvestigationGroup.DoesNotExist:
+            return Response(f"No existe el Grupo de investigacion en la base de datos", status=status.HTTP_404_NOT_FOUND)
+        return Response({"Group": InvestigationGroupSerializer(queryset, many=True).data})
+    
+    def put(self, request, *args, **kwargs):
+        try:
+            model = InvestigationGroup.objects.get(id=kwargs['id'])
+        except InvestigationGroup.DoesNotExist:
+            return Response(f"No existe el Grupo de investigacion en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+        serializer = InvestigationGroupSerializer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ConsultKnowledgeAreaAPI(APIView):
     def get(self, request, *args, **kwargs):
@@ -282,6 +297,8 @@ class ConsultInvestigationLine_idAPI(APIView):
         queryset = InvestigationLine.objects.filter(id=kwargs['id'])
         return Response({"Line": InvestigationLineSerializer(queryset, many=True).data })
 
-
+# class IsMemberAPI(APIView):
+#     def get(self, request, *args, **kwargs):
+#         queryset = IsMember.objects.filter(inv_group=)
 
 
