@@ -259,11 +259,13 @@ class ConsultInvestigationGroup_DepartmentAPI(APIView):#si funciona
 
 class ConsultInvestigationGroup_idAPI(APIView):
     def get(self, request, *args, **kwargs):
-        try:
-            queryset = InvestigationGroup.objects.filter(id=kwargs['id'])
-        except InvestigationGroup.DoesNotExist:
+        queryset = InvestigationGroup.objects.filter(id=kwargs['id'])
+        
+        returned = InvestigationGroupSerializer(queryset, many=True).data
+        if returned:
+            return Response({"Group": returned}, status=status.HTTP_202_ACCEPTED)
+        else:
             return Response(f"No existe el Grupo de investigacion en la base de datos", status=status.HTTP_404_NOT_FOUND)
-        return Response({"Group": InvestigationGroupSerializer(queryset, many=True).data})
     
     def put(self, request, *args, **kwargs):
         try:
@@ -272,6 +274,32 @@ class ConsultInvestigationGroup_idAPI(APIView):
             return Response(f"No existe el Grupo de investigacion en la base de datos", status=status.HTTP_404_NOT_FOUND)
 
         serializer = InvestigationGroupSerializer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ConsultProfessorAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = Professor.objects.all()
+        return Response({"Professors": ProfessorSerializer(queryset, many=True).data })
+
+class ConsultProfessor_idAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        try:
+            queryset = Professor.objects.get(user=kwargs['id'])
+            #return Response({"Professor": ProfessorSerializer(queryset, many=True).data })
+            return Response(ProfessorSerializer(queryset, many=True).data)
+        except Professor.DoesNotExist:
+            return Response(f"No existe el Profesor en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, *args, **kwargs):
+        try:
+            model = Professor.objects.get(user=kwargs['id'])
+        except Professor.DoesNotExist:
+            return Response(f"No existe el Profesor en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+        serializer = ProfessorSerializer(model, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
