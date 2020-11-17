@@ -6,13 +6,13 @@ from .models import (Country, State, City, Institution, Professor, Faculty, Depa
 # Create your serializers here.
 # --------------------------------------------------Arias
 
-class CountrySerializer(serializers.Serializer):
-    id = serializers.ReadOnlyField()
-    name = serializers.CharField()
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = "__all__"
 
     def create(self, validate_data):
-        instance = Country()
-        instance.name = validate_data.get('name')
+        instance = Country.objects.create(**validate_data)
         instance.save()
         return instance
 
@@ -23,7 +23,8 @@ class StateSerializer(serializers.ModelSerializer):
 
     def create(self, validate_data):
         instance = State.objects.create(**validate_data)
-        instance.save()
+        #instance.save()
+        print("Serializer en state: ",instance)
         return instance
 
 class CitySerializer(serializers.ModelSerializer):

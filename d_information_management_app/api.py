@@ -19,9 +19,13 @@ from .models import (Country, State, City, Institution, Professor, Faculty, Depa
 # Create your api's here.
 # --------------------------------------------------Arias
 
-class CreateCountryAPI(APIView):
+#region Create
+
+class CreateCountryAPI(generics.GenericAPIView):
+    serializer_class = CountrySerializer
+
     def post(self, request):
-        serializer = CountrySerializer(data = request.data) 
+        serializer = self.get_serializer(data = request.data) 
         if serializer.is_valid():#Valida que los tipos de datos sean correctos
             test = Country.objects.filter(name=request.data["name"])
             if not(test):
@@ -100,21 +104,78 @@ class CreateDepartmentAPI(generics.GenericAPIView):
                 department = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+#endregion
+#region Consult
 
 class ConsultCountryAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = Country.objects.all()
         return Response({"Countrys": CountrySerializer(queryset, many=True).data })
 
+class ConsultCountry_idAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = Country.objects.filter(id=kwargs["id_country"])
+        returned = CountrySerializer(queryset, many=True).data
+        if returned:
+            return Response({"Country": returned}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe el País en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, *args, **kwargs):
+        try:
+            model = Country.objects.get(id=request.data['id'])
+        except Country.DoesNotExist:
+            return Response(f"No existe el País en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+        serializer = CountrySerializer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+
 class ConsultState_CountryAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = State.objects.filter(country=kwargs["id_country"])
-        return Response({"States": StateSerializer(queryset, many=True).data })
+        returned = StateSerializer(queryset, many=True).data
+        if returned:
+            return Response({"States": returned}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existen Departamentos con ese País en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, *args, **kwargs):
+        try:
+            model = State.objects.get(id=request.data['id'])
+        except State.DoesNotExist:
+            return Response(f"No existe ese Departamento en la base de datos", status=status.HTTP_404_NOT_FOUND)
+        
+        print(request.data)
+        serializer = StateSerializer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 class ConsultCity_StateAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = City.objects.filter(state=kwargs["id_dep"])
-        return Response({"Citys": CitySerializer(queryset, many=True).data })
+        returned = CitySerializer(queryset, many=True).data
+        if returned:
+            return Response({"Cities": returned}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existen Ciudades con ese Departamento en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, *args, **kwargs):
+        try:
+            model = City.objects.get(id=request.data['id'])
+        except City.DoesNotExist:
+            return Response(f"No existe esa Ciudad en la base de datos", status=status.HTTP_404_NOT_FOUND)
+        
+        print(request.data)
+        serializer = CitySerializer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ConsultInstitutionAPI(APIView):
     def get(self, request, *args, **kwargs):
@@ -123,8 +184,24 @@ class ConsultInstitutionAPI(APIView):
 
 class ConsultInstitution_idAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = Institution.objects.filter(id=kwargs["id"])  
-        return Response({"Institution": InstitutionSerializer(queryset, many=True).data })
+        queryset = Institution.objects.filter(id=kwargs["id"]) 
+        returned = InstitutionSerializer(queryset, many=True).data
+        if returned:
+            return Response({"Institution": returned}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe Instituto en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, *args, **kwargs):
+        try:
+            model = Institution.objects.get(id=request.data['id'])
+        except Institution.DoesNotExist:
+            return Response(f"No existe Instituto en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+        serializer = InstitutionSerializer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 class ConsultFacultyAPI(APIView):
     def get(self, request, *args, **kwargs):
@@ -134,7 +211,23 @@ class ConsultFacultyAPI(APIView):
 class ConsultFaculty_idAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = Faculty.objects.filter(id=kwargs["id"])  
-        return Response({"Faculty": FacultySerializer(queryset, many=True).data })
+        returned = FacultySerializer(queryset, many=True).data
+        if returned:
+            return Response({"Faculty": returned}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe Facultad en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, *args, **kwargs):
+        try:
+            model = Faculty.objects.get(id=request.data['id'])
+        except Faculty.DoesNotExist:
+            return Response(f"No existe Facultad en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+        serializer = FacultySerializer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 class ConsultDepartmentAPI(APIView):
     def get(self, request, *args, **kwargs):
@@ -144,7 +237,23 @@ class ConsultDepartmentAPI(APIView):
 class ConsultDepartment_idAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = Department.objects.filter(id=kwargs["id"])  
-        return Response({"Department": DepartmentSerializer(queryset, many=True).data })
+        returned = DepartmentSerializer(queryset, many=True).data
+        if returned:
+            return Response({"Department": returned}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe Departamento en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, *args, **kwargs):
+        try:
+            model = Department.objects.get(id=request.data['id'])
+        except Department.DoesNotExist:
+            return Response(f"No existe Departamento en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+        serializer = DepartmentSerializer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 class CreateAcademicTrainingAPI(generics.GenericAPIView):
     serializer_class = AcademicTrainingSerializer
@@ -157,6 +266,7 @@ class CreateAcademicTrainingAPI(generics.GenericAPIView):
                 academicTraining = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+#endregion
 
 # Create your api's here.
 # --------------------------------------------------Jeison

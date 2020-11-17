@@ -10,7 +10,8 @@ from django.urls import path, include
 from .api import (CreateCountryAPI, CreateStateAPI, CreateCityAPI, CreateInstitutionAPI, CreateProfessorAPI,
                  CreateFacultyAPI, CreateDepartmentAPI, CreateAcademicTrainingAPI,
                  CreateWorksInvestGroupAPI, CreateManageInvestLineAPI, CreateManageInvestGroupAPI,
-                 ConsultCountryAPI, ConsultState_CountryAPI, ConsultCity_StateAPI, ConsultInstitutionAPI, ConsultInstitution_idAPI, 
+                 ConsultCountryAPI, ConsultCountry_idAPI,ConsultState_CountryAPI, ConsultCity_StateAPI,
+                 ConsultInstitutionAPI, ConsultInstitution_idAPI, 
                  ConsultProfessorAPI, ConsultProfessor_idAPI, CreateIsMemberAPI,
                  ConsultFacultyAPI, ConsultFaculty_idAPI, ConsultDepartmentAPI, ConsultDepartment_idAPI,
                  CreateKnowledgeAreaAPI, CreateInvestigationGroupAPI, CreateInvestigationLineAPI, 
@@ -31,6 +32,7 @@ urlpatterns = [
     path('api/1.0/crear_formacion_academica/', CreateAcademicTrainingAPI.as_view()),
     #Consultar
     path('api/1.0/consultar_pais/', ConsultCountryAPI.as_view()),
+    path('api/1.0/consultar_pais_id/<int:id_country>', ConsultCountry_idAPI.as_view()),
     path('api/1.0/consultar_departamento_pais/<int:id_country>', ConsultState_CountryAPI.as_view()),
     path('api/1.0/consultar_ciudad_departamento/<int:id_dep>', ConsultCity_StateAPI.as_view()),
     path('api/1.0/consultar_institucion/', ConsultInstitutionAPI.as_view()),
