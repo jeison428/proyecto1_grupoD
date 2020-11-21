@@ -291,6 +291,9 @@ class WorksInvestGroup(models.Model):
         verbose_name = 'Trabaja'
         verbose_name_plural = 'Trabaja'
 
+    def __str__(self):
+        return "{}".format(self.inv_group)," trabaja en {}".format(self.know_area)
+
 class ManageInvestLine(models.Model):
     """
     Clase usada para tener el registro de la relacion entre profesor y la linea de investigacion que el profesor
@@ -351,11 +354,15 @@ class IsMember(models.Model):
     """
     professor = models.ForeignKey(Professor, on_delete=models.SET_NULL, blank=False, null=True)
     inv_group = models.ForeignKey(InvestigationGroup, on_delete=models.SET_NULL, blank=False, null=True)
-    membershio_status = models.BooleanField()
+    member_status = models.BooleanField()
 
     class Meta:
         verbose_name = 'Es Miembro'
         verbose_name_plural = 'Son Miembros'
+
+    def __str__(self):
+        return "{}".format(self.professor)," es miembro de {}".format(self.inv_group)
+
 
 class WorksDepartm(models.Model):
     """

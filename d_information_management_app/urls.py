@@ -8,11 +8,11 @@ from django.urls import path, include
 
 #Jeison
 from .api import (CreateCountryAPI, CreateStateAPI, CreateCityAPI, CreateInstitutionAPI, CreateProfessorAPI,
-                 CreateFacultyAPI, CreateDepartmentAPI, CreateAcademicTrainingAPI,
+                 CreateFacultyAPI, CreateDepartmentAPI, CreateAcademicTrainingAPI, ConsultManageInvestGroupAPI,
                  CreateWorksInvestGroupAPI, CreateManageInvestLineAPI, CreateManageInvestGroupAPI,
                  ConsultCountryAPI, ConsultCountry_idAPI,ConsultState_CountryAPI, ConsultCity_StateAPI,
-                 ConsultInstitutionAPI, ConsultInstitution_idAPI, 
-                 ConsultProfessorAPI, ConsultProfessor_idAPI, CreateIsMemberAPI,
+                 ConsultInstitutionAPI, ConsultInstitution_idAPI, ConsultIsMemberAPI,
+                 ConsultProfessorAPI, ConsultProfessor_idAPI, CreateIsMemberAPI, ConsultWorksInvestGroupAPI,
                  ConsultFacultyAPI, ConsultFaculty_idAPI, ConsultDepartmentAPI, ConsultDepartment_idAPI,
                  CreateKnowledgeAreaAPI, CreateInvestigationGroupAPI, CreateInvestigationLineAPI, 
                  ConsultInvestigationGroup_idAPI, ConsultInvestigationGroup_DepartmentAPI, 
@@ -59,6 +59,8 @@ urlpatterns = [
     path('api/1.0/consultar_li_area/<int:id_area>', ConsultInvestigationLine_knowledgeAPI.as_view()),
     path('api/1.0/consultar_li_id/<int:id>', ConsultInvestigationLine_idAPI.as_view()),
     path('api/1.0/consultar_profesor/', ConsultProfessorAPI.as_view()),
-    path('api/1.0/consultar_profesor/<int:id>', ConsultProfessor_idAPI.as_view()),#TODO ESTA RECIBIENDO UN OBJETO USER
-    
+    path('api/1.0/consultar_profesor/<int:id>', ConsultProfessor_idAPI.as_view()),
+    path('api/1.0/consultar_es_miembro/<int:id_p>/<int:id_gi>', ConsultIsMemberAPI.as_view()),
+    path('api/1.0/consultar_trabaja/<int:id_gi>/<int:id_ac>', ConsultWorksInvestGroupAPI.as_view()),
+    path('api/1.0/consultar_dirige/<int:id_p>/<int:id_gi>', ConsultManageInvestGroupAPI.as_view()),
 ]
