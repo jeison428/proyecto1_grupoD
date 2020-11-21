@@ -396,11 +396,12 @@ class ConsultProfessorAPI(APIView):
 
 class ConsultProfessor_idAPI(APIView):
     def get(self, request, *args, **kwargs):
-        try:
-            queryset = Professor.objects.get(user=kwargs['id'])
-            #return Response({"Professor": ProfessorSerializer(queryset, many=True).data })
-            return Response(ProfessorSerializer(queryset, many=True).data)
-        except Professor.DoesNotExist:
+        queryset = Professor.objects.filter(user=kwargs['id'])
+
+        returned = ProfessorSerializer(queryset, many=True).data
+        if returned:
+            return Response({"Professor": returned}, status=status.HTTP_202_ACCEPTED)
+        else:
             return Response(f"No existe el Profesor en la base de datos", status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, *args, **kwargs):
