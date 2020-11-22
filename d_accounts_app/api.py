@@ -55,3 +55,9 @@ class ConsultUser_PersonalAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = User.objects.filter(personal_id=kwargs['id'])
         return Response({"Users": CreateUserSerializer(queryset, many=True).data })
+
+class ConsultUser_idAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = User.objects.filter(id=kwargs['id'])
+        return Response({"Users": CreateUserSerializer(queryset, many=True).data })
+
