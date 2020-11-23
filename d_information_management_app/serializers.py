@@ -6,6 +6,7 @@ from .models import (Country, State, City, Institution, Professor, Faculty, Depa
 # Create your serializers here.
 # --------------------------------------------------Arias
 
+#País
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
@@ -16,6 +17,7 @@ class CountrySerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+#Estado o Departamento
 class StateSerializer(serializers.ModelSerializer):
     class Meta:
         model = State
@@ -27,6 +29,7 @@ class StateSerializer(serializers.ModelSerializer):
         print("Serializer en state: ",instance)
         return instance
 
+#Ciudad
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
         model = City
@@ -37,6 +40,7 @@ class CitySerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+#Institución
 class InstitutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Institution
@@ -47,6 +51,7 @@ class InstitutionSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+#Profesor
 class ProfessorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Professor
@@ -57,6 +62,7 @@ class ProfessorSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+#Facultad
 class FacultySerializer(serializers.ModelSerializer):
     class Meta:
         model = Faculty
@@ -67,6 +73,7 @@ class FacultySerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+#Departamento 
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
@@ -76,7 +83,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
         instance = Department.objects.create(**validate_data)
         instance.save()
         return instance
-
+#Formación Academica
 class AcademicTrainingSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicTraining
