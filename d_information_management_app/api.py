@@ -5,6 +5,9 @@ from rest_framework import generics, permissions
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+
+from d_accounts_app.backend import IsProfessor
 
 from .serializers import (CountrySerializer, StateSerializer, CitySerializer, InstitutionSerializer, 
                         ProfessorSerializer, FacultySerializer, DepartmentSerializer, InvestigationGroupSerializer,
@@ -304,6 +307,7 @@ class ConsultDepartment_idAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 class CreateAcademicTrainingAPI(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated, IsProfessor]
     serializer_class = AcademicTrainingSerializer
 
     def post(self, request):
