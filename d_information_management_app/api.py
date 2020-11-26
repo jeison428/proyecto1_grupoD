@@ -104,21 +104,7 @@ class CreateDepartmentAPI(generics.GenericAPIView):
                 department = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-
-
-class CreateAcademicTrainingAPI(generics.GenericAPIView):
-    serializer_class = AcademicTrainingSerializer
-    def post(self, request):
-        serializer = self.get_serializer(data = request.data)
-        if serializer.is_valid():
-            isElement = AcademicTraining.objects.filter(professor=request.data['professor'],degree=request.data['degree'])
-            if not(isElement):
-                academicTraining = serializer.save()
-                return Response(serializer.data, status = status.HTTP_201_CREATED)
-        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-
 #endregion
-
 #region Consult
 
 class ConsultCountryAPI(APIView):
@@ -127,14 +113,6 @@ class ConsultCountryAPI(APIView):
         return Response({"Countrys": CountrySerializer(queryset, many=True).data })
 
 class ConsultCountry_idAPI(APIView):
-    """
-    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-    API que permite:
-    ☠ Consultar País enviando su id, esta función hace uso del metodo GET.
-    ☠ Atualizar un País enviando un JSON, esta función hace uso del método PUT.
-    PATH: 'api/1.0/consultar_pais_id/<int:id_country>'
-    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-    """
     def get(self, request, *args, **kwargs):
         queryset = Country.objects.filter(id=kwargs["id_country"])
         returned = CountrySerializer(queryset, many=True).data
@@ -156,14 +134,6 @@ class ConsultCountry_idAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
 class ConsultState_CountryAPI(APIView):
-    """
-    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒►Departamento en contexto de País
-    API que permite:
-    ☠ Consultar Departamentos de un determinado País enviando su id, esta función hace uso del metodo GET.
-    ☠ Actualizar un País enviando un JSON, esta función hace uso del método PUT.
-    PATH: 'api/1.0/consultar_departamento_pais/<int:id_country>'
-    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-    """
     def get(self, request, *args, **kwargs):
         queryset = State.objects.filter(country=kwargs["id_country"])
         returned = StateSerializer(queryset, many=True).data
@@ -186,14 +156,6 @@ class ConsultState_CountryAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 class ConsultCity_StateAPI(APIView):
-    """
-    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-    API que permite:
-    ☠ Consultar Ciudades de un determinado Departamento enviando su id, esta función hace uso del metodo GET.
-    ☠ Actualizar un Departamento enviando un JSON, esta función hace uso del método PUT.
-    PATH: 'api/1.0/consultar_ciudad_departamento/<int:id_dep>'
-    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-    """
     def get(self, request, *args, **kwargs):
         queryset = City.objects.filter(state=kwargs["id_dep"])
         returned = CitySerializer(queryset, many=True).data
@@ -221,14 +183,6 @@ class ConsultInstitutionAPI(APIView):
         return Response({"Institutions": InstitutionSerializer(queryset, many=True).data })
 
 class ConsultInstitution_idAPI(APIView):
-    """
-    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-    API que permite:
-    ☠ Consultar un Instituto enviando su id, esta función hace uso del metodo GET.
-    ☠ Actualizar un Instituto enviando un JSON, esta función hace uso del método PUT.
-    PATH: 'api/1.0/consultar_institucion_id/<int:id>'
-    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-    """
     def get(self, request, *args, **kwargs):
         queryset = Institution.objects.filter(id=kwargs["id"]) 
         returned = InstitutionSerializer(queryset, many=True).data
@@ -255,14 +209,6 @@ class ConsultFacultyAPI(APIView):
         return Response({"Facultys": FacultySerializer(queryset, many=True).data })
 
 class ConsultFaculty_idAPI(APIView):
-    """
-    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-    API que permite:
-    ☠ Consultar una Facultad enviando su id, esta función hace uso del metodo GET.
-    ☠ Actualizar una Facultad enviando un JSON, esta función hace uso del método PUT.
-    PATH: 'api/1.0/consultar_facultad_id/<int:id>'
-    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-    """
     def get(self, request, *args, **kwargs):
         queryset = Faculty.objects.filter(id=kwargs["id"])  
         returned = FacultySerializer(queryset, many=True).data
@@ -289,14 +235,6 @@ class ConsultDepartmentAPI(APIView):
         return Response({"Departments": DepartmentSerializer(queryset, many=True).data })
 
 class ConsultDepartment_idAPI(APIView):
-    """
-    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒►Departamento en contexto de Facultad
-    API que permite:
-    ☠ Consultar un Departamento enviando su id, esta función hace uso del metodo GET.
-    ☠ Actualizar un Departamento enviando un JSON, esta función hace uso del método PUT.
-    PATH: 'api/1.0/consultar_departamentoU_id/<int:id>'
-    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-    """
     def get(self, request, *args, **kwargs):
         queryset = Department.objects.filter(id=kwargs["id"])  
         returned = DepartmentSerializer(queryset, many=True).data
@@ -316,6 +254,18 @@ class ConsultDepartment_idAPI(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+
+class CreateAcademicTrainingAPI(generics.GenericAPIView):
+    serializer_class = AcademicTrainingSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():#Toca arreglar el filtro. Att_:JAVIER
+            isElement = AcademicTraining.objects.filter(professor=request.data['professor'],degree=request.data['degree'])
+            if not(isElement):
+                academicTraining = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 #endregion
 
 # Create your api's here.
@@ -327,6 +277,7 @@ class CreateInvestigationGroupAPI(generics.GenericAPIView):
     Clase usada para la implementacion de la API para crear un 
     Grupo de Investigacion
     """
+
     serializer_class = InvestigationGroupSerializer
 
     def post(self, request):
@@ -538,7 +489,7 @@ class ConsultKnowledgeAreaAPI(APIView):
         queryset = KnowledgeArea.objects.all()
         return Response({"Knowledges": KnowledgeAreaSerializer(queryset, many=True).data })
 
-class ConsultKnowledgeArea_idAPI(APIView):
+class ConsultKnowledgeArea_idAPI(APIView): #no terminada
     """
     Clase usada para la implementacion de la API para consultar y editar un Area del Conocimiento espesifica
     de la Universidad, esto se logra enviando el ID del Area del Conocimiento mediante el metodo GET y/o enviando
@@ -565,7 +516,7 @@ class ConsultInvestigationLine_knowledgeAPI(APIView):
         queryset = InvestigationLine.objects.filter(know_area=kwargs['id_area'])
         return Response({"Lines": InvestigationLineSerializer(queryset, many=True).data })
 
-class ConsultInvestigationLine_idAPI(APIView):
+class ConsultInvestigationLine_idAPI(APIView): #no terminada
     """
     Clase usada para la implementacion de la API para consultar una Linea de Investigacion espesifica 
     de la Universidad, esto se logra enviando el ID de la Linea de Investigacion mediante el metodo GET 
