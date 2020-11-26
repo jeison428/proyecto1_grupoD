@@ -113,6 +113,14 @@ class ConsultCountryAPI(APIView):
         return Response({"Countrys": CountrySerializer(queryset, many=True).data })
 
 class ConsultCountry_idAPI(APIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    API que permite:
+    ☠ Consultar País enviando su id, esta función hace uso del metodo GET.
+    ☠ Atualizar un País enviando un JSON, esta función hace uso del método PUT.
+    PATH: 'api/1.0/consultar_pais_id/<int:id_country>'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     def get(self, request, *args, **kwargs):
         queryset = Country.objects.filter(id=kwargs["id_country"])
         returned = CountrySerializer(queryset, many=True).data
@@ -134,6 +142,14 @@ class ConsultCountry_idAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
 class ConsultState_CountryAPI(APIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒►Departamento en contexto de País
+    API que permite:
+    ☠ Consultar Departamentos de un determinado País enviando su id, esta función hace uso del metodo GET.
+    ☠ Actualizar un País enviando un JSON, esta función hace uso del método PUT.
+    PATH: 'api/1.0/consultar_departamento_pais/<int:id_country>'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     def get(self, request, *args, **kwargs):
         queryset = State.objects.filter(country=kwargs["id_country"])
         returned = StateSerializer(queryset, many=True).data
@@ -156,6 +172,14 @@ class ConsultState_CountryAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 class ConsultCity_StateAPI(APIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    API que permite:
+    ☠ Consultar Ciudades de un determinado Departamento enviando su id, esta función hace uso del metodo GET.
+    ☠ Actualizar un Departamento enviando un JSON, esta función hace uso del método PUT.
+    PATH: 'api/1.0/consultar_ciudad_departamento/<int:id_dep>'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     def get(self, request, *args, **kwargs):
         queryset = City.objects.filter(state=kwargs["id_dep"])
         returned = CitySerializer(queryset, many=True).data
@@ -183,6 +207,14 @@ class ConsultInstitutionAPI(APIView):
         return Response({"Institutions": InstitutionSerializer(queryset, many=True).data })
 
 class ConsultInstitution_idAPI(APIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    API que permite:
+    ☠ Consultar un Instituto enviando su id, esta función hace uso del metodo GET.
+    ☠ Actualizar un Instituto enviando un JSON, esta función hace uso del método PUT.
+    PATH: 'api/1.0/consultar_institucion_id/<int:id>'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     def get(self, request, *args, **kwargs):
         queryset = Institution.objects.filter(id=kwargs["id"]) 
         returned = InstitutionSerializer(queryset, many=True).data
@@ -209,6 +241,14 @@ class ConsultFacultyAPI(APIView):
         return Response({"Facultys": FacultySerializer(queryset, many=True).data })
 
 class ConsultFaculty_idAPI(APIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    API que permite:
+    ☠ Consultar una Facultad enviando su id, esta función hace uso del metodo GET.
+    ☠ Actualizar una Facultad enviando un JSON, esta función hace uso del método PUT.
+    PATH: 'api/1.0/consultar_facultad_id/<int:id>'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     def get(self, request, *args, **kwargs):
         queryset = Faculty.objects.filter(id=kwargs["id"])  
         returned = FacultySerializer(queryset, many=True).data
@@ -235,6 +275,14 @@ class ConsultDepartmentAPI(APIView):
         return Response({"Departments": DepartmentSerializer(queryset, many=True).data })
 
 class ConsultDepartment_idAPI(APIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒►Departamento en contexto de Facultad
+    API que permite:
+    ☠ Consultar un Departamento enviando su id, esta función hace uso del metodo GET.
+    ☠ Actualizar un Departamento enviando un JSON, esta función hace uso del método PUT.
+    PATH: 'api/1.0/consultar_departamentoU_id/<int:id>'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     def get(self, request, *args, **kwargs):
         queryset = Department.objects.filter(id=kwargs["id"])  
         returned = DepartmentSerializer(queryset, many=True).data
