@@ -25,6 +25,14 @@ from .models import (Country, State, City, Institution, Professor, Faculty, Depa
 #region Create
 
 class CreateCountryAPI(generics.GenericAPIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    API que permite:
+    ☠ Crear un País, esta función hace uso del metodo POST.
+    PATH: 'api/1.0/crear_pais/'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
+    #permission_classes = [IsAuthenticated, IsProfessor]
     serializer_class = CountrySerializer
 
     def post(self, request):
@@ -37,6 +45,13 @@ class CreateCountryAPI(generics.GenericAPIView):
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class CreateStateAPI(generics.GenericAPIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒►Departamento en contexto de País
+    API que permite:
+    ☠ Crear un Departamento, esta función hace uso del metodo POST.
+    PATH: 'api/1.0/crear_departamento/'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     serializer_class = StateSerializer
 
     def post(self, request):
@@ -49,6 +64,13 @@ class CreateStateAPI(generics.GenericAPIView):
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class CreateCityAPI(generics.GenericAPIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    API que permite:
+    ☠ Crear una Ciudad, esta función hace uso del metodo POST.
+    PATH: 'api/1.0/crear_ciudad/'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     serializer_class = CitySerializer
 
     def post(self, request):
@@ -61,6 +83,13 @@ class CreateCityAPI(generics.GenericAPIView):
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class CreateInstitutionAPI(generics.GenericAPIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    API que permite:
+    ☠ Crear una Institución, esta función hace uso del metodo POST.
+    PATH: 'api/1.0/crear_institucion/'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     serializer_class = InstitutionSerializer
 
     def post(self, request):
@@ -73,6 +102,13 @@ class CreateInstitutionAPI(generics.GenericAPIView):
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class CreateProfessorAPI(generics.GenericAPIView):# toca modificarlo a los cambios nuevos
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    API que permite:
+    ☠ Crear un Profesor, esta función hace uso del metodo POST.
+    PATH: 'api/1.0/crear_profesor/'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     serializer_class = ProfessorSerializer
 
     def post(self, request):
@@ -85,6 +121,13 @@ class CreateProfessorAPI(generics.GenericAPIView):# toca modificarlo a los cambi
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class CreateFacultyAPI(generics.GenericAPIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    API que permite:
+    ☠ Crear una Facultad, esta función hace uso del metodo POST.
+    PATH: 'api/1.0/crear_facultad/'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     serializer_class = FacultySerializer
 
     def post(self, request):
@@ -97,6 +140,13 @@ class CreateFacultyAPI(generics.GenericAPIView):
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class CreateDepartmentAPI(generics.GenericAPIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒►Departamento en contexto de Facultad
+    API que permite:
+    ☠ Crear un Departamento, esta función hace uso del metodo POST.
+    PATH: 'api/1.0/crear_departamento_u/'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     serializer_class = DepartmentSerializer
 
     def post(self, request):
@@ -111,6 +161,13 @@ class CreateDepartmentAPI(generics.GenericAPIView):
 #region Consult
 
 class ConsultCountryAPI(APIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    API que permite:
+    ☠ Consultar Paises, esta función hace uso del metodo GET.
+    PATH: 'api/1.0/consultar_pais/'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     def get(self, request, *args, **kwargs):
         queryset = Country.objects.all()
         return Response({"Countrys": CountrySerializer(queryset, many=True).data })
@@ -120,7 +177,7 @@ class ConsultCountry_idAPI(APIView):
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     API que permite:
     ☠ Consultar País enviando su id, esta función hace uso del metodo GET.
-    ☠ Atualizar un País enviando un JSON, esta función hace uso del método PUT.
+    ☠ Actualizar un País enviando un JSON, esta función hace uso del método PUT.
     PATH: 'api/1.0/consultar_pais_id/<int:id_country>'
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
@@ -205,6 +262,13 @@ class ConsultCity_StateAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ConsultInstitutionAPI(APIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    API que permite:
+    ☠ Consultar Instituciones, esta función hace uso del metodo GET.
+    PATH: 'api/1.0/consultar_institucion/'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     def get(self, request, *args, **kwargs):
         queryset = Institution.objects.all()
         return Response({"Institutions": InstitutionSerializer(queryset, many=True).data })
@@ -239,6 +303,13 @@ class ConsultInstitution_idAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 class ConsultFacultyAPI(APIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    API que permite:
+    ☠ Consultar Facultades, esta función hace uso del metodo GET.
+    PATH: 'api/1.0/consultar_facultad/'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     def get(self, request, *args, **kwargs):
         queryset = Faculty.objects.all()
         return Response({"Facultys": FacultySerializer(queryset, many=True).data })
@@ -273,6 +344,13 @@ class ConsultFaculty_idAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 class ConsultDepartmentAPI(APIView):
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒►Departamento en contexto de Facultad
+    API que permite:
+    ☠ Consultar Departamentos, esta función hace uso del metodo GET.
+    PATH: 'api/1.0/consultar_departamentoU/'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
     def get(self, request, *args, **kwargs):
         queryset = Department.objects.all()
         return Response({"Departments": DepartmentSerializer(queryset, many=True).data })
@@ -307,7 +385,14 @@ class ConsultDepartment_idAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 class CreateAcademicTrainingAPI(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated, IsProfessor]
+    """
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    API que permite:
+    ☠ Crear una Formación Academica, esta función hace uso del metodo POST.
+    PATH: 'api/1.0/crear_formacion_academica/'
+    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+    """
+    #permission_classes = [IsAuthenticated, IsProfessor]
     serializer_class = AcademicTrainingSerializer
 
     def post(self, request):
