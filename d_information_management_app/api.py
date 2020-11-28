@@ -392,7 +392,7 @@ class CreateAcademicTrainingAPI(generics.GenericAPIView):
     PATH: 'api/1.0/crear_formacion_academica/'
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
-    #permission_classes = [IsAuthenticated, IsProfessor]
+    permission_classes = [IsAuthenticated, IsProfessor]
     serializer_class = AcademicTrainingSerializer
 
     def post(self, request):
@@ -626,7 +626,7 @@ class ConsultKnowledgeAreaAPI(APIView):
         queryset = KnowledgeArea.objects.all()
         return Response({"Knowledges": KnowledgeAreaSerializer(queryset, many=True).data })
 
-class ConsultKnowledgeArea_idAPI(APIView): #no terminada
+class ConsultKnowledgeArea_idAPI(APIView):
     """
     Clase usada para la implementacion de la API para consultar y editar un Area del Conocimiento espesifica
     de la Universidad, esto se logra enviando el ID del Area del Conocimiento mediante el metodo GET y/o enviando
@@ -636,13 +636,26 @@ class ConsultKnowledgeArea_idAPI(APIView): #no terminada
     - - - - -
     id : int
         Referencia a un Area del Conocimiento
-
-    NOTA: falta implementar la parte de las validaciones si no existe el area del conocimiento consultada
-    y la parte de editar el area del conocimiento
     """
     def get(self, request, *args, **kwargs):
         queryset = KnowledgeArea.objects.filter(id=kwargs['id'])
-        return Response({"Knowledge": KnowledgeAreaSerializer(queryset, many=True).data })
+        returned = KnowledgeAreaSerializer(queryset, many=True).data
+        if returned:
+            return Response({"Knowledge": KnowledgeAreaSerializer(queryset, many=True).data })
+        else:
+            return Response(f"No existe el Area de conocimiento en la base de datos...")
+
+    def put(self, request, *args, **kwargs):
+        try:
+            model = KnowledgeArea.objects.get(id=kwargs['id'])
+        except KnowledgeArea.DoesNotExist:
+            return Response(f"No existe el Area de conocimiento en la base de datos...")
+        
+        serializer = KnowledgeAreaSerializer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ConsultInvestigationLine_knowledgeAPI(APIView):
     """
@@ -651,9 +664,13 @@ class ConsultInvestigationLine_knowledgeAPI(APIView):
     """
     def get(self, request, *args, **kwargs):
         queryset = InvestigationLine.objects.filter(know_area=kwargs['id_area'])
-        return Response({"Lines": InvestigationLineSerializer(queryset, many=True).data })
+        returned = InvestigationLineSerializer(queryset, many=True).data
+        if returned:
+            return Response({"Lines": InvestigationLineSerializer(queryset, many=True).data })
+        else:
+            return Response(f"No existen Lineas de Investigacion asociadas a esa Area del conocimiento...")
 
-class ConsultInvestigationLine_idAPI(APIView): #no terminada
+class ConsultInvestigationLine_idAPI(APIView):
     """
     Clase usada para la implementacion de la API para consultar una Linea de Investigacion espesifica 
     de la Universidad, esto se logra enviando el ID de la Linea de Investigacion mediante el metodo GET 
@@ -663,13 +680,26 @@ class ConsultInvestigationLine_idAPI(APIView): #no terminada
     - - - - -
     id : int
         Referencia a una Linea de Investigacion
-
-    NOTA: falta implementar la parte de las validaciones si no existe la linea de investigacion consultada
-    y la parte de editar la linea de investigacion
     """
     def get(self, request, *args, **kwargs):
         queryset = InvestigationLine.objects.filter(id=kwargs['id'])
-        return Response({"Line": InvestigationLineSerializer(queryset, many=True).data })
+        returned = InvestigationLineSerializer(queryset, many=True).data
+        if returned:
+            return Response({"Line": InvestigationLineSerializer(queryset, many=True).data })
+        else:
+            return Response(f"No existe la Linea de investigacion en la base de datos...")
+
+    def put(self, request, *args, **kwargs):
+        try:
+            model = InvestigationLine.objects.get(id=kwargs['id'])
+        except InvestigationLine.DoesNotExist:
+            return Response(f"No existe la Linea de investigacion en la base de datos...")
+
+        serializer = InvestigationLineSerializer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ConsultIsMemberAPI(APIView):
     """
