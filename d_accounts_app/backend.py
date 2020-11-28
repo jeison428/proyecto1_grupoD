@@ -111,7 +111,7 @@ class IsStudent(permissions.BasePermission):
         except Student.DoesNotExist:
             return False
 
-class IsCoordinatorCommittee(permissions.BasePermission):
+class IsCoordinator(permissions.BasePermission):
     """
     Clase que permite determinar si un usuario es del comite de coordinadores
     """
