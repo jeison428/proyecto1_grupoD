@@ -824,6 +824,13 @@ class ConsultMemberProfessorAPI(APIView):
             else:
                 return Response(f"No existen registros en la base de datos para el ID ingresado", status=status.HTTP_404_NOT_FOUND)
 
-
+class ConsultManageInvestGroup_DirecAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = ManageInvestGroup.objets.filter(professor=kwargs['id'], direction_state=True)
+        returned = ManageInvestGroupSerializer(queryset, many=True).data
+        if returned:
+            return Response({"Manage": returned}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existen registros en la base de datos para el ID ingresado", status=status.HTTP_404_NOT_FOUND)
 
 #endregion
