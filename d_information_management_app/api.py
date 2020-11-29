@@ -456,7 +456,6 @@ class CreateInvestigationLineAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-#
 class CreateWorksInvestGroupAPI(generics.GenericAPIView):
     """
     Clase usada para la implementacion de la API para crear una relacion
@@ -492,7 +491,6 @@ class CreateManageInvestGroupAPI(generics.GenericAPIView):
                 directs = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-#
 
 class CreateIsMemberAPI(generics.GenericAPIView):
     """
@@ -711,12 +709,12 @@ class ConsultIsMemberAPI(APIView):
     Parameters
     - - - - -
     id_p : int
-        Referencia al Usuario de un Profesor
+        Referencia a un Profesor
     id_gi : int
         Referencia a un Grupo de Investigacion
     """
     def get(self, request, *args, **kwargs):
-        queryset = IsMember.objects.filter(inv_group=kwargs['id_gi'], professor__user=kwargs['id_p'])
+        queryset = IsMember.objects.filter(inv_group=kwargs['id_gi'], professor=kwargs['id_p'])
         returned = IsMemberSerializer(queryset, many=True).data
         if returned:
             return Response({"IsMember":returned}, status=status.HTTP_202_ACCEPTED)
@@ -725,7 +723,7 @@ class ConsultIsMemberAPI(APIView):
     
     def post(self, request, *args, **kwargs):
         try:
-            model = IsMember.objects.get(inv_group=kwargs['id_gi'], professor__user=kwargs['id_p'])
+            model = IsMember.objects.get(inv_group=kwargs['id_gi'], professor=kwargs['id_p'])
         except IsMember.DoesNotExist:
             return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
 
@@ -750,7 +748,7 @@ class ConsultWorksInvestGroupAPI(APIView):
         Referencia a un Area del Conocimiento
     """
     def get(self, request, *args, **kwargs):
-        queryset = WorksInvestGroup.objects.filter(inv_group=kwargs['id_gi'], know_area=kwargs['id_ac'])
+        queryset = WorksInvestGroup.objects.filter(inv_group=kwargs['id_gi'], know_area=kwargs['id_ac'], study_status=True)
         returned = WorksInvestGroupSerializer(queryset, many=True).data
         if returned:
             return Response({"Work":returned}, status=status.HTTP_202_ACCEPTED)
@@ -759,7 +757,7 @@ class ConsultWorksInvestGroupAPI(APIView):
     
     def post(self, request, *args, **kwargs):
         try:
-            model = WorksInvestGroup.objects.get(inv_group=kwargs['id_gi'], know_area=kwargs['id_ac'])
+            model = WorksInvestGroup.objects.get(inv_group=kwargs['id_gi'], know_area=kwargs['id_ac'], study_status=True)
         except IsMember.DoesNotExist:
             return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
 
@@ -772,19 +770,19 @@ class ConsultWorksInvestGroupAPI(APIView):
 class ConsultManageInvestGroupAPI(APIView):
     """
     Clase usada para la implementacion de, la API para consultar si un Profesor DIRIGE o no un
-    Grupo de Investigacion espesifico de la Universidad, esto se logra enviando el ID del Profesor y 
+    Grupo de Investigacion espesifico de la Universidad, esto se logra enviando el ID del usuario del Profesor y 
     el ID del Grupo de Investigacion (en ese orden) mediante el metodo GET y/o enviando la informacion 
     que se va a editar del registro del modelo "Dirige" mediante el metodo POST
     - - - - -
     Parameters
     - - - - -
     id_p : int
-        Referencia al usuario de un Profesor
+        Referencia a un Profesor
     id_gi : int
         Referencia a un Grupo de Investigacion
     """
     def get(self, request, *args, **kwargs):
-        queryset = ManageInvestGroup.objects.filter(inv_group=kwargs['id_gi'], professor__user=kwargs['id_p'])
+        queryset = ManageInvestGroup.objects.filter(inv_group=kwargs['id_gi'], professor=kwargs['id_p'], direction_state=True)
         returned = ManageInvestGroupSerializer(queryset, many=True).data
         if returned:
             return Response({"Manage":returned}, status=status.HTTP_202_ACCEPTED)
@@ -793,7 +791,7 @@ class ConsultManageInvestGroupAPI(APIView):
     
     def post(self, request, *args, **kwargs):
         try:
-            model = ManageInvestGroup.objects.get(inv_group=kwargs['id_gi'], professor__user=kwargs['id_p'])
+            model = ManageInvestGroup.objects.get(inv_group=kwargs['id_gi'], professor=kwargs['id_p'], direction_state=True)
         except IsMember.DoesNotExist:
             return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
 
@@ -802,6 +800,30 @@ class ConsultManageInvestGroupAPI(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ConsultMemberIGAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = IsMember.objects.filter(inv_group=kwargs['id'], member_status=True)
+        returned = IsMemberSerializer(queryset, many=True).data
+        if returned:
+            return Response({"Members": returned}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existen registros en la base de datos para el ID ingresado", status=status.HTTP_404_NOT_FOUND)
+
+class ConsultMemberProfessorAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = IsMember.objects.filter(professor=kwargs['id'], member_status=True)
+        returned = IsMemberSerializer(queryset, many=True).data
+        if returned:
+            return Response({"Members": returned}, status=status.HTTP_202_ACCEPTED)
+        else:
+            queryset = IsMember.objects.filter(professor=kwargs['id'])
+            returned = IsMemberSerializer(queryset, many=True).data
+            if returned:
+                return Response(f"El profesor no se encuentra activo", status=status.HTTP_404_NOT_FOUND)
+            else:
+                return Response(f"No existen registros en la base de datos para el ID ingresado", status=status.HTTP_404_NOT_FOUND)
+
 
 
 #endregion
