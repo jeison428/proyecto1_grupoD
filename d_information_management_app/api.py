@@ -595,7 +595,7 @@ class ConsultProfessor_idAPI(APIView):
         Referencia a un profesor
     """
     def get(self, request, *args, **kwargs):
-        queryset = Professor.objects.filter(user=kwargs['id'])
+        queryset = Professor.objects.filter(id=kwargs['id'])
 
         returned = ProfessorSerializer(queryset, many=True).data
         if returned:
