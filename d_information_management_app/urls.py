@@ -11,11 +11,11 @@ from .api import (CreateCountryAPI, CreateStateAPI, CreateCityAPI, CreateInstitu
                  CreateFacultyAPI, CreateDepartmentAPI, CreateAcademicTrainingAPI, ConsultManageInvestGroupAPI,
                  CreateWorksInvestGroupAPI, CreateManageInvestLineAPI, CreateManageInvestGroupAPI,
                  ConsultCountryAPI, ConsultCountry_idAPI,ConsultState_CountryAPI, ConsultCity_StateAPI,
-                 ConsultInstitutionAPI, ConsultInstitution_idAPI, ConsultIsMemberAPI,
+                 ConsultInstitutionAPI, ConsultInstitution_idAPI, ConsultIsMemberAPI, ConsultMemberIGAPI,
                  ConsultProfessorAPI, ConsultProfessor_idAPI, CreateIsMemberAPI, ConsultWorksInvestGroupAPI,
                  ConsultFacultyAPI, ConsultFaculty_idAPI, ConsultDepartmentAPI, ConsultDepartment_idAPI,
                  CreateKnowledgeAreaAPI, CreateInvestigationGroupAPI, CreateInvestigationLineAPI, 
-                 ConsultInvestigationGroup_idAPI, ConsultInvestigationGroup_DepartmentAPI, 
+                 ConsultInvestigationGroup_idAPI, ConsultInvestigationGroup_DepartmentAPI, ConsultMemberProfessorAPI,
                  ConsultKnowledgeAreaAPI, ConsultKnowledgeArea_idAPI, ConsultInvestigationLine_knowledgeAPI,
                  ConsultInvestigationLine_idAPI)
 
@@ -63,4 +63,7 @@ urlpatterns = [
     path('api/1.0/consultar_es_miembro/<int:id_p>/<int:id_gi>', ConsultIsMemberAPI.as_view()),
     path('api/1.0/consultar_trabaja/<int:id_gi>/<int:id_ac>', ConsultWorksInvestGroupAPI.as_view()),
     path('api/1.0/consultar_dirige/<int:id_p>/<int:id_gi>', ConsultManageInvestGroupAPI.as_view()),
+    path('api/1.0/consultar_profesor/<int:id>', ConsultProfessor_idAPI.as_view()),
+    path('api/1.0/consultar_miembro_gi/<int:id>', ConsultMemberGIAPI.as_view()),
+    path('api/1.0/consultar_miembro_p/<int:id>', ConsultMemberProfessorAPI.as_view()),
 ]
