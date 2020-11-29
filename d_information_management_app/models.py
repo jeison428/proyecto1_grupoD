@@ -292,7 +292,7 @@ class WorksInvestGroup(models.Model):
         verbose_name_plural = 'Trabaja'
 
     def __str__(self):
-        return "{}".format(self.inv_group)," trabaja en {}".format(self.know_area)
+        return "{} trabaja en {}".format(self.inv_group, self.know_area)
 
 class ManageInvestLine(models.Model):
     """
@@ -361,7 +361,7 @@ class IsMember(models.Model):
         verbose_name_plural = 'Son Miembros'
 
     def __str__(self):
-        return "{}".format(self.professor)," es miembro de {}".format(self.inv_group)
+        return "{} es miembro de {}".format(self.professor, self.inv_group)
 
 
 class WorksDepartm(models.Model):
