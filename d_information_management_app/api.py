@@ -826,7 +826,7 @@ class ConsultMemberProfessorAPI(APIView):
 
 class ConsultManageInvestGroup_DirecAPI(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = ManageInvestGroup.objets.filter(professor=kwargs['id'], direction_state=True)
+        queryset = ManageInvestGroup.objects.filter(professor=kwargs['id'], direction_state=True)
         returned = ManageInvestGroupSerializer(queryset, many=True).data
         if returned:
             return Response({"Manage": returned}, status=status.HTTP_202_ACCEPTED)
