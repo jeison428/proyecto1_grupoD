@@ -113,15 +113,19 @@ class InvestigationGroupSerializer(serializers.ModelSerializer):
         return instance
 
 #Area del conocimiento
-class KnowledgeAreaSerializer(serializers.Serializer):
-    id = serializers.ReadOnlyField()
-    name = serializers.CharField()
-    description = serializers.CharField()
+class KnowledgeAreaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KnowledgeArea
+        fields = "__all__"
+    #id = serializers.ReadOnlyField()
+    #name = serializers.CharField()
+    #description = serializers.CharField()
 
     def create(self, validate_data):
-        instance = KnowledgeArea()
-        instance.name = validate_data.get('name')
-        instance.description = validate_data.get('description')
+        instance = KnowledgeArea.objects.create(**validate_data)
+        #instance = KnowledgeArea()
+        #instance.name = validate_data.get('name')
+        #instance.description = validate_data.get('description')
         instance.save()
         return instance
 
