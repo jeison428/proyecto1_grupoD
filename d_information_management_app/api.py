@@ -158,6 +158,7 @@ class CreateDepartmentAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 #endregion
+
 #region Consult
 
 class ConsultCountryAPI(APIView):
@@ -802,6 +803,23 @@ class ConsultManageInvestGroupAPI(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ConsultMemberIGAPI(APIView):
+    """
+    Clase usada para la implementacion de, la API para consultar todos los miembros de un grupo de investigacion
+    espesifico de la Universidad, esto se logra enviando el ID del Grupo de Investigacion (en ese orden) mediante
+    el metodo GET
+    - - - - -
+    Parameters
+    - - - - -
+    id : int
+        Referencia a un grupo de investigacion
+    - - - - -
+    Returned
+    - - - - -
+        Si el id es correcto y se encuentran resultados:
+            {"Members": JsonResultado, HTTP_202_ACCEPTED}}
+        Si no se encuentran resultados:
+            Se mostrata un mensaje de error, HTTP_404_NOT_FOUND
+    """
     def get(self, request, *args, **kwargs):
         queryset = IsMember.objects.filter(inv_group=kwargs['id'], member_status=True)
         returned = IsMemberSerializer(queryset, many=True).data
@@ -811,6 +829,22 @@ class ConsultMemberIGAPI(APIView):
             return Response(f"No existen registros en la base de datos para el ID ingresado", status=status.HTTP_404_NOT_FOUND)
 
 class ConsultMemberProfessorAPI(APIView):
+    """
+    Clase usada para la implementacion de, la API para consultar si un profesor ES MIEMBRO o no de un 
+    grupo de investigacion de la Universidad, esto se logra enviando el ID del Profesor mediante el metodo GET
+    - - - - -
+    Parameters
+    - - - - -
+    id : int
+        Referencia a un Profesor
+    - - - - -
+    Returned
+    - - - - -
+        Si el id es correcto y se encuentran resultados:
+            {"Members": JsonResultado, HTTP_202_ACCEPTED}}
+        Si no se encuentran resultados:
+            Se mostrata un mensaje de error, HTTP_404_NOT_FOUND
+    """
     def get(self, request, *args, **kwargs):
         queryset = IsMember.objects.filter(professor=kwargs['id'], member_status=True)
         returned = IsMemberSerializer(queryset, many=True).data
@@ -825,6 +859,22 @@ class ConsultMemberProfessorAPI(APIView):
                 return Response(f"No existen registros en la base de datos para el ID ingresado", status=status.HTTP_404_NOT_FOUND)
 
 class ConsultManageInvestGroup_DirecAPI(APIView):
+    """
+    Clase usada para la implementacion de, la API para consultar que un profesor DIRIGE o no a un
+    grupo de investigacion de la Universidad, esto se logra enviando el ID del Profesor mediante el metodo GET
+    - - - - -
+    Parameters
+    - - - - -
+    id : int
+        Referencia a un Profesor
+    - - - - -
+    Returned
+    - - - - -
+        Si el id es correcto y se encuentran resultados:
+            {"Manage": JsonResultado, HTTP_202_ACCEPTED}}
+        Si no se encuentran resultados:
+            Se mostrata un mensaje de error, HTTP_404_NOT_FOUND
+    """
     def get(self, request, *args, **kwargs):
         queryset = ManageInvestGroup.objects.filter(professor=kwargs['id'], direction_state=True)
         returned = ManageInvestGroupSerializer(queryset, many=True).data
