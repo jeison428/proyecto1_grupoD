@@ -17,7 +17,7 @@ from .api import (CreateCountryAPI, CreateStateAPI, CreateCityAPI, CreateInstitu
                  CreateKnowledgeAreaAPI, CreateInvestigationGroupAPI, CreateInvestigationLineAPI, 
                  ConsultInvestigationGroup_idAPI, ConsultInvestigationGroup_DepartmentAPI, ConsultMemberProfessorAPI,
                  ConsultKnowledgeAreaAPI, ConsultKnowledgeArea_idAPI, ConsultInvestigationLine_knowledgeAPI,
-                 ConsultInvestigationLine_idAPI, ConsultManageInvestGroup_DirecAPI)
+                 ConsultInvestigationLine_idAPI, ConsultManageInvestGroup_DirecAPI, ConsultManageInvestGroup_GIAPI)
 
 urlpatterns = [
     #Javier
@@ -66,5 +66,6 @@ urlpatterns = [
     path('api/1.0/consultar_miembro_gi/<int:id>', ConsultMemberIGAPI.as_view()),
     path('api/1.0/consultar_miembro_p/<int:id>', ConsultMemberProfessorAPI.as_view()),
     path('api/1.0/consultar_dirige_d/<int:id>', ConsultManageInvestGroup_DirecAPI.as_view()),
+    path('api/1.0/consultar_dirige_gi/<int:id>', ConsultManageInvestGroup_GIAPI.as_view()),
 
 ]
