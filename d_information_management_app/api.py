@@ -768,6 +768,15 @@ class ConsultWorksInvestGroupAPI(APIView):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ConsultWorksInvestGroup_GIAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = WorksInvestGroup.objects.filter(inv_group=kwargs['id'], study_status=True)
+        returned = WorksInvestGroupSerializer(queryset, many=True).data
+        if returned:
+            return Response({"Work":returned}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+
 class ConsultManageInvestGroupAPI(APIView):
     """
     Clase usada para la implementacion de, la API para consultar si un Profesor DIRIGE o no un
