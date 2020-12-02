@@ -17,7 +17,8 @@ from .api import (CreateCountryAPI, CreateStateAPI, CreateCityAPI, CreateInstitu
                  CreateKnowledgeAreaAPI, CreateInvestigationGroupAPI, CreateInvestigationLineAPI, 
                  ConsultInvestigationGroup_idAPI, ConsultInvestigationGroup_DepartmentAPI, ConsultMemberProfessorAPI,
                  ConsultKnowledgeAreaAPI, ConsultKnowledgeArea_idAPI, ConsultInvestigationLine_knowledgeAPI,
-                 ConsultInvestigationLine_idAPI, ConsultManageInvestGroup_DirecAPI)
+                 ConsultInvestigationLine_idAPI, ConsultManageInvestGroup_DirecAPI, ConsultManageInvestGroup_GIAPI,
+                 ConsultWorksInvestGroup_GIAPI)
 
 urlpatterns = [
     #Javier
@@ -62,9 +63,11 @@ urlpatterns = [
     path('api/1.0/consultar_profesor/<int:id>', ConsultProfessor_idAPI.as_view()),
     path('api/1.0/consultar_es_miembro/<int:id_p>/<int:id_gi>', ConsultIsMemberAPI.as_view()),
     path('api/1.0/consultar_trabaja/<int:id_gi>/<int:id_ac>', ConsultWorksInvestGroupAPI.as_view()),
+    path('api/1.0/consultar_trabaja/<int:id>', ConsultWorksInvestGroup_GIAPI.as_view()),
     path('api/1.0/consultar_dirige/<int:id_p>/<int:id_gi>', ConsultManageInvestGroupAPI.as_view()),
     path('api/1.0/consultar_miembro_gi/<int:id>', ConsultMemberIGAPI.as_view()),
     path('api/1.0/consultar_miembro_p/<int:id>', ConsultMemberProfessorAPI.as_view()),
     path('api/1.0/consultar_dirige_d/<int:id>', ConsultManageInvestGroup_DirecAPI.as_view()),
+    path('api/1.0/consultar_dirige_gi/<int:id>', ConsultManageInvestGroup_GIAPI.as_view()),
 
 ]

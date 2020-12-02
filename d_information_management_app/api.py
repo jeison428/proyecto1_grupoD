@@ -768,6 +768,15 @@ class ConsultWorksInvestGroupAPI(APIView):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ConsultWorksInvestGroup_GIAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = WorksInvestGroup.objects.filter(inv_group=kwargs['id'], study_status=True)
+        returned = WorksInvestGroupSerializer(queryset, many=True).data
+        if returned:
+            return Response({"Work":returned}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+
 class ConsultManageInvestGroupAPI(APIView):
     """
     Clase usada para la implementacion de, la API para consultar si un Profesor DIRIGE o no un
@@ -877,6 +886,31 @@ class ConsultManageInvestGroup_DirecAPI(APIView):
     """
     def get(self, request, *args, **kwargs):
         queryset = ManageInvestGroup.objects.filter(professor=kwargs['id'], direction_state=True)
+        returned = ManageInvestGroupSerializer(queryset, many=True).data
+        if returned:
+            return Response({"Manage": returned}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existen registros en la base de datos para el ID ingresado", status=status.HTTP_404_NOT_FOUND)
+
+class ConsultManageInvestGroup_GIAPI(APIView):
+    """
+    Clase usada para la implementacion de, la API para consultar cual es el profesor que DIRIGE a un grupo de
+    investigacion de la Universidad, esto se logra enviando el ID del Grupo de Investigacion mediante el metodo GET
+    - - - - -
+    Parameters
+    - - - - -
+    id : int
+        Referencia a un Grupo de investigacion
+    - - - - -
+    Returned
+    - - - - -
+        Si el id es correcto y se encuentran resultados:
+            {"Manage": JsonResultado, HTTP_202_ACCEPTED}}
+        Si no se encuentran resultados:
+            Se mostrata un mensaje de error, HTTP_404_NOT_FOUND
+    """
+    def get(self, request, *args, **kwargs):
+        queryset = ManageInvestGroup.objects.filter(inv_group=kwargs['id'], direction_state=True)
         returned = ManageInvestGroupSerializer(queryset, many=True).data
         if returned:
             return Response({"Manage": returned}, status=status.HTTP_202_ACCEPTED)
