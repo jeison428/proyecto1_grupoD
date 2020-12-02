@@ -31,6 +31,29 @@ class CreateUserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    
+    first_name = serializers.CharField(required=False)
+    last_name = serializers.CharField(required=False)
+    username = serializers.CharField(required=False)
+    password = serializers.CharField(required=False)
+    email = serializers.EmailField(required=False)
+    type_id = serializers.IntegerField(required=False)
+    personal_id = serializers.CharField(required=False)
+    personal_code = serializers.CharField(required=False)
+    photo = serializers.FileField(required=False)
+    telephone = serializers.CharField(required=False)
+    address = serializers.CharField(required=False)
+    is_proffessor = serializers.BooleanField(required=False)
+    is_student = serializers.BooleanField(required=False)
+
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'username', 'password', 'email', 'type_id', 'personal_id', 
+                'personal_code', 'photo', 'telephone', 'address', 'is_proffessor', 'is_student', ]
+
+
 # class UserSerializer2(serializers.Serializer):
 #     id = serializers.ReadOnlyField()
 #     first_name = serializers.CharField()

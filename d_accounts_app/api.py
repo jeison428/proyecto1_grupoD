@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework import generics, permissions
 from knox.models import AuthToken
-from .serializers import LoginSerializer, UserSerializer, CreateUserSerializer
+from .serializers import LoginSerializer, UserSerializer, CreateUserSerializer, UpdateUserSerializer
 from .models import User
 
 from d_information_management_app.models import Professor
@@ -57,6 +57,19 @@ class ConsultUser_idAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = User.objects.filter(id=kwargs['id'])
         return Response({"Users": CreateUserSerializer(queryset, many=True).data })
+
+    def put(self, request, *args, **kwargs):
+        try:
+            model = User.objects.get(id=kwargs['id'])
+        except User.DoesNotExist:
+            return Response(f"No existe el Usuario en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UpdateUserSerializer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+   
 #endregion
 
 #region autenticacion usuarios
