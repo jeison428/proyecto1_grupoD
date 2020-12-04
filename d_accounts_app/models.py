@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
     # - email
     # - first_name, last_name
     # - password
+    # - is_active
 # POR DEFECTO, EL username ES USADO PARA EL LOGIN
 
 # Create your models here.

@@ -47,11 +47,12 @@ class UpdateUserSerializer(serializers.ModelSerializer):
     address = serializers.CharField(required=False)
     is_proffessor = serializers.BooleanField(required=False)
     is_student = serializers.BooleanField(required=False)
+    is_active = serializers.BooleanField(required=False)
 
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'username', 'password', 'email', 'type_id', 'personal_id', 
-                'personal_code', 'photo', 'telephone', 'address', 'is_proffessor', 'is_student', ]
+                'personal_code', 'photo', 'telephone', 'address', 'is_proffessor', 'is_student', 'is_active']
 
 
 # class UserSerializer2(serializers.Serializer):
