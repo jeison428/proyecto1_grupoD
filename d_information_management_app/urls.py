@@ -18,11 +18,12 @@ from .api import (CreateCountryAPI, CreateStateAPI, CreateCityAPI, CreateInstitu
                  ConsultInvestigationGroup_idAPI, ConsultInvestigationGroup_DepartmentAPI, ConsultMemberProfessorAPI,
                  ConsultKnowledgeAreaAPI, ConsultKnowledgeArea_idAPI, ConsultInvestigationLine_knowledgeAPI,
                  ConsultInvestigationLine_idAPI, ConsultManageInvestGroup_DirecAPI, ConsultManageInvestGroup_GIAPI,
-                 ConsultWorksInvestGroup_GIAPI)
+                 ConsultWorksInvestGroup_GIAPI,ReportTest)
 
 urlpatterns = [
     #Javier
     #Crear
+    path('api/1.0/report/<int:id_format>', ReportTest.as_view()),
     path('api/1.0/crear_pais/', CreateCountryAPI.as_view()),
     path('api/1.0/crear_departamento/', CreateStateAPI.as_view()),
     path('api/1.0/crear_ciudad/', CreateCityAPI.as_view()),

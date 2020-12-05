@@ -19,10 +19,168 @@ from .models import (Country, State, City, Institution, Professor, Faculty, Depa
                     InvestigationGroup, KnowledgeArea, InvestigationLine, WorksInvestGroup, ManageInvestGroup,
                     ManageInvestLine, IsMember)
 
+from django.http.response import HttpResponse
+from django.views.generic.base import TemplateView
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import cm
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus.paragraph import Paragraph
+from reportlab.lib import colors
+from reportlab.platypus import Table, TableStyle
+
 # Create your api's here.
 # --------------------------------------------------Arias
 
 #region Create
+class ReportTest(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = Country.objects.all()
+
+        if(kwargs["id_format"]==1):#Format xlsx
+            wb = Workbook()
+            controller = 3
+            ws = wb.active
+            ws.title = 'Hoja'+str(1)
+
+            #Create title in the sheet
+            ws['B1'].alignment = Alignment(horizontal="center",vertical="center")
+            ws['B1'].border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
+            top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
+            ws['B1'].fill = PatternFill(start_color = '66FFCC',end_color ='66FFCC', fill_type='solid')
+            ws['B1'].font = Font(name = 'Calibri',size =12, bold =True)
+            ws['B1'] = "INFORME POR AÑO"
+            #Change the characteristics of cells
+            ws.merge_cells('B1:G1')
+            ws.row_dimensions[1].height = 25
+            ws.column_dimensions['B'].width = 20
+            ws.column_dimensions['C'].width = 20
+            ws.column_dimensions['D'].width = 20
+            ws.column_dimensions['E'].width = 20
+            ws.column_dimensions['F'].width = 20
+            ws.column_dimensions['G'].width = 20
+            #Create header
+            ws['B2'].alignment = Alignment(horizontal="center",vertical="center")
+            ws['B2'].border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
+            top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
+            ws['B2'].fill = PatternFill(start_color = '66CFCC',end_color ='66CFCC', fill_type='solid')
+            ws['B2'].font = Font(name = 'Calibri',size =10, bold =True)
+            ws['B2']='Codigo'
+
+            ws['C2'].alignment = Alignment(horizontal="center",vertical="center")
+            ws['C2'].border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
+                                                top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
+            ws['C2'].fill = PatternFill(start_color = '66CFCC',end_color ='66CFCC', fill_type='solid')
+            ws['C2'].font = Font(name = 'Calibri',size =10, bold =True)
+            ws['C2']='Nombre'
+                    
+            ws['D2'].alignment = Alignment(horizontal="center",vertical="center")
+            ws['D2'].border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
+                                                top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
+            ws['D2'].fill = PatternFill(start_color = '66CFCC',end_color ='66CFCC', fill_type='solid')
+            ws['D2'].font = Font(name = 'Calibri',size =10, bold =True)
+            ws['D2']='Estado'
+
+            ws['E2'].alignment = Alignment(horizontal="center",vertical="center")
+            ws['E2'].border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
+                                                top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
+            ws['E2'].fill = PatternFill(start_color = '66CFCC',end_color ='66CFCC', fill_type='solid')
+            ws['E2'].font = Font(name = 'Calibri',size =10, bold =True)
+            ws['E2']='Dedicación'
+
+            ws['F2'].alignment = Alignment(horizontal="center",vertical="center")
+            ws['F2'].border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
+                                                top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
+            ws['F2'].fill = PatternFill(start_color = '66CFCC',end_color ='66CFCC', fill_type='solid')
+            ws['F2'].font = Font(name = 'Calibri',size =10, bold =True)
+            ws['F2']='Institución'
+
+            ws['G2'].alignment = Alignment(horizontal="center",vertical="center")
+            ws['G2'].border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
+                                                top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
+            ws['G2'].fill = PatternFill(start_color = '66CFCC',end_color ='66CFCC', fill_type='solid')
+            ws['G2'].font = Font(name = 'Calibri',size =10, bold =True)
+            ws['G2']='Departamento'
+
+            for q in queryset:    
+                ws.cell(row=controller,column=2).alignment = Alignment(horizontal="center")
+                ws.cell(row=controller,column=2).border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
+                                                                        top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
+                ws.cell(row =controller, column=2).font = Font(name='Calibri',size=8)       
+                ws.cell(row =controller, column=2).value = q.name
+                controller +=1
+
+            filename = "ReporteInformePorAño.xlsx"
+            #The define the type of response to be give
+            response = HttpResponse(content_type = "application/ms-excel")
+            content = "attachment; filename = {0}".format(filename)
+            response["Content-Disposition"] = content
+            wb.save(response)
+
+        if(kwargs["id_format"]==2):#Format pdf
+            filename = "ReporteInformePorAño.pdf"
+            #The define the type of response to be give
+            response = HttpResponse(content_type = "application/pdf")
+            content = "attachment; filename = {0}".format(filename)
+            response["Content-Disposition"] = content
+            #Create the PDF object, using the Bytesobject as its "file"
+            buffer = BytesIO()
+            c = canvas.Canvas(buffer, pagesize=A4)
+
+            #Header
+            c.setLineWidth(.3)
+            c.setFont('Helvetica',22)
+            c.drawString(30,750,'Reporte anual')
+            c.setFont('Helvetica',12)
+            c.drawString(30,735,'Report')
+            c.setFont('Helvetica-Bold',12)
+            c.drawString(460,750,"01/07/2020")
+            c.line(460,747,560,747)
+
+            #Table header
+            styles = getSampleStyleSheet()
+            styleBH = styles ["Normal"]
+            styleBH.alignment = 1 #TA_CENTER is 1
+            styleBH.fontSize=10
+
+            codigo = Paragraph('''Codigo''',styleBH)
+            nombre = Paragraph('''Nombre''',styleBH)
+            estado = Paragraph('''Estado''',styleBH)
+            dedicacion = Paragraph('''Dedicación''',styleBH)
+            institucion = Paragraph('''Institución''',styleBH)
+            departamento = Paragraph('''Departamento''',styleBH)
+            data = []
+            data.append([codigo, nombre, estado, dedicacion, institucion, departamento])
+
+            #Table
+            styleN = styles["BodyText"]
+            styleN.alignment = 1 #TA_CENTER is 1
+            styleN.fontSize = 7
+
+            high = 650
+            for q in queryset: 
+                data.append([q.name])
+                high = high -18
+            
+            #Table zise
+            width, height = A4
+            table = Table(data, colWidths=[2.7*cm,6.9*cm,1.9*cm,2.2*cm,2.2*cm,2.7*cm])
+            table.setStyle(TableStyle([('INNERGRID',(0,0),(-1,-1),0.25,colors.black),('BOX',(0,0),(-1,-1),0.25,colors.black)]))
+            #Pdf size
+            table.wrapOn(c, width, height)
+            table.drawOn(c,30,high)
+            c.showPage()
+            
+            c.save()
+            pdf = buffer.getvalue()
+            buffer.close()
+            response.write(pdf)           
+
+        return response        
 
 class CreateCountryAPI(generics.GenericAPIView):
     """
