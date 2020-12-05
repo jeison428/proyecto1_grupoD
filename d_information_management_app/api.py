@@ -13,11 +13,11 @@ from .serializers import (CountrySerializer, StateSerializer, CitySerializer, In
                         ProfessorSerializer, FacultySerializer, DepartmentSerializer, InvestigationGroupSerializer,
                         KnowledgeAreaSerializer, InvestigationLineSerializer, WorksInvestGroupSerializer, 
                         ManageInvestLineSerializer, ManageInvestGroupSerializer, AcademicTrainingSerializer,
-                        IsMemberSerializer)
+                        IsMemberSerializer, WorksDepartmSerializer)
 
 from .models import (Country, State, City, Institution, Professor, Faculty, Department, AcademicTraining,
                     InvestigationGroup, KnowledgeArea, InvestigationLine, WorksInvestGroup, ManageInvestGroup,
-                    ManageInvestLine, IsMember)
+                    ManageInvestLine, IsMember, WorksDepartm)
 
 from django.http.response import HttpResponse
 from django.views.generic.base import TemplateView
@@ -568,6 +568,7 @@ class CreateAcademicTrainingAPI(generics.GenericAPIView):
 # --------------------------------------------------Jeison
 
 #region Create
+# Grupo de investigacion
 class CreateInvestigationGroupAPI(generics.GenericAPIView):
     """
     Clase usada para la implementacion de la API para crear un 
@@ -585,6 +586,7 @@ class CreateInvestigationGroupAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+# Area del conocimiento
 class CreateKnowledgeAreaAPI(APIView):
     """
     Clase usada para la implementacion de la API para crear un 
@@ -599,6 +601,7 @@ class CreateKnowledgeAreaAPI(APIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+# Linea de investigacion
 class CreateInvestigationLineAPI(generics.GenericAPIView):
     """
     Clase usada para la implementacion de la API para crear una
@@ -615,6 +618,7 @@ class CreateInvestigationLineAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+# Trabaja entre GI y AC
 class CreateWorksInvestGroupAPI(generics.GenericAPIView):
     """
     Clase usada para la implementacion de la API para crear una relacion
@@ -633,6 +637,7 @@ class CreateWorksInvestGroupAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+# Dirige entre P y GI
 class CreateManageInvestGroupAPI(generics.GenericAPIView):
     """
     Clase usada para la implementacion de la API para crear una relacion
@@ -651,6 +656,7 @@ class CreateManageInvestGroupAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+# Es miembro entre P y GI
 class CreateIsMemberAPI(generics.GenericAPIView):
     """
     Clase usada para la implementacion de la API para crear una relacion
@@ -669,6 +675,7 @@ class CreateIsMemberAPI(generics.GenericAPIView):
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+# Maneja entre P y LI
 class CreateManageInvestLineAPI(generics.GenericAPIView):
     """
     Clase usada para la implementacion de la API para crear una relacion
@@ -680,6 +687,21 @@ class CreateManageInvestLineAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
             drive = serializer.save()
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+# Labora entre P y Departamento de la U
+class CreateWorkDepartmentAPI(generics.GenericAPIView):
+    """
+    Clase usada para la implementacion de la API para crear una relacion
+    de rol Labora entre los modelos de Profesor y Departamento (de la Universidad)
+    """
+    serializer_class = WorksDepartmSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():
+            work = serializer.save()
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 #endregion
@@ -1074,5 +1096,149 @@ class ConsultManageInvestGroup_GIAPI(APIView):
             return Response({"Manage": returned}, status=status.HTTP_202_ACCEPTED)
         else:
             return Response(f"No existen registros en la base de datos para el ID ingresado", status=status.HTTP_404_NOT_FOUND)
+
+#maneja
+class ConsultManageInvestLineAPI(APIView):
+    """
+    Clase usada para la implementacion de, la API para consultar si un Profesor MANEJA o no una
+    Linea de investigacion espesifica, esto se logra enviando el ID del Profesor y el ID de la 
+    Linea de investigacion (en ese orden) mediante el metodo GET y/o enviando la informacion
+    que se va a editar del registro del modelo "maneja" mediante el metodo POST
+    - - - - -
+    Parameters
+    - - - - -
+    id_p : int
+        Referencia a un Profesor
+    id_i : int
+        Referencia a una Linea de Investigacion de la Universidad
+    """
+    def get(self, request, *args, **kwargs):
+        queryset = ManageInvestLine.objects.filter(inv_line=kwargs['id_i'], professor=kwargs['id_p'], analysis_state=True)
+        returned = ManageInvestLineSerializer(queryset, many=True).data
+        if returned:
+            return Response(returned, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            model = ManageInvestLine.objects.filter(inv_line=kwargs['id_i'], professor=kwargs['id_p'], analysis_state=True)
+        except ManageInvestLine.DoesNotExist:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = ManageInvestLineSerializer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ConsultManageInvestLine_invLineAPI(APIView):
+    """
+    Clase usada para la implementacion de, la API para consultar cuales Profesores MANEJAN una
+    Linea de Investigacion, esto se logra enviando el ID de la Linea de Investigacion mediante el metodo GET 
+    - - - - -
+    Parameters
+    - - - - -
+    id : int
+        Referencia a una Linea de Investigacion
+    """
+    def get(self, request, *args, **kwargs):
+        queryset = ManageInvestLine.objects.filter(inv_line=kwargs['id'], analysis_state=True)
+        returned = ManageInvestLineSerializer(queryset, many=True).data
+        if returned:
+            return Response(returned, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+
+class ConsultManageInvestLine_profAPI(APIView):
+    """
+    Clase usada para la implementacion de, la API para consultar si un Profesor MANEJA una o mas
+    Lineas de Investigacion, esto se logra enviando el ID del Profesor mediante el metodo GET 
+    - - - - -
+    Parameters
+    - - - - -
+    id : int
+        Referencia a un Profesor
+    """
+    def get(self, request, *args, **kwargs):
+        queryset = ManageInvestLine.objects.filter(professor=kwargs['id'], analysis_state=True)
+        returned = ManageInvestLineSerializer(queryset, many=True).data
+        if returned:
+            return Response(returned, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+
+# labora
+class ConsultWorksDepartmAPI(APIView):
+    """
+    Clase usada para la implementacion de, la API para consultar si un Profesor LABORA o no un
+    Departamento espesifico de la Universidad, esto se logra enviando el ID del Profesor y 
+    el ID del Departamento (en ese orden) mediante el metodo GET y/o enviando la informacion 
+    que se va a editar del registro del modelo "Labora" mediante el metodo POST
+    - - - - -
+    Parameters
+    - - - - -
+    id_p : int
+        Referencia a un Profesor
+    id_d : int
+        Referencia a un Departamento de la Universidad
+    """
+    def get(self, request, *args, **kwargs):
+        queryset = WorksDepartm.objects.filter(professor=kwargs['id_p'], department=kwargs['id_d'], laboral_state=True)
+        returned = WorksDepartmSerializer(queryset, many=True).data
+        if returned:
+            return Response(returned, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            model = WorksDepartm.objects.filter(professor=kwargs['id_p'], department=kwargs['id_d'], laboral_state=True)
+        except WorksDepartm.DoesNotExist:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = WorksDepartmSerializer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ConsultWorksDepartm_profAPI(APIView):
+    """
+    Clase usada para la implementacion de, la API para consultar si un Profesor LABORA o no un
+    Departamento de la Universidad, esto se logra enviando el ID del Profesor mediante el metodo GET 
+    - - - - -
+    Parameters
+    - - - - -
+    id : int
+        Referencia a un Profesor
+    """
+    def get(self, request, *args, **kwargs):
+        queryset = WorksDepartm.objects.filter(professor=kwargs['id'], laboral_state=True)
+        returned = WorksDepartmSerializer(queryset, many=True).data
+        if returned:
+            return Response(returned, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+
+class ConsultWorksDepartm_depAPI(APIView):
+    """
+    Clase usada para la implementacion de, la API para consultar cuales Profesores LABORAN en un
+    Departamento espesifico de la Universidad, esto se logra enviando el ID del Departamento mediante
+    el metodo GET 
+    - - - - -
+    Parameters
+    - - - - -
+    id : int
+        Referencia a un Departamento de la Universidad
+    """
+    def get(self, request, *args, **kwargs):
+        queryset = WorksDepartm.objects.filter(department=kwargs['id'], laboral_state=True)
+        returned = WorksDepartmSerializer(queryset, many=True).data
+        if returned:
+            return Response(returned, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+
 
 #endregion

@@ -324,7 +324,7 @@ class ManageInvestLine(models.Model):
     - - - - -
     inv_line : int
         Referencia a una linea de investigacion
-    profesor : int
+    professor : int
         Referencia a un profesor
     analysis_state : boolean
         Estado de la relacionen en la cual el profesor maneja o no una linea de investigacion
