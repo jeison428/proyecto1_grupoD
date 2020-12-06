@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from d_accounts_app.backend import IsProfessor
+from d_accounts_app.models import User
 
 from .serializers import (CountrySerializer, StateSerializer, CitySerializer, InstitutionSerializer, 
                         ProfessorSerializer, FacultySerializer, DepartmentSerializer, InvestigationGroupSerializer,
@@ -271,11 +272,12 @@ class CreateProfessorAPI(generics.GenericAPIView):# toca modificarlo a los cambi
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data) 
-        if serializer.is_valid():#Valida que los tipos de datos sean correctos
-            # test = Professor.objects.filter(name=request.data["name"])
-            # if not(test):
-                professor = serializer.save()              
-                return Response(serializer.data, status = status.HTTP_201_CREATED)
+        assignedUser = User.objects.get(id=request.data['user'])
+        assignedUser.is_proffessor = True
+        assignedUser.save()
+        if serializer.is_valid():
+            professor = serializer.save()              
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class CreateFacultyAPI(generics.GenericAPIView):
@@ -630,7 +632,8 @@ class CreateWorksInvestGroupAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
             isElement = WorksInvestGroup.objects.filter(
-                inv_group=request.data['inv_group'], know_area=request.data['know_area']
+                inv_group=request.data['inv_group'], know_area=request.data['know_area'],
+                inv_group__status=True, know_area__status=True
             )
             if not(isElement):
                 korksInvestGroup = serializer.save()
@@ -649,9 +652,13 @@ class CreateManageInvestGroupAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
             isElement = ManageInvestGroup.objects.filter(
-                inv_group=request.data['inv_group'], professor=request.data['professor']
+                inv_group=request.data['inv_group'], professor=request.data['professor'], 
+                professor__status=True, inv_group__status=True
             )
             if not(isElement):
+                assignedProfessor = Professor.objects.filter(id=request.data['professor'])
+                assignedProfessor.is_director_gi = True
+                assignedProfessor.save()
                 directs = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
@@ -668,7 +675,8 @@ class CreateIsMemberAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
             isElement = IsMember.objects.filter(
-                inv_group=request.data['inv_group'], professor=request.data['professor']
+                inv_group=request.data['inv_group'], professor=request.data['professor'],
+                professor__status=True, inv_group__status=True
             )
             if not(isElement):
                 is_member = serializer.save()
@@ -686,8 +694,13 @@ class CreateManageInvestLineAPI(generics.GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            drive = serializer.save()
-            return Response(serializer.data, status = status.HTTP_201_CREATED)
+            isElement = ManageInvestLine.objects.filter(
+                inv_line=request.data['inv_line'], professor=request.data['professor'],
+                professor__status=True, inv_line__status=True
+            )
+            if not(isElement):
+                drive = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 # Labora entre P y Departamento de la U
@@ -701,8 +714,13 @@ class CreateWorkDepartmentAPI(generics.GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            work = serializer.save()
-            return Response(serializer.data, status = status.HTTP_201_CREATED)
+            isElement = WorksDepartm.objects.filter(
+                department=request.data['department'], professor=request.data['professor'],
+                professor__status=True, department__status=True
+            )
+            if not(isElement):
+                work = serializer.save()
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 #endregion
 
