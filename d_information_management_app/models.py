@@ -306,7 +306,7 @@ class WorksInvestGroup(models.Model):
     """
     inv_group = models.ForeignKey(InvestigationGroup, on_delete=models.SET_NULL, blank=False, null=True)
     know_area = models.ForeignKey(KnowledgeArea, on_delete=models.SET_NULL, blank=False, null=True)
-    study_status = models.BooleanField()
+    study_status = models.BooleanField(default=True, blank=False, null=False)
 
     class Meta:
         verbose_name = 'Trabaja'
@@ -331,7 +331,7 @@ class ManageInvestLine(models.Model):
     """
     inv_line = models.ForeignKey(InvestigationLine, on_delete=models.SET_NULL, blank=False, null=True, default=1)
     professor = models.ForeignKey(Professor, on_delete=models.SET_NULL, blank=False, null=True, default=1)
-    analysis_state = models.BooleanField()
+    analysis_state = models.BooleanField(default=True, blank=False, null=False)
 
     class Meta:
         verbose_name = 'Maneja'
@@ -353,7 +353,7 @@ class ManageInvestGroup(models.Model):
     """
     inv_group = models.ForeignKey(InvestigationGroup, on_delete=models.SET_NULL, blank=False, null=True, default=1)
     professor = models.ForeignKey(Professor, on_delete=models.SET_NULL, blank=False, null=True, default=1)
-    direction_state = models.BooleanField()
+    direction_state = models.BooleanField(default=True, blank=False, null=False)
     
     class Meta:
         verbose_name = 'Dirige'
@@ -375,7 +375,7 @@ class IsMember(models.Model):
     """
     professor = models.ForeignKey(Professor, on_delete=models.SET_NULL, blank=False, null=True)
     inv_group = models.ForeignKey(InvestigationGroup, on_delete=models.SET_NULL, blank=False, null=True)
-    member_status = models.BooleanField()
+    member_status = models.BooleanField(default=True, blank=False, null=False)
 
     class Meta:
         verbose_name = 'Es Miembro'
@@ -405,7 +405,7 @@ class WorksDepartm(models.Model):
     professor = models.ForeignKey(Professor, on_delete=models.SET_NULL, blank=False, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, blank=False, null=True)
     laboral_category = models.CharField(max_length=50, blank=False, null=False)
-    laboral_state = models.BooleanField(default=False)
+    laboral_state = models.BooleanField(default=True, blank=False, null=False)
 
     class Meta:
         verbose_name = 'Labora'

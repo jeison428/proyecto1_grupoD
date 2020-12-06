@@ -656,7 +656,7 @@ class CreateManageInvestGroupAPI(generics.GenericAPIView):
                 professor__status=True, inv_group__status=True
             )
             if not(isElement):
-                assignedProfessor = Professor.objects.filter(id=request.data['professor'])
+                assignedProfessor = Professor.objects.get(id=request.data['professor'])
                 assignedProfessor.is_director_gi = True
                 assignedProfessor.save()
                 directs = serializer.save()
