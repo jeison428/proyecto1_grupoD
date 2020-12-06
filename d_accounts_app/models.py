@@ -28,7 +28,7 @@ class User(AbstractUser):
     address = models.CharField(verbose_name='Direccion', max_length=64)
 
     is_proffessor = models.BooleanField(verbose_name='Es profesor', default=False)
-    is_student = models.BooleanField(verbose_name='Es estudiante', default=True)
+    is_student = models.BooleanField(verbose_name='Es estudiante', default=False)
 
     class Meta:
         indexes = [

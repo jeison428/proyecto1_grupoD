@@ -57,6 +57,9 @@ class InstitutionSerializer(serializers.ModelSerializer):
 
 #Profesor
 class ProfessorSerializer(serializers.ModelSerializer):
+    is_director_student = serializers.BooleanField(required=False)
+    is_director_gi = serializers.BooleanField(required=False)
+    is_internal = serializers.BooleanField(required=False)
     status = serializers.BooleanField(required=False)
     class Meta:
         model = Professor

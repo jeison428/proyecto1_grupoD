@@ -653,7 +653,7 @@ class CreateManageInvestGroupAPI(generics.GenericAPIView):
         if serializer.is_valid():
             isElement = ManageInvestGroup.objects.filter(
                 inv_group=request.data['inv_group'], professor=request.data['professor'], 
-                professor__status=True, inv_group__status=True
+                professor__status=True, inv_group__status=True, professor__is_director_gi=False
             )
             if not(isElement):
                 assignedProfessor = Professor.objects.get(id=request.data['professor'])
@@ -804,7 +804,7 @@ class ConsultProfessor_idAPI(APIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            model = Professor.objects.get(user=kwargs['id'], status=True)
+            model = Professor.objects.get(id=kwargs['id'], status=True)
         except Professor.DoesNotExist:
             return Response(f"No existe el Profesor en la base de datos", status=status.HTTP_404_NOT_FOUND)
 
@@ -1005,6 +1005,9 @@ class ConsultManageInvestGroupAPI(APIView):
 
         serializer = ManageInvestGroupSerializer(model, data=request.data)
         if serializer.is_valid():
+            oldProfessor = Professor.objects.get(id=kwargs['id_p'])
+            oldProfessor.status = False
+            oldProfessor.save()
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

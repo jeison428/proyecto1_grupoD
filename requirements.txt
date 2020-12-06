@@ -3,6 +3,8 @@ pip install Django==2.2.3
 pip install python-decouple
 pip install django-rest-knox
 pip install djangorestframework
+pip install openpyxl
+pip install reportlab
 
 python -m pip install django-cors-headers
 pip install mysqlclient
