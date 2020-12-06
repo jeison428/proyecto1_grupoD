@@ -328,7 +328,7 @@ class ConsultCountryAPI(APIView):
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
     def get(self, request, *args, **kwargs):
-        queryset = Country.objects.all()
+        queryset = Country.objects.filter(status=True)
         return Response({"Countrys": CountrySerializer(queryset, many=True).data })
 
 class ConsultCountry_idAPI(APIView):
@@ -341,7 +341,7 @@ class ConsultCountry_idAPI(APIView):
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
     def get(self, request, *args, **kwargs):
-        queryset = Country.objects.filter(id=kwargs["id_country"])
+        queryset = Country.objects.filter(id=kwargs["id_country"], status=True)
         returned = CountrySerializer(queryset, many=True).data
         if returned:
             return Response({"Country": returned}, status=status.HTTP_202_ACCEPTED)
@@ -350,7 +350,7 @@ class ConsultCountry_idAPI(APIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            model = Country.objects.get(id=request.data['id'])
+            model = Country.objects.get(id=request.data['id'], status=True)
         except Country.DoesNotExist:
             return Response(f"No existe el País en la base de datos", status=status.HTTP_404_NOT_FOUND)
 
@@ -370,7 +370,7 @@ class ConsultState_CountryAPI(APIView):
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
     def get(self, request, *args, **kwargs):
-        queryset = State.objects.filter(country=kwargs["id_country"])
+        queryset = State.objects.filter(country=kwargs["id_country"], status=True)
         returned = StateSerializer(queryset, many=True).data
         if returned:
             return Response({"States": returned}, status=status.HTTP_202_ACCEPTED)
@@ -379,7 +379,7 @@ class ConsultState_CountryAPI(APIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            model = State.objects.get(id=request.data['id'])
+            model = State.objects.get(id=request.data['id'], status=True)
         except State.DoesNotExist:
             return Response(f"No existe ese Departamento en la base de datos", status=status.HTTP_404_NOT_FOUND)
         
@@ -400,7 +400,7 @@ class ConsultCity_StateAPI(APIView):
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
     def get(self, request, *args, **kwargs):
-        queryset = City.objects.filter(state=kwargs["id_dep"])
+        queryset = City.objects.filter(state=kwargs["id_dep"], status=True)
         returned = CitySerializer(queryset, many=True).data
         if returned:
             return Response({"Cities": returned}, status=status.HTTP_202_ACCEPTED)
@@ -409,7 +409,7 @@ class ConsultCity_StateAPI(APIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            model = City.objects.get(id=request.data['id'])
+            model = City.objects.get(id=request.data['id'], status=True)
         except City.DoesNotExist:
             return Response(f"No existe esa Ciudad en la base de datos", status=status.HTTP_404_NOT_FOUND)
         
@@ -429,7 +429,7 @@ class ConsultInstitutionAPI(APIView):
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
     def get(self, request, *args, **kwargs):
-        queryset = Institution.objects.all()
+        queryset = Institution.objects.filter(status=True)
         return Response({"Institutions": InstitutionSerializer(queryset, many=True).data })
 
 class ConsultInstitution_idAPI(APIView):
@@ -442,7 +442,7 @@ class ConsultInstitution_idAPI(APIView):
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
     def get(self, request, *args, **kwargs):
-        queryset = Institution.objects.filter(id=kwargs["id"]) 
+        queryset = Institution.objects.filter(id=kwargs["id"], status=True) 
         returned = InstitutionSerializer(queryset, many=True).data
         if returned:
             return Response({"Institution": returned}, status=status.HTTP_202_ACCEPTED)
@@ -470,7 +470,7 @@ class ConsultFacultyAPI(APIView):
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
     def get(self, request, *args, **kwargs):
-        queryset = Faculty.objects.all()
+        queryset = Faculty.objects.filter(status=True)
         return Response({"Facultys": FacultySerializer(queryset, many=True).data })
 
 class ConsultFaculty_idAPI(APIView):
@@ -483,7 +483,7 @@ class ConsultFaculty_idAPI(APIView):
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
     def get(self, request, *args, **kwargs):
-        queryset = Faculty.objects.filter(id=kwargs["id"])  
+        queryset = Faculty.objects.filter(id=kwargs["id"], status=True)  
         returned = FacultySerializer(queryset, many=True).data
         if returned:
             return Response({"Faculty": returned}, status=status.HTTP_202_ACCEPTED)
@@ -492,7 +492,7 @@ class ConsultFaculty_idAPI(APIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            model = Faculty.objects.get(id=request.data['id'])
+            model = Faculty.objects.get(id=request.data['id'], status=True)
         except Faculty.DoesNotExist:
             return Response(f"No existe Facultad en la base de datos", status=status.HTTP_404_NOT_FOUND)
 
@@ -511,7 +511,7 @@ class ConsultDepartmentAPI(APIView):
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
     def get(self, request, *args, **kwargs):
-        queryset = Department.objects.all()
+        queryset = Department.objects.filter(status=True)
         return Response({"Departments": DepartmentSerializer(queryset, many=True).data })
 
 class ConsultDepartment_idAPI(APIView):
@@ -524,7 +524,7 @@ class ConsultDepartment_idAPI(APIView):
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
     def get(self, request, *args, **kwargs):
-        queryset = Department.objects.filter(id=kwargs["id"])  
+        queryset = Department.objects.filter(id=kwargs["id"], status=True)  
         returned = DepartmentSerializer(queryset, many=True).data
         if returned:
             return Response({"Department": returned}, status=status.HTTP_202_ACCEPTED)
@@ -533,7 +533,7 @@ class ConsultDepartment_idAPI(APIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            model = Department.objects.get(id=request.data['id'])
+            model = Department.objects.get(id=request.data['id'], status=True)
         except Department.DoesNotExist:
             return Response(f"No existe Departamento en la base de datos", status=status.HTTP_404_NOT_FOUND)
 
@@ -556,7 +556,7 @@ class CreateAcademicTrainingAPI(generics.GenericAPIView):
 
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
-        if serializer.is_valid():#Toca arreglar el filtro. Att_:JAVIER
+        if serializer.is_valid():
             isElement = AcademicTraining.objects.filter(professor=request.data['professor'],degree=request.data['degree'])
             if not(isElement):
                 academicTraining = serializer.save()
@@ -719,7 +719,7 @@ class ConsultInvestigationGroup_DepartmentAPI(APIView):
         Referencia a un departamento
     """
     def get(self, request, *args, **kwargs):
-        queryset = InvestigationGroup.objects.filter(department=kwargs['dep'])
+        queryset = InvestigationGroup.objects.filter(department=kwargs['dep'], status=True)
         return Response({"Groups": InvestigationGroupSerializer(queryset, many=True).data })
 
 class ConsultInvestigationGroup_idAPI(APIView):
@@ -735,7 +735,7 @@ class ConsultInvestigationGroup_idAPI(APIView):
         Referencia a un grupo de investigacion
     """
     def get(self, request, *args, **kwargs):
-        queryset = InvestigationGroup.objects.filter(id=kwargs['id'])
+        queryset = InvestigationGroup.objects.filter(id=kwargs['id'], status=True)
         
         returned = InvestigationGroupSerializer(queryset, many=True).data
         if returned:
@@ -745,7 +745,7 @@ class ConsultInvestigationGroup_idAPI(APIView):
     
     def put(self, request, *args, **kwargs):
         try:
-            model = InvestigationGroup.objects.get(id=kwargs['id'])
+            model = InvestigationGroup.objects.get(id=kwargs['id'], status=True)
         except InvestigationGroup.DoesNotExist:
             return Response(f"No existe el Grupo de investigacion en la base de datos", status=status.HTTP_404_NOT_FOUND)
 
@@ -761,7 +761,7 @@ class ConsultProfessorAPI(APIView):
     registrados en la Universidad
     """
     def get(self, request, *args, **kwargs):
-        queryset = Professor.objects.all()
+        queryset = Professor.objects.filter(status=True)
         return Response({"Professors": ProfessorSerializer(queryset, many=True).data })
 
 class ConsultProfessor_idAPI(APIView):
@@ -776,7 +776,7 @@ class ConsultProfessor_idAPI(APIView):
         Referencia a un profesor
     """
     def get(self, request, *args, **kwargs):
-        queryset = Professor.objects.filter(id=kwargs['id'])
+        queryset = Professor.objects.filter(id=kwargs['id'], status=True)
 
         returned = ProfessorSerializer(queryset, many=True).data
         if returned:
@@ -786,7 +786,7 @@ class ConsultProfessor_idAPI(APIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            model = Professor.objects.get(user=kwargs['id'])
+            model = Professor.objects.get(user=kwargs['id'], status=True)
         except Professor.DoesNotExist:
             return Response(f"No existe el Profesor en la base de datos", status=status.HTTP_404_NOT_FOUND)
 
@@ -802,7 +802,7 @@ class ConsultKnowledgeAreaAPI(APIView):
     registradas en la Universidad
     """
     def get(self, request, *args, **kwargs):
-        queryset = KnowledgeArea.objects.all()
+        queryset = KnowledgeArea.objects.filter(status=True)
         return Response({"Knowledges": KnowledgeAreaSerializer(queryset, many=True).data })
 
 class ConsultKnowledgeArea_idAPI(APIView):
@@ -817,7 +817,7 @@ class ConsultKnowledgeArea_idAPI(APIView):
         Referencia a un Area del Conocimiento
     """
     def get(self, request, *args, **kwargs):
-        queryset = KnowledgeArea.objects.filter(id=kwargs['id'])
+        queryset = KnowledgeArea.objects.filter(id=kwargs['id'], status=True)
         returned = KnowledgeAreaSerializer(queryset, many=True).data
         if returned:
             return Response({"Knowledge": KnowledgeAreaSerializer(queryset, many=True).data })
@@ -826,7 +826,7 @@ class ConsultKnowledgeArea_idAPI(APIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            model = KnowledgeArea.objects.get(id=kwargs['id'])
+            model = KnowledgeArea.objects.get(id=kwargs['id'], status=True)
         except KnowledgeArea.DoesNotExist:
             return Response(f"No existe el Area de conocimiento en la base de datos...")
         
@@ -842,7 +842,7 @@ class ConsultInvestigationLine_knowledgeAPI(APIView):
     pertenecen a un Area del conocimiento espesifica
     """
     def get(self, request, *args, **kwargs):
-        queryset = InvestigationLine.objects.filter(know_area=kwargs['id_area'])
+        queryset = InvestigationLine.objects.filter(know_area=kwargs['id_area'], status=True)
         returned = InvestigationLineSerializer(queryset, many=True).data
         if returned:
             return Response({"Lines": InvestigationLineSerializer(queryset, many=True).data })
@@ -861,7 +861,7 @@ class ConsultInvestigationLine_idAPI(APIView):
         Referencia a una Linea de Investigacion
     """
     def get(self, request, *args, **kwargs):
-        queryset = InvestigationLine.objects.filter(id=kwargs['id'])
+        queryset = InvestigationLine.objects.filter(id=kwargs['id'], status=True)
         returned = InvestigationLineSerializer(queryset, many=True).data
         if returned:
             return Response({"Line": InvestigationLineSerializer(queryset, many=True).data })
@@ -870,7 +870,7 @@ class ConsultInvestigationLine_idAPI(APIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            model = InvestigationLine.objects.get(id=kwargs['id'])
+            model = InvestigationLine.objects.get(id=kwargs['id'], status=True)
         except InvestigationLine.DoesNotExist:
             return Response(f"No existe la Linea de investigacion en la base de datos...")
 
@@ -895,7 +895,7 @@ class ConsultIsMemberAPI(APIView):
         Referencia a un Grupo de Investigacion
     """
     def get(self, request, *args, **kwargs):
-        queryset = IsMember.objects.filter(inv_group=kwargs['id_gi'], professor=kwargs['id_p'])
+        queryset = IsMember.objects.filter(inv_group=kwargs['id_gi'], professor=kwargs['id_p'], member_status=True)
         returned = IsMemberSerializer(queryset, many=True).data
         if returned:
             return Response({"IsMember":returned}, status=status.HTTP_202_ACCEPTED)
@@ -904,7 +904,7 @@ class ConsultIsMemberAPI(APIView):
     
     def post(self, request, *args, **kwargs):
         try:
-            model = IsMember.objects.get(inv_group=kwargs['id_gi'], professor=kwargs['id_p'])
+            model = IsMember.objects.get(inv_group=kwargs['id_gi'], professor=kwargs['id_p'], member_status=True)
         except IsMember.DoesNotExist:
             return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
 
@@ -1235,6 +1235,57 @@ class ConsultWorksDepartm_depAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = WorksDepartm.objects.filter(department=kwargs['id'], laboral_state=True)
         returned = WorksDepartmSerializer(queryset, many=True).data
+        if returned:
+            return Response(returned, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+
+# Formacion academica
+class ConsultAcademicTrainingAPI(APIView):
+    """
+    Clase usada para la implementacion de, la API para consultar la FORMACION ACADEMICA de un
+    Profesor espesifico de la Universidad, esto se logra enviando el ID de la Formacion Academica
+    correspondiente mediante el metodo GET y/o enviando la informacion que se va a editar del
+    registro del modelo "Formacion academica" mediante el metodo POST
+    - - - - -
+    Parameters
+    - - - - -
+    id : int
+        Referencia a una Formacion academica (Primary key del registro de la tabla)
+    """
+    def get(self, request, *args, **kwargs):
+        queryset = AcademicTraining.objects.filter(id=kwargs['id'], professor__status=True)
+        returned = AcademicTrainingSerializer(queryset, many=True).data
+        if returned:
+            return Response(returned, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, *args, **kwargs):
+        try:
+            model = AcademicTraining.objects.get(id=kwargs['id'], professor__status=True)
+        except AcademicTraining.DoesNotExist:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = AcademicTrainingSerializer(model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ConsultAcademicTraining_profAPI(APIView):
+    """
+    Clase usada para la implementacion de, la API para consultar las FORMACIONES ACADEMICAS de un
+    Profesor de la Universidad, esto se logra enviando el ID del Profesor mediante el metodo GET 
+    - - - - -
+    Parameters
+    - - - - -
+    id : int
+        Referencia a un Profesor
+    """
+    def get(self, request, *args, **kwargs):
+        queryset = AcademicTraining.objects.filter(professor=kwargs['id'], professor__status=True)
+        returned = AcademicTrainingSerializer(queryset, many=True).data
         if returned:
             return Response(returned, status=status.HTTP_202_ACCEPTED)
         else:
