@@ -31,6 +31,11 @@ class CreateUserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class ConsultUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'username', 'password', 'email', 'type_id', 'personal_id', 
+                'personal_code', 'photo', 'telephone', 'address', 'is_student', 'is_proffessor', 'is_coordinator']
 
 class UpdateUserSerializer(serializers.ModelSerializer):
     

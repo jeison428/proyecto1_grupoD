@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework import generics, permissions
 from knox.models import AuthToken
-from .serializers import LoginSerializer, UserSerializer, CreateUserSerializer, UpdateUserSerializer
+from .serializers import LoginSerializer, UserSerializer, CreateUserSerializer, UpdateUserSerializer, ConsultUserSerializer
 from .models import User
 
 from d_information_management_app.models import Professor
@@ -46,17 +46,17 @@ class CreateUserAPI(generics.GenericAPIView):
 class ConsultUserAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = User.objects.all()
-        return Response({"Users": CreateUserSerializer(queryset, many=True).data })
+        return Response({"Users": ConsultUserSerializer(queryset, many=True).data })
 
 class ConsultUser_PersonalAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = User.objects.filter(personal_id=kwargs['id'])
-        return Response({"Users": CreateUserSerializer(queryset, many=True).data })
+        return Response({"Users": ConsultUserSerializer(queryset, many=True).data })
 
 class ConsultUser_idAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = User.objects.filter(id=kwargs['id'])
-        return Response({"Users": CreateUserSerializer(queryset, many=True).data })
+        return Response({"Users": ConsultUserSerializer(queryset, many=True).data })
 
     def put(self, request, *args, **kwargs):
         try:
