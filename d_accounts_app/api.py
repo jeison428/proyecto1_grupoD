@@ -84,7 +84,7 @@ class AuthUserAPI(APIView):
                 return Response(f"director")
             except StudentProfessor.DoesNotExist:
                 try:
-                    ActivityProfessor.objects.get(professor__user=kwargs['id'])
+                    User.objects.get(id=kwargs['id'], is_coordinator=True)
                     return Response(f"coordinador")
                 except ActivityProfessor.DoesNotExist:
                     try:
