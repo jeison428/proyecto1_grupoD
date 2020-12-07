@@ -769,6 +769,14 @@ class ConsultInvestigationGroup_idAPI(APIView):
 
         serializer = InvestigationGroupSerializer(model, data=request.data)
         if serializer.is_valid():
+            if 'status' in request.data.keys():
+                if request.data['status'] == False:
+                    manageInvLine = ManageInvestGroup.objects.get(inv_group=kwargs['id'], direction_state=True)
+                    manageInvLine.direction_state = False
+                    oldProfessor = Professor.objects.get(id=int(queryset.professor.pk), status=True)
+                    oldProfessor.is_director_gi = False
+                    manageInvLine.save()
+                    oldProfessor.save()
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -1005,9 +1013,18 @@ class ConsultManageInvestGroupAPI(APIView):
 
         serializer = ManageInvestGroupSerializer(model, data=request.data)
         if serializer.is_valid():
-            oldProfessor = Professor.objects.get(id=kwargs['id_p'])
-            oldProfessor.status = False
-            oldProfessor.save()
+            if 'professor' in request.data.keys():
+                oldProfessor = Professor.objects.get(id=kwargs['id_p'])
+                oldProfessor.is_director_gi = False
+                oldProfessor.save()
+                newProfessor = Professor.objects.get(id=request.data['professor'])
+                newProfessor.is_director_gi = True
+                newProfessor.save()
+            if 'status' in request.data.keys():
+                if request.data['status'] == False:
+                    oldProfessor = Professor.objects.get(id=kwargs['id_p'])
+                    oldProfessor.is_director_gi = False
+                    oldProfessor.save()
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
