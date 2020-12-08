@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
-from d_accounts_app.backend import IsProfessor
+from d_accounts_app.backend import IsProfessor, IsCoordinator
 from d_accounts_app.models import User
 
 from .serializers import (CountrySerializer, StateSerializer, CitySerializer, InstitutionSerializer, 
@@ -576,7 +576,7 @@ class CreateInvestigationGroupAPI(generics.GenericAPIView):
     Clase usada para la implementacion de la API para crear un 
     Grupo de Investigacion
     """
-
+    permission_classes = [IsAuthenticated, IsCoordinator]
     serializer_class = InvestigationGroupSerializer
 
     def post(self, request):

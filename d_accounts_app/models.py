@@ -23,7 +23,7 @@ class User(AbstractUser):
     type_id = models.IntegerField(verbose_name='Tipo de ID', choices=ID_CHOICES, default=1)
     personal_id = models.CharField(verbose_name='Numero de ID', max_length=24)
     personal_code = models.CharField(verbose_name='Codigo ID', max_length=24)
-    photo = models.FileField(verbose_name='Foto', upload_to="d_accounts_app/users/%Y/%m/%d", default="http://localhost:8000/media/default/default_user.png")
+    photo = models.FileField(verbose_name='Foto', upload_to="d_accounts_app/users/%Y/%m/%d", default="/default/default_user.png")
     telephone = models.CharField(verbose_name='Telefono', max_length=24)
     address = models.CharField(verbose_name='Direccion', max_length=64)
     is_coordinator = models.BooleanField(verbose_name="Es Coordinador", default=False)

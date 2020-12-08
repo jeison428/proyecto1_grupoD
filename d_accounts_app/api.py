@@ -6,7 +6,7 @@ from knox.models import AuthToken
 from .serializers import LoginSerializer, UserSerializer, CreateUserSerializer, UpdateUserSerializer, ConsultUserSerializer
 from .models import User
 
-from d_information_management_app.models import Professor
+from d_information_management_app.models import Professor, ManageInvestGroup
 from c_tracking_app.models import ActivityProfessor
 from a_students_app.models import Student, StudentProfessor
 
@@ -80,9 +80,9 @@ class AuthUserAPI(APIView):
             return Response(f"profesor")
         except Professor.DoesNotExist:
             try:
-                StudentProfessor.objects.get(professor__user=kwargs['id'])
+                ManageInvestGroup.objects.get(professor__user=kwargs['id'])
                 return Response(f"director")
-            except StudentProfessor.DoesNotExist:
+            except ManageInvestGroup.DoesNotExist:
                 try:
                     User.objects.get(id=kwargs['id'], is_coordinator=True)
                     return Response(f"coordinador")
