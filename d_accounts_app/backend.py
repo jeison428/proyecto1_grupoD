@@ -1,5 +1,6 @@
 from rest_framework import permissions
 
+from .models import User
 from d_information_management_app.models import Professor
 from c_tracking_app.models import ActivityProfessor
 from a_students_app.models import Student, StudentProfessor
@@ -17,7 +18,7 @@ class IsProfessor(permissions.BasePermission):
     message = "No tienes permisos de un profesor"
 
     def has_permission(self, request, view):
-        try: 
+        try:
             professor = Professor.objects.get(user=request.user)
             if request.method == DELETE:
                 return False
@@ -36,8 +37,8 @@ class IsCoordinator(permissions.BasePermission):
     message = "No tienes permisos de un coordinador"
 
     def has_permission(self, request, view):
-        try: 
-            User.objects.get(id=request.user, is_coordinator=True)
+        try:
+            User.objects.get(id=request.user.pk, is_coordinator=True)
             return True
         except User.DoesNotExist:
             return False
