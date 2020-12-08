@@ -1267,7 +1267,7 @@ class ConsultWorksDepartmAPI(APIView):
         else:
             return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
     
-    def post(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         try:
             model = WorksDepartm.objects.filter(professor=kwargs['id_p'], department=kwargs['id_d'], laboral_state=True)
         except WorksDepartm.DoesNotExist:
