@@ -783,7 +783,7 @@ class ConsultInvestigationGroup_idAPI(APIView):
                 if request.data['status'] == False:
                     manageInvLine = ManageInvestGroup.objects.get(inv_group=kwargs['id'], direction_state=True)
                     manageInvLine.direction_state = False
-                    oldProfessor = Professor.objects.get(id=int(queryset.professor.pk), status=True)
+                    oldProfessor = Professor.objects.get(id=manageInvLine.professor.pk, status=True)
                     oldProfessor.is_director_gi = False
                     manageInvLine.save()
                     oldProfessor.save()
@@ -1043,7 +1043,7 @@ class ConsultManageInvestGroupAPI(APIView):
         else:
             return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
     
-    def post(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         try:
             model = ManageInvestGroup.objects.get(inv_group=kwargs['id_gi'], professor=kwargs['id_p'], direction_state=True)
         except IsMember.DoesNotExist:
@@ -1196,7 +1196,7 @@ class ConsultManageInvestLineAPI(APIView):
         else:
             return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
     
-    def post(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         try:
             model = ManageInvestLine.objects.filter(inv_line=kwargs['id_i'], professor=kwargs['id_p'], analysis_state=True)
         except ManageInvestLine.DoesNotExist:
