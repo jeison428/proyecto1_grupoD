@@ -191,7 +191,7 @@ class CreateCountryAPI(generics.GenericAPIView):
     PATH: 'api/1.0/crear_pais/'
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
-    #permission_classes = [IsAuthenticated, IsProfessor]
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     serializer_class = CountrySerializer
 
     def post(self, request):
@@ -211,8 +211,8 @@ class CreateStateAPI(generics.GenericAPIView):
     PATH: 'api/1.0/crear_departamento/'
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     serializer_class = StateSerializer
-
     def post(self, request):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
@@ -230,6 +230,7 @@ class CreateCityAPI(generics.GenericAPIView):
     PATH: 'api/1.0/crear_ciudad/'
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     serializer_class = CitySerializer
 
     def post(self, request):
@@ -268,6 +269,7 @@ class CreateProfessorAPI(generics.GenericAPIView):# toca modificarlo a los cambi
     PATH: 'api/1.0/crear_profesor/'
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     serializer_class = ProfessorSerializer
 
     def post(self, request):
@@ -329,6 +331,7 @@ class ConsultCountryAPI(APIView):
     PATH: 'api/1.0/consultar_pais/'
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     def get(self, request, *args, **kwargs):
         queryset = Country.objects.filter(status=True)
         return Response({"Countrys": CountrySerializer(queryset, many=True).data })
@@ -342,6 +345,7 @@ class ConsultCountry_idAPI(APIView):
     PATH: 'api/1.0/consultar_pais_id/<int:id_country>'
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     def get(self, request, *args, **kwargs):
         queryset = Country.objects.filter(id=kwargs["id_country"], status=True)
         returned = CountrySerializer(queryset, many=True).data
@@ -371,6 +375,7 @@ class ConsultState_CountryAPI(APIView):
     PATH: 'api/1.0/consultar_departamento_pais/<int:id_country>'
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     def get(self, request, *args, **kwargs):
         queryset = State.objects.filter(country=kwargs["id_country"], status=True)
         returned = StateSerializer(queryset, many=True).data
@@ -401,6 +406,7 @@ class ConsultCity_StateAPI(APIView):
     PATH: 'api/1.0/consultar_ciudad_departamento/<int:id_dep>'
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     def get(self, request, *args, **kwargs):
         queryset = City.objects.filter(state=kwargs["id_dep"], status=True)
         returned = CitySerializer(queryset, many=True).data
@@ -553,7 +559,7 @@ class CreateAcademicTrainingAPI(generics.GenericAPIView):
     PATH: 'api/1.0/crear_formacion_academica/'
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
-    permission_classes = [IsAuthenticated, IsProfessor]
+    #permission_classes = [IsAuthenticated, IsProfessor]
     serializer_class = AcademicTrainingSerializer
 
     def post(self, request):
@@ -576,7 +582,7 @@ class CreateInvestigationGroupAPI(generics.GenericAPIView):
     Clase usada para la implementacion de la API para crear un 
     Grupo de Investigacion
     """
-    permission_classes = [IsAuthenticated, IsCoordinator]
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     serializer_class = InvestigationGroupSerializer
 
     def post(self, request):
@@ -594,6 +600,7 @@ class CreateKnowledgeAreaAPI(APIView):
     Clase usada para la implementacion de la API para crear un 
     Area del Conocimiento
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     def post(self, request):
         serializer = KnowledgeAreaSerializer(data = request.data)
         if serializer.is_valid():
@@ -609,6 +616,7 @@ class CreateInvestigationLineAPI(generics.GenericAPIView):
     Clase usada para la implementacion de la API para crear una
     Linea de Investigacion
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     serializer_class = InvestigationLineSerializer
 
     def post(self, request):
@@ -736,7 +744,7 @@ class ConsultInvestigationGroup_DepartmentAPI(APIView):
     dep : int
         Referencia a un departamento
     """
-    permission_classes = [IsAuthenticated, IsCoordinator]
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     def get(self, request, *args, **kwargs):
         queryset = InvestigationGroup.objects.filter(department=kwargs['dep'], status=True)
         return Response({"Groups": InvestigationGroupSerializer(queryset, many=True).data })
@@ -753,7 +761,7 @@ class ConsultInvestigationGroup_idAPI(APIView):
     id : int
         Referencia a un grupo de investigacion
     """
-    permission_classes = [IsAuthenticated, IsCoordinator]
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     def get(self, request, *args, **kwargs):
         queryset = InvestigationGroup.objects.filter(id=kwargs['id'], status=True)
         
@@ -788,6 +796,7 @@ class ConsultProfessorAPI(APIView):
     Clase usada para la implementacion de la API para consultar todos los Profesores
     registrados en la Universidad
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     def get(self, request, *args, **kwargs):
         queryset = Professor.objects.filter(status=True)
         return Response({"Professors": ProfessorSerializer(queryset, many=True).data })
@@ -803,6 +812,7 @@ class ConsultProfessor_idAPI(APIView):
     id : int
         Referencia a un profesor
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     def get(self, request, *args, **kwargs):
         queryset = Professor.objects.filter(id=kwargs['id'], status=True)
 
@@ -829,6 +839,7 @@ class ConsultKnowledgeAreaAPI(APIView):
     Clase usada para la implementacion de la API para consultar todas las Areas del Conocimiento 
     registradas en la Universidad
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     def get(self, request, *args, **kwargs):
         queryset = KnowledgeArea.objects.filter(status=True)
         return Response({"Knowledges": KnowledgeAreaSerializer(queryset, many=True).data })
@@ -844,6 +855,7 @@ class ConsultKnowledgeArea_idAPI(APIView):
     id : int
         Referencia a un Area del Conocimiento
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     def get(self, request, *args, **kwargs):
         queryset = KnowledgeArea.objects.filter(id=kwargs['id'], status=True)
         returned = KnowledgeAreaSerializer(queryset, many=True).data
@@ -869,6 +881,7 @@ class ConsultInvestigationLine_knowledgeAPI(APIView):
     Clase usada para la implementacion de la API para consultar todas las Lineas de Investigacion que
     pertenecen a un Area del conocimiento espesifica
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     def get(self, request, *args, **kwargs):
         queryset = InvestigationLine.objects.filter(know_area=kwargs['id_area'], status=True)
         returned = InvestigationLineSerializer(queryset, many=True).data
@@ -888,6 +901,7 @@ class ConsultInvestigationLine_idAPI(APIView):
     id : int
         Referencia a una Linea de Investigacion
     """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
     def get(self, request, *args, **kwargs):
         queryset = InvestigationLine.objects.filter(id=kwargs['id'], status=True)
         returned = InvestigationLineSerializer(queryset, many=True).data

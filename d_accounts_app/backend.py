@@ -43,6 +43,22 @@ class IsCoordinator(permissions.BasePermission):
         except User.DoesNotExist:
             return False
 
+class IsCoordinator_user(permissions.BasePermission):
+    """
+    Clase para verificar si un usuario es coordinador o no
+    """
+
+    message = "No tienes permisos de un coordinador"
+
+    def has_permission(self, request, view):
+        try:
+            User.objects.get(id=request.user.pk, is_coordinator=True)
+            if request.method == POST:
+                return True
+            return True
+        except User.DoesNotExist:
+            return False
+
 class IsDirector_C(permissions.BasePermission):
     """
     Clase que permite determinar si un usuario es director o no
