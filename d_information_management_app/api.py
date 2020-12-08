@@ -834,6 +834,28 @@ class ConsultProfessor_idAPI(APIView):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ConsultProfessor_userAPI(APIView):
+    """
+    Clase usada para la implementacion de la API para consultar un Profesor espesifico
+    de la Universidad, esto se logra enviando el ID del Usuario asigano al Profesor mediante 
+    el metodo GET
+    - - - - -
+    Parameters
+    - - - - -
+    id : int
+        Referencia a un Usuario
+    """
+    #permission_classes = [IsAuthenticated, IsCoordinator]
+    def get(self, request, *args, **kwargs):
+        queryset = Professor.objects.filter(user=kwargs['id'], status=True)
+
+        returned = ProfessorSerializer(queryset, many=True).data
+        if returned:
+            return Response({"Professor": returned}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe el Profesor en la base de datos", status=status.HTTP_404_NOT_FOUND)
+
+
 class ConsultKnowledgeAreaAPI(APIView):
     """
     Clase usada para la implementacion de la API para consultar todas las Areas del Conocimiento 
