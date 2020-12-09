@@ -163,7 +163,7 @@ class Professor(models.Model):
     status: Boolean
         Determina el estado del profesor ([True]activo o [False]inactivo)
     """
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=False, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=False, null=True, unique=True)
     institution = models.ForeignKey(Institution, on_delete=models.SET_NULL, blank=False, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, blank=False, null=True)
     is_director_student = models.BooleanField(default=False)

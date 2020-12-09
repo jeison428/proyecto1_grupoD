@@ -20,7 +20,7 @@ from .api import (CreateCountryAPI, CreateStateAPI, CreateCityAPI, CreateInstitu
                  ConsultInvestigationLine_idAPI, ConsultManageInvestGroup_DirecAPI, ConsultManageInvestGroup_GIAPI,
                  ConsultWorksInvestGroup_GIAPI,ReportTest, ConsultWorksDepartmAPI, ConsultWorksDepartm_profAPI,
                  ConsultWorksDepartm_depAPI, ConsultManageInvestLineAPI, ConsultManageInvestLine_invLineAPI, 
-                 ConsultManageInvestLine_profAPI)
+                 ConsultManageInvestLine_profAPI, ConsultProfessor_userAPI)
 
 urlpatterns = [
     #Javier
@@ -64,6 +64,7 @@ urlpatterns = [
     path('api/1.0/consultar_li_id/<int:id>', ConsultInvestigationLine_idAPI.as_view()),
     path('api/1.0/consultar_profesor/', ConsultProfessorAPI.as_view()),
     path('api/1.0/consultar_profesor/<int:id>', ConsultProfessor_idAPI.as_view()),
+    path('api/1.0/consultar_profesor_user/<int:id>', ConsultProfessor_userAPI.as_view()),
     # Es miembro
     path('api/1.0/consultar_es_miembro/<int:id_p>/<int:id_gi>', ConsultIsMemberAPI.as_view()), # ya esta editar es miembro (P-GI)
     path('api/1.0/consultar_miembro_gi/<int:id>', ConsultMemberIGAPI.as_view()),

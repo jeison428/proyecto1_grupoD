@@ -3,10 +3,10 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework import generics, permissions
 from knox.models import AuthToken
-from .serializers import LoginSerializer, UserSerializer, CreateUserSerializer, UpdateUserSerializer
+from .serializers import LoginSerializer, UserSerializer, CreateUserSerializer, UpdateUserSerializer, ConsultUserSerializer
 from .models import User
 
-from d_information_management_app.models import Professor
+from d_information_management_app.models import Professor, ManageInvestGroup
 from c_tracking_app.models import ActivityProfessor
 from a_students_app.models import Student, StudentProfessor
 
@@ -27,7 +27,7 @@ class LoginAPI(generics.GenericAPIView):
 
 class UserAPI(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = UserSerializer
+    serializer_class = ConsultUserSerializer
 
     def get_object(self):
         return self.request.user
@@ -46,17 +46,17 @@ class CreateUserAPI(generics.GenericAPIView):
 class ConsultUserAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = User.objects.all()
-        return Response({"Users": CreateUserSerializer(queryset, many=True).data })
+        return Response({"Users": ConsultUserSerializer(queryset, many=True).data })
 
 class ConsultUser_PersonalAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = User.objects.filter(personal_id=kwargs['id'])
-        return Response({"Users": CreateUserSerializer(queryset, many=True).data })
+        return Response({"Users": ConsultUserSerializer(queryset, many=True).data })
 
 class ConsultUser_idAPI(APIView):
     def get(self, request, *args, **kwargs):
         queryset = User.objects.filter(id=kwargs['id'])
-        return Response({"Users": CreateUserSerializer(queryset, many=True).data })
+        return Response({"Users": ConsultUserSerializer(queryset, many=True).data })
 
     def put(self, request, *args, **kwargs):
         try:
@@ -80,13 +80,13 @@ class AuthUserAPI(APIView):
             return Response(f"profesor")
         except Professor.DoesNotExist:
             try:
-                StudentProfessor.objects.get(professor__user=kwargs['id'])
+                ManageInvestGroup.objects.get(professor__user=kwargs['id'])
                 return Response(f"director")
-            except StudentProfessor.DoesNotExist:
+            except ManageInvestGroup.DoesNotExist:
                 try:
-                    ActivityProfessor.objects.get(professor__user=kwargs['id'])
+                    User.objects.get(id=kwargs['id'], is_coordinator=True)
                     return Response(f"coordinador")
-                except ActivityProfessor.DoesNotExist:
+                except User.DoesNotExist:
                     try:
                         Student.objects.get(user=kwargs['id'])
                         return Response(f"estudiante")
