@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from d_information_management_app.models import Professor
 from d_accounts_app.models import User
-from d_information_management_app.models import InvestigationGroup
+from d_information_management_app.models import InvestigationGroup, Department
 
 
 class GrantAgreement(models.Model):
@@ -16,8 +16,6 @@ class GrantAgreement(models.Model):
     date_record = models.DateTimeField(auto_now=True)
     date_update = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
-
-    
 
     class Meta:
         verbose_name = 'Beca/Convenio'
@@ -32,9 +30,7 @@ class Grant(GrantAgreement):
     announcement = models.IntegerField(default=0)
     description = models.CharField(max_length=48)
     num_resolution = models.CharField(max_length=48)
-
-       
-
+  
     class Meta:
         verbose_name = 'Beca'
         verbose_name_plural = 'Becas'
@@ -60,6 +56,7 @@ class Agreement(GrantAgreement):
 
 class Program(models.Model):
     name = models.CharField(max_length=148)
+    deparment = models.ForeignKey(Department, on_delete=models.SET_NULL, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Programa'

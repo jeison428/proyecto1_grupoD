@@ -25,7 +25,7 @@ from .api import (CreateCountryAPI, CreateStateAPI, CreateCityAPI, CreateInstitu
 urlpatterns = [
     #Javier
     #Crear
-    path('api/1.0/report/<int:id_format>', ReportTest.as_view()),
+    path('api/1.0/report/<int:year>/<int:type>', ReportTest.as_view()),
     path('api/1.0/crear_pais/', CreateCountryAPI.as_view()),
     path('api/1.0/crear_departamento/', CreateStateAPI.as_view()),
     path('api/1.0/crear_ciudad/', CreateCityAPI.as_view()),
