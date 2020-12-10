@@ -33,6 +33,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus.paragraph import Paragraph
 from reportlab.lib import colors
 from reportlab.platypus import Table, TableStyle
+from a_students_app.models import Student,Enrrollment
 
 import datetime
 
@@ -42,9 +43,28 @@ import datetime
 #region Create
 class ReportTest(APIView):
     def get(self, request, *args, **kwargs):
-        queryset = Country.objects.all()
 
-        if(kwargs["id_format"]==1):#Format xlsx
+        states={1:"Activo",2:"Inactivo",3:"Graduado",4:"Balanceado",5:"Retirado"}
+           
+        year = kwargs["year"]
+        queryset = Enrrollment.objects.filter(admission_date__range=(str(year)+"-1-1",str(year)+"-12-31"))
+        #print("enrrollment: ",queryset0.values("id","admission_date","student"))
+        
+        
+        #queryset = Student.objects.all()
+
+        #print("query2: ",queryset2," type: ",type(queryset2))
+
+        #queryset = Student.objects.filter(activity=kwargs['id_activity']).order_by('-date_update')[:1]
+
+        """if( len(queryset) > 0 ):
+            return Response({"eval_dir": TestDirectorSerializer(queryset[0], many=False).data})
+        else:
+            return Response({"eval_dir": None})
+        """
+        #print("El año  a consultar es: ",kwargs["anio"]," el tipo es",request.data["tipo"])
+
+        if(kwargs["type"]==1):#Format xlsx request.data["tipo"]==1
             wb = Workbook()
             controller = 3
             ws = wb.active
@@ -55,8 +75,8 @@ class ReportTest(APIView):
             ws['B1'].border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
             top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
             ws['B1'].fill = PatternFill(start_color = '66FFCC',end_color ='66FFCC', fill_type='solid')
-            ws['B1'].font = Font(name = 'Calibri',size =12, bold =True)
-            ws['B1'] = "INFORME POR AÑO"
+            ws['B1'].font = Font(name = 'Calibri',size =14, bold =True)
+            ws['B1'] = "INFORME DEL AÑO "+str(year)
             #Change the characteristics of cells
             ws.merge_cells('B1:G1')
             ws.row_dimensions[1].height = 25
@@ -71,50 +91,80 @@ class ReportTest(APIView):
             ws['B2'].border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
             top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
             ws['B2'].fill = PatternFill(start_color = '66CFCC',end_color ='66CFCC', fill_type='solid')
-            ws['B2'].font = Font(name = 'Calibri',size =10, bold =True)
+            ws['B2'].font = Font(name = 'Calibri',size =12, bold =True)
             ws['B2']='Codigo'
 
             ws['C2'].alignment = Alignment(horizontal="center",vertical="center")
             ws['C2'].border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
                                                 top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
             ws['C2'].fill = PatternFill(start_color = '66CFCC',end_color ='66CFCC', fill_type='solid')
-            ws['C2'].font = Font(name = 'Calibri',size =10, bold =True)
+            ws['C2'].font = Font(name = 'Calibri',size =12, bold =True)
             ws['C2']='Nombre'
                     
             ws['D2'].alignment = Alignment(horizontal="center",vertical="center")
             ws['D2'].border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
                                                 top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
             ws['D2'].fill = PatternFill(start_color = '66CFCC',end_color ='66CFCC', fill_type='solid')
-            ws['D2'].font = Font(name = 'Calibri',size =10, bold =True)
+            ws['D2'].font = Font(name = 'Calibri',size =12, bold =True)
             ws['D2']='Estado'
 
             ws['E2'].alignment = Alignment(horizontal="center",vertical="center")
             ws['E2'].border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
                                                 top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
             ws['E2'].fill = PatternFill(start_color = '66CFCC',end_color ='66CFCC', fill_type='solid')
-            ws['E2'].font = Font(name = 'Calibri',size =10, bold =True)
+            ws['E2'].font = Font(name = 'Calibri',size =12, bold =True)
             ws['E2']='Dedicación'
 
             ws['F2'].alignment = Alignment(horizontal="center",vertical="center")
             ws['F2'].border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
                                                 top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
             ws['F2'].fill = PatternFill(start_color = '66CFCC',end_color ='66CFCC', fill_type='solid')
-            ws['F2'].font = Font(name = 'Calibri',size =10, bold =True)
+            ws['F2'].font = Font(name = 'Calibri',size =12, bold =True)
             ws['F2']='Institución'
 
             ws['G2'].alignment = Alignment(horizontal="center",vertical="center")
             ws['G2'].border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
                                                 top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
             ws['G2'].fill = PatternFill(start_color = '66CFCC',end_color ='66CFCC', fill_type='solid')
-            ws['G2'].font = Font(name = 'Calibri',size =10, bold =True)
+            ws['G2'].font = Font(name = 'Calibri',size =12, bold =True)
             ws['G2']='Departamento'
 
             for q in queryset:    
                 ws.cell(row=controller,column=2).alignment = Alignment(horizontal="center")
                 ws.cell(row=controller,column=2).border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
                                                                         top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
-                ws.cell(row =controller, column=2).font = Font(name='Calibri',size=8)       
-                ws.cell(row =controller, column=2).value = q.name
+                ws.cell(row =controller, column=2).font = Font(name='Calibri',size=12)       
+                ws.cell(row =controller, column=2).value = q.student.user.personal_code
+
+                ws.cell(row=controller,column=3).alignment = Alignment(horizontal="center")
+                ws.cell(row=controller,column=3).border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
+                                                                        top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
+                ws.cell(row =controller, column=3).font = Font(name='Calibri',size=12)       
+                ws.cell(row =controller, column=3).value = q.student.user.first_name+" "+q.student.user.last_name 
+
+                ws.cell(row=controller,column=4).alignment = Alignment(horizontal="center")
+                ws.cell(row=controller,column=4).border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
+                                                                        top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
+                ws.cell(row =controller, column=4).font = Font(name='Calibri',size=12)
+                ws.cell(row =controller, column=4).value = states[q.state]
+
+                ws.cell(row=controller,column=5).alignment = Alignment(horizontal="center")
+                ws.cell(row=controller,column=5).border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
+                                                                        top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
+                ws.cell(row =controller, column=5).font = Font(name='Calibri',size=12)       
+                ws.cell(row =controller, column=5).value = "Completo" if q.student.dedication==1 else "Parcial" 
+                
+                ws.cell(row=controller,column=6).alignment = Alignment(horizontal="center")
+                ws.cell(row=controller,column=6).border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
+                                                                        top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
+                ws.cell(row =controller, column=6).font = Font(name='Calibri',size=12)       
+                ws.cell(row =controller, column=6).value = q.student.program.deparment.faculty.institution.name_inst
+
+                ws.cell(row=controller,column=7).alignment = Alignment(horizontal="center")
+                ws.cell(row=controller,column=7).border = Border(left = Side(border_style = "thin"), right=Side(border_style = "thin"),
+                                                                        top=Side(border_style="thin"),bottom=Side(border_style ="thin"))
+                ws.cell(row =controller, column=7).font = Font(name='Calibri',size=12)       
+                ws.cell(row =controller, column=7).value = q.student.program.deparment.name 
                 controller +=1
 
             filename = "ReporteInformePorAño.xlsx"
@@ -124,7 +174,7 @@ class ReportTest(APIView):
             response["Content-Disposition"] = content
             wb.save(response)
 
-        if(kwargs["id_format"]==2):#Format pdf
+        if(kwargs["type"]==2):#Format pdf request.data["tipo"]==2
             filename = "ReporteInformePorAño.pdf"
             #The define the type of response to be give
             response = HttpResponse(content_type = "application/pdf")
@@ -141,7 +191,7 @@ class ReportTest(APIView):
             c.setFont('Helvetica',12)
             c.drawString(30,735,'Report')
             c.setFont('Helvetica-Bold',12)
-            c.drawString(460,750,"01/07/2020")
+            c.drawString(460,750,str(year))
             c.line(460,747,560,747)
 
             #Table header
@@ -166,12 +216,17 @@ class ReportTest(APIView):
 
             high = 650
             for q in queryset: 
-                data.append([q.name])
+                data.append([ q.student.user.personal_code,
+                              q.student.user.first_name+" "+q.student.user.last_name,
+                              states[q.state],
+                              "Completo" if q.student.dedication==1 else "Parcial",
+                              q.student.program.deparment.faculty.institution.name_inst,
+                              q.student.program.deparment.name])
                 high = high -18
             
             #Table zise
             width, height = A4
-            table = Table(data, colWidths=[2.7*cm,6.9*cm,1.9*cm,2.2*cm,2.2*cm,2.7*cm])
+            table = Table(data, colWidths=[2.7*cm,6.9*cm,2.2*cm,2.2*cm,2.2*cm,2.7*cm])
             table.setStyle(TableStyle([('INNERGRID',(0,0),(-1,-1),0.25,colors.black),('BOX',(0,0),(-1,-1),0.25,colors.black)]))
             #Pdf size
             table.wrapOn(c, width, height)
