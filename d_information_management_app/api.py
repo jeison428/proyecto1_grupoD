@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from d_accounts_app.backend import IsProfessor, IsCoordinator
 from d_accounts_app.models import User
+from a_students_app.models import StudentGroupInvestigation
 
 from .serializers import (CountrySerializer, StateSerializer, CitySerializer, InstitutionSerializer, 
                         ProfessorSerializer, FacultySerializer, DepartmentSerializer, InvestigationGroupSerializer,
@@ -48,21 +49,6 @@ class ReportTest(APIView):
            
         year = kwargs["year"]
         queryset = Enrrollment.objects.filter(admission_date__range=(str(year)+"-1-1",str(year)+"-12-31"))
-        #print("enrrollment: ",queryset0.values("id","admission_date","student"))
-        
-        
-        #queryset = Student.objects.all()
-
-        #print("query2: ",queryset2," type: ",type(queryset2))
-
-        #queryset = Student.objects.filter(activity=kwargs['id_activity']).order_by('-date_update')[:1]
-
-        """if( len(queryset) > 0 ):
-            return Response({"eval_dir": TestDirectorSerializer(queryset[0], many=False).data})
-        else:
-            return Response({"eval_dir": None})
-        """
-        #print("El año  a consultar es: ",kwargs["anio"]," el tipo es",request.data["tipo"])
 
         if(kwargs["type"]==1):#Format xlsx request.data["tipo"]==1
             wb = Workbook()
@@ -863,14 +849,39 @@ class ConsultInvestigationGroup_idAPI(APIView):
                     oldProfessor = Professor.objects.get(id=manageInvLine.professor.pk, status=True)
                     oldProfessor.is_director_gi = False
                     manageInvLine.save()
-                    oldProfessor.save()
+                    oldProfessor.save()  
+                    isMember = IsMember.objects.filter(inv_group=kwargs['id']) 
+                    for reg in isMember: 
+                        aux =  IsMember.objects.get(professor = reg.professor, inv_group=reg.inv_group)
+                        aux.member_status = False
+                        aux.save()
+
+                    isMember = StudentGroupInvestigation.objects.filter(investigation_group=kwargs['id'])
+                    for reg in isMember: 
+                        aux =  StudentGroupInvestigation.objects.get(student = reg.student, investigation_group=reg.investigation_group)
+                        aux.is_active = False
+                        aux.save()
+                                         
+                    
                 if request.data['status'] == True:
                     manageInvLine = ManageInvestGroup.objects.get(inv_group=kwargs['id'], direction_state=True)
                     manageInvLine.direction_state = True
                     oldProfessor = Professor.objects.get(id=manageInvLine.professor.pk, status=True)
-                    oldProfessor.is_director_gi = True
+                    oldProfessor.is_director_gi = True                    
                     manageInvLine.save()
-                    oldProfessor.save()
+                    oldProfessor.save()  
+                    isMember = IsMember.objects.filter(inv_group=kwargs['id']) 
+                    for reg in isMember: 
+                        aux =  IsMember.objects.get(professor = reg.professor, inv_group=reg.inv_group)
+                        aux.member_status = True
+                        aux.save() 
+
+                    isMember = StudentGroupInvestigation.objects.filter(investigation_group=kwargs['id'])
+                    for reg in isMember: 
+                        aux =  StudentGroupInvestigation.objects.get(student = reg.student, investigation_group=reg.investigation_group)
+                        aux.is_active = True
+                        aux.save()
+
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
