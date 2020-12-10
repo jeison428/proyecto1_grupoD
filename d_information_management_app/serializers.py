@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import (Country, State, City, Institution, Professor, Faculty, Department, InvestigationGroup, 
                     KnowledgeArea, InvestigationLine, WorksDepartm, ManageInvestLine, ManageInvestGroup, 
-                    WorksInvestGroup, AcademicTraining, IsMember, WorksDepartm)
+                    WorksInvestGroup, AcademicTraining, IsMember, WorksDepartm, CoordinatorProgram)
 
 # Create your serializers here.
 # --------------------------------------------------Arias
@@ -205,5 +205,16 @@ class WorksDepartmSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-
+class CoordinatorProgramSerializer(serializers.ModelSerializer):
+    is_active = serializers.BooleanField(required=False)
+    academic_period = serializers.CharField(required=False)
+    #professor = serializers.IntegerField(required=False)
+    class Meta:
+        model = CoordinatorProgram
+        fields = ['professor', 'program', 'academic_period', 'is_active']
+    
+    def create(self, validate_data):
+        instance = CoordinatorProgram.objects.create(**validate_data)
+        instance.save()
+        return instance
 

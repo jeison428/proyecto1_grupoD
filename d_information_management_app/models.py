@@ -163,7 +163,7 @@ class Professor(models.Model):
     status: Boolean
         Determina el estado del profesor ([True]activo o [False]inactivo)
     """
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=False, null=True, unique=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=False, null=True)
     institution = models.ForeignKey(Institution, on_delete=models.SET_NULL, blank=False, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, blank=False, null=True)
     is_director_student = models.BooleanField(default=False)
@@ -411,7 +411,30 @@ class WorksDepartm(models.Model):
         verbose_name = 'Labora'
         verbose_name_plural = 'Labora'
 
+class CoordinatorProgram(models.Model):
+    """
+    Clase usada para tener el registro de la relacion entre un profesor y un programa de la universidad en el cual
+    puede o no ser el coordinador del programa
+    - - - - -
+    Attributes
+    - - - - -
+    professor : int
+        Referencia a un profesor
+    program : int
+        Referencia a un programa de la universidad
+    academic_period : string[10]
+        Periodo en el cual el profesor es coordinador del programa
+    """
+    professor = models.ForeignKey(Professor, on_delete=models.SET_NULL, blank=False, null=True)
+    program = models.ForeignKey('a_students_app.Program', on_delete=models.SET_NULL, blank=False, null=True)
+    academic_period = models.CharField(max_length=10)
+    date_record = models.DateTimeField(auto_now=True)
+    date_update = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
 
-
+    class Meta:
+        unique_together = ("professor", "academic_period")
+        verbose_name = "Coordinador"
+        verbose_name_plural = "Coordinadores"
 
 

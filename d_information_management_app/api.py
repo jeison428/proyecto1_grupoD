@@ -14,11 +14,11 @@ from .serializers import (CountrySerializer, StateSerializer, CitySerializer, In
                         ProfessorSerializer, FacultySerializer, DepartmentSerializer, InvestigationGroupSerializer,
                         KnowledgeAreaSerializer, InvestigationLineSerializer, WorksInvestGroupSerializer, 
                         ManageInvestLineSerializer, ManageInvestGroupSerializer, AcademicTrainingSerializer,
-                        IsMemberSerializer, WorksDepartmSerializer)
+                        IsMemberSerializer, WorksDepartmSerializer, CoordinatorProgramSerializer)
 
 from .models import (Country, State, City, Institution, Professor, Faculty, Department, AcademicTraining,
                     InvestigationGroup, KnowledgeArea, InvestigationLine, WorksInvestGroup, ManageInvestGroup,
-                    ManageInvestLine, IsMember, WorksDepartm)
+                    ManageInvestLine, IsMember, WorksDepartm, CoordinatorProgram)
 
 from django.http.response import HttpResponse
 from django.views.generic.base import TemplateView
@@ -33,6 +33,8 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus.paragraph import Paragraph
 from reportlab.lib import colors
 from reportlab.platypus import Table, TableStyle
+
+import datetime
 
 # Create your api's here.
 # --------------------------------------------------Arias
@@ -730,6 +732,26 @@ class CreateWorkDepartmentAPI(generics.GenericAPIView):
                 work = serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+# Director entre profesor y programa
+class CreateCoordinatorProgramAPI(generics.GenericAPIView):
+    """
+    Clase usada para la implementacion de la API para crear una relacion
+    de rol coordinador entre los modelos de Profesor y Programa (de la Universidad)
+    """
+    serializer_class = CoordinatorProgramSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():
+            newCoordinator = Professor.objects.get(id=request.data['professor'])
+            userCoordinator = User.objects.get(id=newCoordinator.user.pk)
+            userCoordinator.is_coordinator = True
+            userCoordinator.save()
+            coordinator = serializer.save()
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
 #endregion
 
 #region Consult
@@ -785,6 +807,13 @@ class ConsultInvestigationGroup_idAPI(APIView):
                     manageInvLine.direction_state = False
                     oldProfessor = Professor.objects.get(id=manageInvLine.professor.pk, status=True)
                     oldProfessor.is_director_gi = False
+                    manageInvLine.save()
+                    oldProfessor.save()
+                if request.data['status'] == True:
+                    manageInvLine = ManageInvestGroup.objects.get(inv_group=kwargs['id'], direction_state=True)
+                    manageInvLine.direction_state = True
+                    oldProfessor = Professor.objects.get(id=manageInvLine.professor.pk, status=True)
+                    oldProfessor.is_director_gi = True
                     manageInvLine.save()
                     oldProfessor.save()
             serializer.save()
@@ -1366,6 +1395,36 @@ class ConsultAcademicTraining_profAPI(APIView):
             return Response(returned, status=status.HTTP_202_ACCEPTED)
         else:
             return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+
+# Coordinador
+class ConsultCoordinatorAPI(APIView):
+    # consultar por cuales campos para la edicion
+    def get(self, request, *args, **kwargs):
+        queryset = CoordinatorProgram.objects.filter(program=kwargs['prog'], academic_period=kwargs['period'])
+        returned = CoordinatorProgramSerializer(queryset, many=True).data
+        if returned:
+            return Response(returned, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, *args, **kwargs):
+        try:
+            model = CoordinatorProgram.objects.get(program=kwargs['prog'], academic_period=kwargs['period'])
+        except AcademicTraining.DoesNotExist:
+            return Response(f"No existe un registro en la base de datos para los datos ingresados", status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = CoordinatorProgramSerializer(model, data=request.data)
+        if serializer.is_valid():
+            if 'status' in request.data.keys():
+                if request.data['is_active'] == False:
+                    coordinator = Professor.objects.get(id=request.data['professor'])
+                    userCoordinator = User.objects.get(id=coordinator.user.pk)
+                    userCoordinator.is_coordinator = False
+                    userCoordinator.save()
+            model.date_update = datetime.now()
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 #endregion
