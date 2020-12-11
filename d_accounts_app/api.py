@@ -1,12 +1,12 @@
+from rest_framework import generics, permissions, views
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework import generics, permissions
 from knox.models import AuthToken
-from .serializers import LoginSerializer, UserSerializer, CreateUserSerializer, UpdateUserSerializer, ConsultUserSerializer
 from .models import User
+from .serializers import *
 
-from d_information_management_app.models import Professor, ManageInvestGroup
+from d_information_management_app.models import Professor, ManageInvestGroup, CoordinatorProgram
 from c_tracking_app.models import ActivityProfessor
 from a_students_app.models import Student, StudentProfessor
 
@@ -34,6 +34,7 @@ class UserAPI(generics.RetrieveAPIView):
 #endregion
 
 #region usuarios
+
 class CreateUserAPI(generics.GenericAPIView):
     serializer_class = CreateUserSerializer
     def post(self, request, *args, **kwargs):
@@ -76,19 +77,19 @@ class ConsultUser_idAPI(APIView):
 class AuthUserAPI(APIView):
     def get(self, request, *args, **kwargs):
         try:
-            Professor.objects.get(user=kwargs['id'])
+            Professor.objects.get(user=kwargs['id'], status=True)
             return Response(f"profesor")
         except Professor.DoesNotExist:
             try:
-                ManageInvestGroup.objects.get(professor__user=kwargs['id'])
+                ManageInvestGroup.objects.get(professor__user=kwargs['id'], professor__status=True)
                 return Response(f"director")
             except ManageInvestGroup.DoesNotExist:
                 try:
-                    User.objects.get(id=kwargs['id'], is_coordinator=True)
+                    CoordinatorProgram.objects.get(professor__user=kwargs['id'], professor__status=True)
                     return Response(f"coordinador")
-                except User.DoesNotExist:
+                except CoordinatorProgram.DoesNotExist:
                     try:
-                        Student.objects.get(user=kwargs['id'])
+                        Student.objects.get(user=kwargs['id'], is_active=True)
                         return Response(f"estudiante")
                     except Student.DoesNotExist:
                         return Response(f"Usuario sin rol")

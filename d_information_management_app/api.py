@@ -864,7 +864,7 @@ class ConsultInvestigationGroup_idAPI(APIView):
                                          
                     
                 if request.data['status'] == True:
-                    manageInvLine = ManageInvestGroup.objects.get(inv_group=kwargs['id'], direction_state=True)
+                    manageInvLine = ManageInvestGroup.objects.get(inv_group=kwargs['id'])
                     manageInvLine.direction_state = True
                     oldProfessor = Professor.objects.get(id=manageInvLine.professor.pk, status=True)
                     oldProfessor.is_director_gi = True                    
@@ -1158,6 +1158,7 @@ class ConsultManageInvestGroupAPI(APIView):
                     oldProfessor = Professor.objects.get(id=kwargs['id_p'])
                     oldProfessor.is_director_gi = False
                     oldProfessor.save()
+            print(">>>>>>>>>>>>>>>>>>>>>> ",serializer)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -1487,7 +1488,7 @@ class ConsultCoordinatorAPI(APIView):
                     userCoordinator = User.objects.get(id=coordinator.user.pk)
                     userCoordinator.is_coordinator = False
                     userCoordinator.save()
-            model.date_update = datetime.now()
+            model.date_update = datetime.datetime.now()
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
