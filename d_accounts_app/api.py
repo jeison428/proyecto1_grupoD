@@ -81,21 +81,21 @@ class AuthUserAPI(APIView):
     def get(self, request, *args, **kwargs):
         typeList = ["Usuario sin rol"]
         try:
-            Professor.objects.get(user=kwargs['id'], status=True)
-            typeList.remove("Usuario sin rol")
-            typeList.append("profesor")
-        except Professor.DoesNotExist:
-            print("No es profesor")
+            CoordinatorProgram.objects.get(professor__user=kwargs['id'], professor__status=True)
+            typeList.append("coordinador")
+        except CoordinatorProgram.DoesNotExist:
+            print("No es coordinador")
         try:
             ManageInvestGroup.objects.get(professor__user=kwargs['id'], professor__status=True)
             typeList.append("director")
         except ManageInvestGroup.DoesNotExist:
             print("No es director")
         try:
-            CoordinatorProgram.objects.get(professor__user=kwargs['id'], professor__status=True)
-            typeList.append("coordinador")
-        except CoordinatorProgram.DoesNotExist:
-            print("No es coordinador")
+            Professor.objects.get(user=kwargs['id'], status=True)
+            typeList.remove("Usuario sin rol")
+            typeList.append("profesor")
+        except Professor.DoesNotExist:
+            print("No es profesor")
         try:
             Student.objects.get(user=kwargs['id'], is_active=True)
             typeList.append("estudiante")

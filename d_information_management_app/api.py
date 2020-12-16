@@ -479,7 +479,7 @@ class ConsultInstitutionAPI(APIView):
     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
     """
     def get(self, request, *args, **kwargs):
-        queryset = Institution.objects.filter(status=True)
+        queryset = Institution.objects.filter(status=True, city__state__country__status=True)
         return Response({"Institutions": InstitutionSerializer(queryset, many=True).data })
 
 class ConsultInstitution_idAPI(APIView):
